@@ -10,6 +10,27 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'BigCaslon';
+  src: url('/fonts/BigCaslon.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CDWriting';
+  src: url('/fonts/CDWriting.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SnellRoundhand';
+  src: url('/fonts/SnellRoundhand.ttc') format('truetype-collection');
+  font-weight: normal;
+  font-style: normal;
+}
+
 html, body { @apply bg-white text-neutral-900 antialiased; }
 
 .container-gs { @apply mx-auto w-full max-w-6xl px-4; }

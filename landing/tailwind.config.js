@@ -9,6 +9,9 @@ module.exports = {
     extend: {
     fontFamily: {
         custom: ['MaPolice', 'sans-serif'],
+        bigcaslon: ['BigCaslon', 'serif'],
+        cdwriting: ['CDWriting', 'cursive'],
+        snellroundhand: ['SnellRoundhand', 'cursive'],
     display: ["Inter", "ui-sans-serif", "system-ui"],
     body: ["Inter", "ui-sans-serif", "system-ui"]
     }

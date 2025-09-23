@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Button from './Button';
+import Image from 'next/image';
 
 export default function CTA() {
   const [showForm, setShowForm] = useState(false);
 
   return (
-    <div className="mt-16 bg-white py-16">
+    <div className="mt-16 bg-white py-4">
       <div className="container-gs">
         {/* Contenu principal */}
         <div className="text-center">
@@ -96,6 +97,30 @@ export default function CTA() {
               </div>
             </motion.div>
           )}
+
+          {/* Logo footer responsive - Mobile */}
+          <div className="mt-8 flex justify-center md:hidden">
+            <Image
+              src="/logofooter.png"
+              alt="Logo footer mobile"
+              width={950}
+              height={197}
+              className="w-auto"
+              priority={false}
+            />
+          </div>
+
+          {/* Logo footer responsive - Desktop */}
+          <div className="mt-8 hidden md:flex justify-center">
+            <Image
+              src="/logofooterdesktop.png"
+              alt="Logo footer desktop"
+              width={1848}
+              height={118}
+              className="w-auto "
+              priority={false}
+            />
+          </div>
         </div>
       </div>
     </div>

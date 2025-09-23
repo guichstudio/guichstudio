@@ -9,7 +9,7 @@ import CTA from './CTA';
 
 export default function Hero() {
   return (
-    <section className="container-gs pt-16 pb-14 overflow-hidden tracking-tighter">
+    <section className="container-gs pt-16 pb-0 overflow-hidden tracking-tighter">
       <motion.h1
         initial={{ opacity: 0, y: 0 }}
         animate={{ opacity: 1, y: 0 }}
