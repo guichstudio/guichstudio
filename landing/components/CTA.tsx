@@ -1,0 +1,103 @@
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+import Button from './Button';
+
+export default function CTA() {
+  const [showForm, setShowForm] = useState(false);
+
+  return (
+    <div className="mt-16 bg-white py-16">
+      <div className="container-gs">
+        {/* Contenu principal */}
+        <div className="text-center">
+          {/* Titre principal avec animation */}
+          <motion.h2
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-4xl md:text-6xl font-bold text-black mb-12 leading-tight"
+          >
+            <motion.div
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="overflow-hidden"
+            >
+              Learn how we build
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: -100 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+              className="overflow-hidden"
+            >
+              retention with
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 1.0 }}
+              className="overflow-hidden"
+            >
+              story.
+            </motion.div>
+          </motion.h2>
+
+          {/* Section email + bouton */}
+          {!showForm && (
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto rounded-full">
+              {/* Input email */}
+              <input
+                type="email"
+                placeholder="my@email.com"
+                className="flex-1 w-full px-4 py-2 rounded-full bg-neutral-100 border border-neutral-200  text-neutral-700 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:border-transparent"
+              />
+
+              {/* Bouton */}
+              <Button
+                variant="black"
+                size="md"
+                className="w-full sm:w-auto"
+                onClick={() => setShowForm(true)}
+              >
+                Book free audit
+              </Button>
+            </div>
+          )}
+
+          {/* Formulaire Tally - affiché conditionnellement */}
+          {showForm && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="mt-12 max-w-2xl mx-auto"
+            >
+              <div className="relative">
+                {/* Bouton de fermeture */}
+                <button
+                  onClick={() => setShowForm(false)}
+                  className="absolute top-4 right-4 z-10 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  ×
+                </button>
+
+                {/* Embed Tally */}
+                <iframe
+                  src="https://tally.so/embed/mKbMl8?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+                  width="100%"
+                  height="500"
+                  frameBorder="0"
+                  marginHeight={0}
+                  marginWidth={0}
+                  title="Formulaire d'inscription"
+                  className="rounded-lg shadow-lg"
+                />
+              </div>
+            </motion.div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

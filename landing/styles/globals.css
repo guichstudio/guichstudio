@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'MaPolice';
+  src: url('/fonts/Inter-VariableFont_opsz,wght.ttf') format('truetype'),
+       url('/fonts/ppeditorialold-regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+html, body { @apply bg-white text-neutral-900 antialiased; }
+
+.container-gs { @apply mx-auto w-full max-w-6xl px-4; }
+
+.btn-primary { @apply inline-flex items-center gap-2 rounded-full border border-neutral-300 px-5 py-2 hover:bg-neutral-100 transition; }
+.card { @apply rounded-2xl border border-neutral-200 bg-white/50 shadow-lg; }
+
+/* Animation pour le défilement des logos - boucle infinie parfaite */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 80s linear infinite;
+  width: max-content;
+}
+
+/* Masquer la scrollbar */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Snap scroll */
+.snap-x {
+  scroll-snap-type: x mandatory;
+}
+
+.snap-center {
+  scroll-snap-align: center;
+}
