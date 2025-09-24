@@ -5,7 +5,7 @@ export default function Footer() {
         <p>© {new Date().getFullYear()} guichstudio — All rights reserved.</p>
         <div className="flex gap-4">
           <a
-            href="https://www.instagram.com/guichstudio/"
+            href="https://www.instagram.com/guich.studio/"
             target="_blank"
             className="hover:opacity-100 opacity-70"
           >

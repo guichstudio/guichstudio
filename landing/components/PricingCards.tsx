@@ -3,7 +3,7 @@ import Button from './Button';
 const pricingPlans = [
   {
     title: 'Launch Sprint',
-    price: '3,500 $',
+    price: '4,600 $',
     features: [
       '##Narrative spine & visual micro-system##',
       '##Teaser/launch film##',
@@ -16,7 +16,7 @@ const pricingPlans = [
   },
   {
     title: 'Growth',
-    price: '5,000 $/mo',
+    price: '6,000 $/mo',
     features: [
       '##Weekly ship## 3-5 brand assets/week, video',
       '##Hot-moment## 48h for trend,news,partner spikes',
