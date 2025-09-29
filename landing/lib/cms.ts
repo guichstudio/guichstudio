@@ -299,8 +299,23 @@ export const allTags = [
     }
 
     export const tweets: Tweet[] = [
+      {
+        id: 1,
+        video:
+          'https://d3cf6gvjj37km9.cloudfront.net/video-landing/tweet-image-video/video4/video_4.mp4',
+        imageStats:
+          'https://d3cf6gvjj37km9.cloudfront.net/video-landing/tweet-image-video/video4/text_video_4.png',
+        avatar:
+          'https://d3cf6gvjj37km9.cloudfront.net/video-landing/tweet-image-video/video4/logo_4.jpg',
+        thumbnail:
+          'https://d3cf6gvjj37km9.cloudfront.net/video-landing/tweet-image-video/video4/video_4_thumbnail.webp',
+        link: 'https://twitter.com/pumpdotfun/status/1763327529635692928',
+        username: 'pump.fun',
+        handle: '@pumpdotfun',
+        content: 'pump dot fun is now live on @Blast_L2 !!!!!',
+      },
         {
-          id: 1,
+            id: 2,
           video:
             'https://d3cf6gvjj37km9.cloudfront.net/video-landing/tweet-image-video/video1/video_1.mp4',
           imageStats:
@@ -316,7 +331,7 @@ export const allTags = [
           content: 'Introducing… Fantasy Top Free to Play, LIVE',
         },
         {
-          id: 2,
+          id: 3,
           video:
             'https://d3cf6gvjj37km9.cloudfront.net/video-landing/tweet-image-video/video2/video_2.mp4',
           imageStats:
@@ -331,7 +346,7 @@ export const allTags = [
           content: 'Do you have what it takes to be a Hero?',
         },
         {
-          id: 3,
+          id: 4,
           video:
             'https://d3cf6gvjj37km9.cloudfront.net/video-landing/tweet-image-video/video3/video_3.mp4',
           imageStats:
@@ -345,21 +360,7 @@ export const allTags = [
           handle: '@fantasy_top_',
           content: "Today we're thrilled to unveil Fantasy Top V2! 🎉",
         },
-        {
-          id: 4,
-          video:
-            'https://d3cf6gvjj37km9.cloudfront.net/video-landing/tweet-image-video/video4/video_4.mp4',
-          imageStats:
-            'https://d3cf6gvjj37km9.cloudfront.net/video-landing/tweet-image-video/video4/text_video_4.png',
-          avatar:
-            'https://d3cf6gvjj37km9.cloudfront.net/video-landing/tweet-image-video/video4/logo_4.jpg',
-          thumbnail:
-            'https://d3cf6gvjj37km9.cloudfront.net/video-landing/tweet-image-video/video4/video_4_thumbnail.webp',
-          link: 'https://twitter.com/pumpdotfun/status/1763327529635692928',
-          username: 'pump.fun',
-          handle: '@pumpdotfun',
-          content: 'pump dot fun is now live on @Blast_L2 !!!!!',
-        },
+        
         {
           id: 5,
           video:
