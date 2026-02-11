@@ -38,7 +38,7 @@ const pricingPlans = [
       '##Creator orchestration## 10-30 creators',
       '##Style governance## In-product, social visuals branding',
       '##Monthly campaign## Mint, contest, merch design',
-      '##UX revison## Onboarding, LP, emotional design',
+      '##UX revision## Onboarding, LP, emotional design',
     ],
     buttonText: 'Scale',
     buttonVariant: 'black' as const,
@@ -53,7 +53,7 @@ export default function PricingCards() {
 
     return parts.map((part, index) => {
       if (part.startsWith('##') && part.endsWith('##')) {
-        // Supprimer les ## et mettre en gras
+        // Strip ## markers and bold
         const boldText = part.slice(2, -2);
         return <strong key={index}>{boldText}</strong>;
       }
@@ -63,32 +63,31 @@ export default function PricingCards() {
 
   const getCalendlyUrl = () => {
     const now = new Date();
-    const currentMonth = now.getMonth() + 1; // getMonth() retourne 0-11, on veut 1-12
+    const currentMonth = now.getMonth() + 1;
     const currentYear = now.getFullYear();
     return `https://calendly.com/guichstudio/30min?back=1&month=${currentYear}-${currentMonth.toString().padStart(2, '0')}`;
   };
 
   return (
     <div className="mt-16">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-8 lg:mb-12">Pricing</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
         {pricingPlans.map((plan, index) => (
           <div
             key={index}
-            className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-6 flex flex-col h-full"
+            className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-6 lg:p-8 flex flex-col h-full"
           >
-            {/* Contenu principal */}
+            {/* Features */}
             <div className="flex-1">
-              {/* Titre */}
               <h3 className="text-3xl font-bold text-black mb-2">
                 {plan.title}
               </h3>
 
-              {/* Prix */}
               <div className="text-2xl font-medium text-black mb-6">
                 {plan.price}
               </div>
 
-              {/* Liste des fonctionnalités */}
+              {/* Feature list */}
               <ul className="space-y-2 mb-6">
                 {plan.features.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-start">
@@ -103,9 +102,7 @@ export default function PricingCards() {
               </ul>
             </div>
 
-            {/* Bouton et tagline en bas */}
             <div className="mt-auto">
-              {/* Bouton */}
               <Button
                 variant={plan.buttonVariant}
                 size="md"
@@ -115,7 +112,6 @@ export default function PricingCards() {
                 {plan.buttonText}
               </Button>
 
-              {/* Tagline */}
               <p className="text-xs text-neutral-500 mt-4 leading-relaxed">
                 {plan.tagline}
               </p>

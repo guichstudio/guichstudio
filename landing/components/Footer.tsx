@@ -7,6 +7,7 @@ export default function Footer() {
           <a
             href="https://www.instagram.com/guich.studio/"
             target="_blank"
+            rel="noopener noreferrer"
             className="hover:opacity-100 opacity-70"
           >
             Instagram
