@@ -1,0 +1,58 @@
+# Standard crawlers
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /success
+
+# AI Search Engines — explicitly allowed
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+Disallow: /success
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/
+Disallow: /success
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+Disallow: /success
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /api/
+Disallow: /success
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /api/
+Disallow: /success
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /api/
+Disallow: /success
+
+User-agent: Amazonbot
+Allow: /
+Disallow: /api/
+Disallow: /success
+
+User-agent: meta-externalagent
+Allow: /
+Disallow: /api/
+Disallow: /success
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /api/
+Disallow: /success
+
+User-agent: cohere-ai
+Allow: /
+Disallow: /api/
+Disallow: /success
+
+Sitemap: https://www.buildlore.top/sitemap.xml

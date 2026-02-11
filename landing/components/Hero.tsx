@@ -10,44 +10,43 @@ import CTA from './CTA';
 export default function Hero() {
   return (
     <section className="container-gs pt-16 pb-0 overflow-hidden tracking-tighter">
-      <motion.h1
+      <h1 className="sr-only">
+        BuildLore — Creative Agency for Branding, Video Marketing &amp; Content
+        Production for Tech Companies and Web3 Projects
+      </h1>
+      <motion.p
+        aria-hidden="true"
         initial={{ opacity: 0, y: 0 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
-        className="text-5xl md:text-6xl font-extrabold tracking-tighter text-center "
+        className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tighter text-center "
       >
-        <motion.div
+        <motion.span
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="overflow-hidden"
+          className="block overflow-hidden"
         >
           Retain attention.
-        </motion.div>
-        <motion.div
+        </motion.span>
+        <motion.span
           initial={{ opacity: 0, x: -100 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="overflow-hidden"
+          className="block overflow-hidden"
         >
           Build fans.
-        </motion.div>
-      </motion.h1>
+        </motion.span>
+      </motion.p>
 
       <div className="flex justify-center">
-        <p className="mt-5 max-w-2xl text-neutral-600 text-center tracking-tighter">
-          Marketing should always come first.
+        <p className="mt-5 lg:mt-6 max-w-2xl lg:max-w-3xl text-neutral-600 text-center tracking-tighter lg:text-lg">
+          Narrative-led branding, video production, and content for tech &amp; Web3.
         </p>
       </div>
 
-      {/* Composant logos défilants */}
       <LogoCarousel />
 
-      {/* <div className="mt-12 h-64 rounded-2xl border border-neutral-200 bg-gradient-to-b from-neutral-100 to-neutral-50 grid place-items-center">
-        <span className="opacity-60">[ zone 3D / vidéo loop ]</span>
-      </div> */}
-
-      {/* Carrousel de tweets */}
       <TwitterCarouselScratch />
 
       <div className="mt-8 flex justify-center">
@@ -55,7 +54,7 @@ export default function Hero() {
           onClick={() => {
             const element = document.getElementById('service-cards');
             if (element) {
-              const navbarHeight = 80; // Ajustez cette valeur selon la hauteur de votre navbar
+              const navbarHeight = 80;
               const elementPosition = element.offsetTop - navbarHeight;
               window.scrollTo({
                 top: elementPosition,
@@ -70,18 +69,14 @@ export default function Hero() {
         </Button>
       </div>
 
-      {/* Composant des cartes de service */}
       <div id="service-cards">
         <ServiceCards />
       </div>
 
-      {/* Composant des cartes de prix */}
       <PricingCards />
 
-      {/* Composant FAQ */}
       <FAQ />
 
-      {/* Composant CTA de fin */}
       <CTA />
     </section>
   );

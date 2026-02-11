@@ -6,7 +6,7 @@ const links = [{ href: '/work', label: 'Work' }];
 export default function Navbar() {
   const router = useRouter();
   return (
-    <header className=" top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+    <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <nav className="container-gs flex items-center justify-between py-4">
         <Link href="/" className="font-bigcaslon text-2xl  tracking-tight">
           BuildLore

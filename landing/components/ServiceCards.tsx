@@ -1,27 +1,28 @@
 import Button from './Button';
 
 export default function ServiceCards() {
-  // Fonction pour générer l'URL Calendly avec la date actuelle
   const getCalendlyUrl = () => {
     const now = new Date();
-    const currentMonth = now.getMonth() + 1; // getMonth() retourne 0-11, on veut 1-12
+    const currentMonth = now.getMonth() + 1;
     const currentYear = now.getFullYear();
     return `https://calendly.com/guichstudio/30min?back=1&month=${currentYear}-${currentMonth.toString().padStart(2, '0')}`;
   };
 
   return (
-    <div className="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-8">
-      {/* Carte gauche - grise */}
-      <div className="bg-neutral-100 rounded-2xl p-6 sm:p-8">
-        <h3 className="text-3xl sm:text-2xl font-bold mb-4 sm:mb-6">
-          How it work
+    <div className="mt-16">
+      <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-8 lg:mb-12">Services</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+      {/* How it works */}
+      <div className="bg-neutral-100 rounded-2xl p-6 sm:p-8 lg:p-10">
+        <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6">
+          How it works
         </h3>
-        <p className="text-sm sm:text-base text-neutral-700 mb-4 sm:mb-6 leading-relaxed">
+        <p className="text-sm sm:text-base lg:text-lg text-neutral-700 mb-4 sm:mb-6 leading-relaxed">
           Narrative-led growth for tech companies. We turn products into brands
           people care about, through cinematic story, cohesive design, and
           memetic content.
         </p>
-        <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base text-neutral-700">
+        <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base lg:text-lg text-neutral-700">
           <li className="flex items-center">
             <span className="text-neutral-500 mr-2 text-3xl leading-none">
               •
@@ -43,12 +44,12 @@ export default function ServiceCards() {
         </ul>
       </div>
 
-      {/* Carte droite - noire */}
-      <div className="bg-black rounded-2xl p-6 sm:p-8 text-white">
-        <h3 className="text-3xl sm:text-2xl font-bold mb-4 sm:mb-6">
+      {/* Narrative Engine */}
+      <div className="bg-black rounded-2xl p-6 sm:p-8 lg:p-10 text-white">
+        <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6">
           The Narrative Engine
         </h3>
-        <p className="text-sm sm:text-base text-neutral-300 mb-4 sm:mb-6 leading-relaxed">
+        <p className="text-sm sm:text-base lg:text-lg text-neutral-300 mb-4 sm:mb-6 leading-relaxed">
           A monthly content & design service that ships weekly. We run your
           narrative : from teaser to threads to in-product feelings.
         </p>
@@ -63,6 +64,7 @@ export default function ServiceCards() {
         >
           Start
         </Button>
+      </div>
       </div>
     </div>
   );

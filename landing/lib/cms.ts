@@ -35,7 +35,7 @@ export const allTags = [
 ] as const;
     
     
-    // ⚠️ À remplacer par un vrai CMS (Sanity/Strapi/Contentful)
+    // Project data — move to CMS when needed
     export const projects: Project[] = [
     {
     slug: 'fantasy-top-1',
@@ -130,7 +130,7 @@ export const allTags = [
         },
         {
             slug: 'AAA-lending',
-            title: 'AAA Lending agregator',
+            title: 'AAA Lending Aggregator',
             role: 'Artistic Direction & Production',
             tags: ['Web 3'],
             thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/web-3/AAA-thumbnail.webp',
@@ -204,7 +204,7 @@ export const allTags = [
             month: '02',
             day: '08',
             client: '-',
-            description: 'wasabi.xyz is generating buzz with its upcoming launch of perpetual contracts (Perps) and leverage options specifically designed for meme coins. By combining Perps with leverage, wsabi.xyz promises to deliver a dynamic trading experience that balances risk and reward, catering to the growing community of meme coin enthusiasts eager for advanced financial tools tailored to this niche market.'
+            description: 'wasabi.xyz is generating buzz with its upcoming launch of perpetual contracts (Perps) and leverage options specifically designed for meme coins. By combining Perps with leverage, wasabi.xyz promises to deliver a dynamic trading experience that balances risk and reward, catering to the growing community of meme coin enthusiasts eager for advanced financial tools tailored to this niche market.'
         },
         {
             slug: 'gondi',
@@ -269,7 +269,7 @@ export const allTags = [
             month: '02',
             day: '16',
             client: '-',
-            description: 'wasabi.xyz is generating buzz with its upcoming launch of perpetual contracts (Perps) and leverage options specifically designed for meme coins. By combining Perps with leverage, wsabi.xyz promises to deliver a dynamic trading experience that balances risk and reward, catering to the growing community of meme coin enthusiasts eager for advanced financial tools tailored to this niche market.'
+            description: 'wasabi.xyz is generating buzz with its upcoming launch of perpetual contracts (Perps) and leverage options specifically designed for meme coins. By combining Perps with leverage, wasabi.xyz promises to deliver a dynamic trading experience that balances risk and reward, catering to the growing community of meme coin enthusiasts eager for advanced financial tools tailored to this niche market.'
         },
     {
         slug: 'rad-carter-ft-jaia-rose',

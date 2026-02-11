@@ -1,0 +1,35 @@
+# BuildLore
+
+> Creative agency specializing in branding, video marketing, and content production for tech companies and Web3 projects.
+
+BuildLore (formerly Guich Studio) is a narrative-led creative agency that helps tech companies and Web3 projects retain attention and build fans through cinematic storytelling, brand systems, and high-velocity content production.
+
+## Services
+
+- **Launch Sprint** ($4,600): Two-week launch package including narrative spine, teaser film, landing page art direction, and social starter kit.
+- **Growth** ($6,000/mo): Monthly retainer with 3–5 brand assets per week, 48-hour hot-moment response, creator seeding, and lore maintenance.
+- **Scale** ($11,000/mo): Full-service monthly package with 15–25 assets, quarterly cinematic video, creator orchestration (10–30 creators), style governance, and UX revision.
+
+## Expertise
+
+- Branding & visual identity
+- Video production & cinematic storytelling
+- Art direction
+- Motion design
+- Social media content production
+- Creator orchestration & seeding
+- Projection mapping
+- UX & product design direction
+
+## Notable Clients
+
+Fantasy.top, Pump.fun, Wasabi Protocol, H Company, Eterna Labs, Gondi.xyz, Pressiat, Domestique Paris, Ledger, Warner, Guess Best, AAA Lending, Mentat, Olympia, Zyfai
+
+## Links
+
+- Website: https://www.buildlore.top
+- Portfolio: https://www.buildlore.top/work
+- Book a call: https://calendly.com/guichstudio/30min
+- Instagram: https://www.instagram.com/guich.studio/
+- X/Twitter: https://twitter.com/guichstudio
+- Full AI-readable content: https://www.buildlore.top/llms-full.txt

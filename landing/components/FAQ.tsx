@@ -13,29 +13,28 @@ export default function FAQ() {
 
   return (
     <div className="mt-16">
-      {/* Titre */}
       <div className="mb-12">
-        <h2 className="text-4xl md:text-5xl font-bold text-black mb-2">
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-2">
           Questions ?
         </h2>
       </div>
 
-      {/* FAQ Items */}
       <div className="space-y-4">
         {faqData.map((item, index) => (
           <div key={index}>
-            {/* Question cliquable */}
-            <motion.div
+            <motion.button
+              type="button"
               whileHover={openIndex !== index ? { scale: 1.02 } : {}}
               whileTap={{ scale: 0.98 }}
               onClick={() => toggleItem(index)}
-              className={`flex items-center justify-between py-4 cursor-pointer transition-colors duration-300 ${
+              aria-expanded={openIndex === index}
+              className={`w-full flex items-center justify-between py-4 cursor-pointer transition-colors duration-300 ${
                 openIndex === index
                   ? 'bg-neutral-100 rounded-t-lg px-6'
                   : 'hover:bg-neutral-50 rounded-lg px-6'
               }`}
             >
-              <h3 className="text-lg font-bold text-black pr-4">
+              <h3 className="text-lg font-bold text-black pr-4 text-left">
                 {item.question}
               </h3>
               <motion.div
@@ -45,9 +44,8 @@ export default function FAQ() {
               >
                 <span className="text-white text-sm font-bold">+</span>
               </motion.div>
-            </motion.div>
+            </motion.button>
 
-            {/* Réponse qui descend */}
             <AnimatePresence>
               {openIndex === index && (
                 <motion.div

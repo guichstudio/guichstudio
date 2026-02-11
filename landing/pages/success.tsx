@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
+import { generateNextSeo } from 'next-seo/pages';
 
 export default function Success() {
   const router = useRouter();
@@ -13,6 +15,13 @@ export default function Success() {
 
   return (
     <div className="container-gs py-16 text-center">
+      <Head>
+        {generateNextSeo({
+          title: 'Payment Successful',
+          noindex: true,
+          nofollow: true,
+        })}
+      </Head>
       <h1 className="text-4xl font-bold text-black mb-4">
         Payment Successful!
       </h1>
