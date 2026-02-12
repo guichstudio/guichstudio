@@ -94,9 +94,9 @@ export default function ProjectDetail({
           </div>
         </div>
         {project.description && (
-          <p className="mt-6 max-w-3xl opacity-80 leading-relaxed">
-            {project.description}
-          </p>
+          <div className="mt-6 max-w-3xl opacity-80 leading-relaxed whitespace-pre-line"
+            dangerouslySetInnerHTML={{ __html: project.description }}
+          />
         )}
       </article>
     </Layout>
