@@ -292,6 +292,36 @@ export const allTags = [
             description: 'wasabi.xyz is generating buzz with its upcoming launch of perpetual contracts (Perps) and leverage options specifically designed for meme coins. By combining Perps with leverage, wasabi.xyz promises to deliver a dynamic trading experience that balances risk and reward, catering to the growing community of meme coin enthusiasts eager for advanced financial tools tailored to this niche market.'
         },
     {
+        slug: '0015-1',
+        title: '0015_1',
+        role: 'Art Direction & Production',
+        tags: ['Web 3'],
+        thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/web-3/0015_1-thumbnail.webp',
+        video: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/web-3/0015_1.mp4',
+        client: '-',
+        description: 'Web3 project production featuring creative direction and visual storytelling.'
+    },
+    {
+        slug: 'final',
+        title: 'Final',
+        role: 'Art Direction & Production',
+        tags: ['Web 3'],
+        thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/web-3/final-thumbnail.webp',
+        video: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/web-3/final.mp4',
+        client: '-',
+        description: 'Web3 project production featuring creative direction and visual storytelling.'
+    },
+    {
+        slug: 'polycool-devfunxpoly',
+        title: 'Polycool DevFun x Poly',
+        role: 'Art Direction & Production',
+        tags: ['Web 3'],
+        thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/web-3/polycool_devfunxpoly_video-thumbnail.webp',
+        video: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/web-3/polycool_devfunxpoly_video.mp4',
+        client: '-',
+        description: 'Web3 project production featuring creative direction and visual storytelling.'
+    },
+    {
         slug: 'rad-carter-ft-jaia-rose',
         title: 'Rad Cartier ft Jaia Rose',
         role: 'Art Direction & Production',
