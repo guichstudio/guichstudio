@@ -314,6 +314,46 @@ export const allTags = [
         client: '-',
         description: 'Music video production featuring creative direction and visual storytelling.'
     },
+    {
+        slug: 'dtf-projection',
+        title: 'DTF',
+        role: 'Art Direction & Production',
+        tags: ['Projection'],
+        thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/projection/DTF-thumbnail.webp',
+        video: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/projection/DTF.mp4',
+        client: '-',
+        description: 'Projection mapping performance combining immersive visuals with live stage design.'
+    },
+    {
+        slug: 'lujipeka-projection',
+        title: 'Lujipeka',
+        role: 'Art Direction & Production',
+        tags: ['Projection'],
+        thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/projection/lujipeka-thumbnail.webp',
+        video: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/projection/lujipeka.mp4',
+        client: '-',
+        description: 'Projection mapping performance combining immersive visuals with live stage design.'
+    },
+    {
+        slug: 'naute-projection',
+        title: 'Naute',
+        role: 'Art Direction & Production',
+        tags: ['Projection'],
+        thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/projection/naute-thumbnail.webp',
+        video: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/projection/naute.mp4',
+        client: '-',
+        description: 'Projection mapping performance combining immersive visuals with live stage design.'
+    },
+    {
+        slug: 'romsii-projection',
+        title: 'ROMSII',
+        role: 'Art Direction & Production',
+        tags: ['Projection'],
+        thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/projection/romsii-thumbnail.webp',
+        video: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/projection/romsii.mp4',
+        client: '-',
+        description: 'Projection mapping performance combining immersive visuals with live stage design.'
+    },
 
     ]
     
