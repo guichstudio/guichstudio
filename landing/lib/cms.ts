@@ -299,7 +299,7 @@ export const allTags = [
         thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/web-3/0015_1-thumbnail.webp',
         video: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/web-3/0015_1.mp4',
         client: '-',
-        description: 'Web3 project production featuring creative direction and visual storytelling.'
+        description: 'Launch video and teaser for Polycool.live, an AI-powered trading bot built on predictive markets such as Polymarket and Kalshi. The creative direction blends dynamic motion design with data-driven visuals to capture the speed and precision of automated market predictions.\n\nFrom concept to delivery, the production combines bold visual storytelling with the technical language of Web3, positioning Polycool.live as a next-generation tool for traders navigating the predictive market landscape.'
     },
     {
         slug: 'final',
@@ -309,7 +309,7 @@ export const allTags = [
         thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/web-3/final-thumbnail.webp',
         video: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/web-3/final.mp4',
         client: '-',
-        description: 'Web3 project production featuring creative direction and visual storytelling.'
+        description: 'Launch video and teaser for Polycool.live, an AI-powered trading bot built on predictive markets such as Polymarket and Kalshi. The creative direction blends dynamic motion design with data-driven visuals to capture the speed and precision of automated market predictions.\n\nFrom concept to delivery, the production combines bold visual storytelling with the technical language of Web3, positioning Polycool.live as a next-generation tool for traders navigating the predictive market landscape.'
     },
     {
         slug: 'polycool-devfunxpoly',
@@ -319,7 +319,7 @@ export const allTags = [
         thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/web-3/polycool_devfunxpoly_video-thumbnail.webp',
         video: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/web-3/polycool_devfunxpoly_video.mp4',
         client: '-',
-        description: 'Web3 project production featuring creative direction and visual storytelling.'
+        description: 'Launch video and teaser for Polycool.live, an AI-powered trading bot built on predictive markets such as Polymarket and Kalshi. The creative direction blends dynamic motion design with data-driven visuals to capture the speed and precision of automated market predictions.\n\nFrom concept to delivery, the production combines bold visual storytelling with the technical language of Web3, positioning Polycool.live as a next-generation tool for traders navigating the predictive market landscape.'
     },
     {
         slug: 'rad-carter-ft-jaia-rose',
