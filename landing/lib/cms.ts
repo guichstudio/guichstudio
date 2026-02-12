@@ -129,6 +129,26 @@ export const allTags = [
             description: 'THE IDENTITY CAMPAIGN\nSocial media campaign for the Paris-based brand DOMESTIQUE. Render of the brand\'s iconic bag with photorealistic renderings. Playing on minimal volumes and transparency, with references to fetishism and BDSM to support the essential pillars of the brand.'
         },
         {
+            slug: 'domestique-2',
+            title: 'Domestique Paris',
+            role: 'Art Direction & Production',
+            tags: ['Commercial'],
+            thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/commercial/domestique-2-thumbnail.webp',
+            video: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/commercial/domestique-2.mp4',
+            client: '-',
+            description: 'Social media campaign for the Paris-based brand DOMESTIQUE. Photorealistic renderings playing on minimal volumes and transparency to support the essential pillars of the brand.'
+        },
+        {
+            slug: 'pressiat-3',
+            title: 'Pressiat',
+            role: 'Art Direction & Production',
+            tags: ['Commercial'],
+            thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/commercial/pressiat-2-thumbnail.webp',
+            video: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/commercial/pressiat-2.mp4',
+            client: '-',
+            description: 'Pressiat social media campaign combining high-quality visuals and interactive content to engage a global audience and reinforce brand identity.'
+        },
+        {
             slug: 'AAA-lending',
             title: 'AAA Lending Aggregator',
             role: 'Artistic Direction & Production',
