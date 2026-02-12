@@ -284,7 +284,37 @@ export const allTags = [
         client: '-',
         description: 'The video clip by All 3D Prod showcases seamless 3D animation techniques, highlighting smooth transitions, realistic textures, and dynamic lighting.'
     },
-        
+    {
+        slug: 'nganoux',
+        title: 'Nganoux',
+        role: 'Art Direction & Production',
+        tags: ['Music/Label'],
+        thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/music&clip/nganoux-thumbnail.webp',
+        video: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/music&clip/nganoux.mp4',
+        client: '-',
+        description: 'Music video production featuring creative direction and visual storytelling.'
+    },
+    {
+        slug: 'romsii-usa',
+        title: 'ROMSII - USA',
+        role: 'Art Direction & Production',
+        tags: ['Music/Label'],
+        thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/music&clip/romsii-1-thumbnail.webp',
+        video: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/music&clip/romsii-1.mp4',
+        client: '-',
+        description: 'Music video production featuring creative direction and visual storytelling.'
+    },
+    {
+        slug: 'romsii-enfant',
+        title: 'ROMSII - Enfant',
+        role: 'Art Direction & Production',
+        tags: ['Music/Label'],
+        thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/music&clip/romsii-2-thumbnail.webp',
+        video: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/music&clip/romsii-2.mp4',
+        client: '-',
+        description: 'Music video production featuring creative direction and visual storytelling.'
+    },
+
     ]
     
     
