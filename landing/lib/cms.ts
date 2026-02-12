@@ -293,7 +293,7 @@ export const allTags = [
         },
     {
         slug: '0015-1',
-        title: '0015_1',
+        title: 'Polycool.live',
         role: 'Art Direction & Production',
         tags: ['Web 3'],
         thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/web-3/0015_1-thumbnail.webp',
@@ -303,7 +303,7 @@ export const allTags = [
     },
     {
         slug: 'final',
-        title: 'Final',
+        title: 'Polycool.live',
         role: 'Art Direction & Production',
         tags: ['Web 3'],
         thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/web-3/final-thumbnail.webp',
@@ -313,7 +313,7 @@ export const allTags = [
     },
     {
         slug: 'polycool-devfunxpoly',
-        title: 'Polycool DevFun x Poly',
+        title: 'Polycool.live',
         role: 'Art Direction & Production',
         tags: ['Web 3'],
         thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/web-3/polycool_devfunxpoly_video-thumbnail.webp',
