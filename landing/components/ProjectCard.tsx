@@ -106,7 +106,7 @@ export default function ProjectCard({ project }: { project: Project }) {
             playsInline
             loop
             muted={!isMobile}
-            preload="metadata"
+            preload="none"
             onCanPlay={() => {
               setReady(true);
               if (showVideo) videoRef.current?.play().catch(() => {});

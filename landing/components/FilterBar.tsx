@@ -6,7 +6,7 @@ export default function FilterBar() {
   const { query } = useRouter();
   const active = (query.tag as string) || 'All';
   return (
-    <div className="container-gs sticky top-[0px] z-40 bg-white/80 backdrop-blur py-3 border-b border-neutral-200">
+    <div className="container-gs sticky top-0 z-40 bg-white/80 backdrop-blur py-3 border-b border-neutral-200">
       <div className="flex flex-wrap gap-2">
         {allTags.map(tag => (
           <Link

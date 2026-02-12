@@ -47,7 +47,7 @@ export const allTags = [
     year: '2024',
     month: '04',
     day: '24',
-    client: '—',
+    client: '-',
     description: `Step into a world where imagination meets strategy with the launch of Fantasy.top, the next evolution in trading card games. Designed for competitive play and immersive storytelling, Fantasy.top offers players a rich universe filled with unique characters, powerful spells, and dynamic battle mechanics that keep every match fresh and challenging.\n\nCollect rare cards, build unstoppable decks, and engage with a vibrant community eager to test their wits and forge alliances.`
 },
     {
@@ -66,7 +66,7 @@ export const allTags = [
     {
     slug: 'pressiat-1',
     title: 'Pressiat',
-    role: 'Art direction & Production',
+    role: 'Art Direction & Production',
     tags: ['Commercial', 'Projection'],
     thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/projection/pressiat-thumbnail.webp',
     video: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/projection/pressiat.mp4',
@@ -79,7 +79,7 @@ export const allTags = [
     {
         slug: 'eterna-labs',
         title: 'Eterna Labs',
-        role: 'Art direction & Production',
+        role: 'Art Direction & Production',
         tags: ['Web 3'],
         thumb: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/web-3/eterna-thumbnail.webp',
         video: 'https://d3cf6gvjj37km9.cloudfront.net/video-landing/web-3/eterna.mp4',
@@ -113,7 +113,7 @@ export const allTags = [
             month: '01',
             day: '02',
             client: '-',
-            description: 'Fantasy.TopTrading Card Game introduces Clout, an innovative platform that enables players to earn rewards based on their social media performance. By leveraging your activity and influence on Social X, Clout transforms engagement into tangible value, allowing users to monetize their presence while enjoying immersive gameplay. This integration creates a unique ecosystem where social interaction and competitive card gaming combine, offering an opportunity for players to grow both their in-game assets and online clout simultaneously.'
+            description: 'Fantasy.Top Trading Card Game introduces Clout, an innovative platform that enables players to earn rewards based on their social media performance. By leveraging your activity and influence on Social X, Clout transforms engagement into tangible value, allowing users to monetize their presence while enjoying immersive gameplay. This integration creates a unique ecosystem where social interaction and competitive card gaming combine, offering an opportunity for players to grow both their in-game assets and online clout simultaneously.'
         },
         {
             slug: 'domestique-1',

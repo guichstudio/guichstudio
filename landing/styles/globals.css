@@ -3,45 +3,17 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'MaPolice';
-  src: url('/fonts/Inter-VariableFont_opsz,wght.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'PPEditorialOld';
-  src: url('/fonts/ppeditorialold-regular.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
   font-family: 'BigCaslon';
   src: url('/fonts/BigCaslon.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
-@font-face {
-  font-family: 'CDWriting';
-  src: url('/fonts/CDWriting.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'SnellRoundhand';
-  src: url('/fonts/SnellRoundhand.ttc') format('truetype-collection');
-  font-weight: normal;
-  font-style: normal;
-}
 
 html, body { @apply bg-white text-neutral-900 antialiased; }
 
 .container-gs { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8; }
 
-.btn-primary { @apply inline-flex items-center gap-2 rounded-full border border-neutral-300 px-5 py-2 hover:bg-neutral-100 transition; }
 .card { @apply rounded-2xl border border-neutral-200 bg-white/50 shadow-lg; }
 
 /* Infinite logo scroll */
