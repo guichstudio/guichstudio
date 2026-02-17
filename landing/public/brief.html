@@ -1004,14 +1004,15 @@
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify(brief),
         });
-        if (!res.ok) throw new Error('Error');
+        const result = await res.json().catch(() => null);
+        if (!res.ok) throw new Error(result?.error || res.status);
         e.target.style.display = 'none';
         document.getElementById('success').style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } catch (err) {
         btn.textContent = oldText;
         btn.disabled = false;
-        alert('Error sending the form. Please try again.');
+        alert('Error: ' + err.message + '\n\nIf using an ad blocker, please disable it for this page.');
       }
     });
 
