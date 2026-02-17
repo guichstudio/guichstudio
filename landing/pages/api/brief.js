@@ -44,15 +44,12 @@ export default async function handler(req, res) {
       <h2 style="font-size:16px;color:#999;text-transform:uppercase;letter-spacing:1px">Sound / Mood</h2>
       <p style="font-size:15px">${esc(brief.sons || brief.sounds || '—')}</p>
       ${formatLinks(brief.son_liens || brief.sound_links)}
-      ${brief.son_fichiers || brief.sound_files ? `<p style="font-size:14px;color:#666">📎 ${esc(brief.son_fichiers || brief.sound_files)}</p>` : ''}
 
       <h2 style="font-size:16px;color:#999;text-transform:uppercase;letter-spacing:1px">Visual Ideas</h2>
       <p style="font-size:15px">${esc(brief.idees_visuelles || brief.visual_ideas || '—')}</p>
 
-      <h2 style="font-size:16px;color:#999;text-transform:uppercase;letter-spacing:1px">Links & Files</h2>
-      ${formatLinks(brief.liens || brief.links)}
-      ${formatFileList(brief.fichiers_showcase || brief.showcase_files, 'Showcase')}
-      ${formatFileList(brief.fichiers_assets || brief.asset_files, 'Assets')}
+      <h2 style="font-size:16px;color:#999;text-transform:uppercase;letter-spacing:1px">Links</h2>
+      ${formatLinks(brief.liens || brief.links) || '<p style="color:#999">—</p>'}
 
       <hr style="border:none;border-top:1px solid #e5e5e5;margin:24px 0">
       <p style="font-size:12px;color:#999">Sent from buildlore.top</p>
@@ -87,9 +84,3 @@ function formatLinks(str) {
   ).join('');
 }
 
-function formatFileList(str, label) {
-  if (!str) return '';
-  const files = str.split(', ').filter(Boolean);
-  if (!files.length) return '';
-  return `<p style="font-size:14px;color:#666;margin:4px 0">📎 <strong>${label}:</strong> ${files.map(f => esc(f)).join(', ')}</p>`;
-}

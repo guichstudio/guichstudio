@@ -400,27 +400,6 @@
     }
     .sound-ref-add-btn:hover { background: #333; }
 
-    .sound-ref-upload-btn {
-      flex-shrink: 0;
-      padding: 10px 16px;
-      background: #fafafa;
-      border: 1px solid #e5e5e5;
-      border-radius: 10px;
-      color: #a3a3a3;
-      font-size: 14px;
-      font-family: 'Inter', sans-serif;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .sound-ref-upload-btn:hover {
-      border-color: #171717;
-      color: #171717;
-      background: #f5f5f5;
-    }
 
     .sound-links-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
     .sound-link-tag {
@@ -493,49 +472,6 @@
     .structure-detail::placeholder { color: #d4d4d4; }
     .structure-option input:checked ~ .structure-detail { display: block; }
 
-    .upload-section { display: none; margin-top: 16px; animation: frameIn 0.25s ease; }
-    .upload-section.visible { display: block; }
-    .upload-section .section-hint { margin-bottom: 12px; }
-
-    .upload-dropzone {
-      border: 2px dashed #e5e5e5;
-      border-radius: 12px;
-      padding: 32px 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      background: #fafafa;
-    }
-
-    .upload-dropzone:hover,
-    .upload-dropzone.dragover { border-color: #171717; background: #f5f5f5; }
-
-    .upload-dropzone .upload-icon { font-size: 32px; margin-bottom: 8px; color: #d4d4d4; }
-    .upload-dropzone .upload-text { font-size: 14px; color: #a3a3a3; }
-    .upload-dropzone .upload-text strong { color: #171717; cursor: pointer; }
-    .upload-dropzone .upload-formats { font-size: 12px; color: #d4d4d4; margin-top: 4px; }
-
-    .upload-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
-    .upload-list:empty { margin-top: 0; }
-
-    .upload-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #fafafa;
-      border: 1px solid #e5e5e5;
-      border-radius: 10px;
-      padding: 10px 14px;
-      animation: tagIn 0.15s ease;
-    }
-
-    .upload-item .file-icon { width: 36px; height: 36px; border-radius: 8px; background: #171717; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
-    .upload-item .file-info { flex: 1; min-width: 0; }
-    .upload-item .file-name { font-size: 14px; color: #171717; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .upload-item .file-size { font-size: 12px; color: #a3a3a3; }
-    .upload-item .file-preview { width: 48px; height: 36px; border-radius: 6px; object-fit: cover; background: #000; flex-shrink: 0; }
-    .upload-item .file-remove { background: none; border: none; color: #d4d4d4; cursor: pointer; font-size: 18px; padding: 4px; border-radius: 4px; flex-shrink: 0; transition: all 0.15s; }
-    .upload-item .file-remove:hover { color: #dc2626; background: #fef2f2; }
 
     .divider { border: none; border-top: 1px solid #e5e5e5; margin: 48px 0; }
 
@@ -579,7 +515,6 @@
       .row-2col { flex-direction: column !important; gap: 10px !important; }
       .row-2col input { flex: unset !important; }
       .sound-ref-row { flex-direction: column; }
-      .sound-ref-upload-btn { justify-content: center; }
       .frame-textarea { font-size: 16px; min-height: 60px; }
       .header-inner { padding: 12px 16px; }
       .header-logo { font-size: 20px; }
@@ -697,16 +632,6 @@
           </div>
         </div>
 
-        <div class="upload-section" id="upload-section">
-          <div class="section-hint">Upload your screen recordings / product videos (.mp4). As many as you want.</div>
-          <div class="upload-dropzone" id="upload-dropzone">
-            <div class="upload-icon">&#9654;</div>
-            <div class="upload-text"><strong>Click here</strong> or drag your files</div>
-            <div class="upload-formats">.mp4, .mov, .webm</div>
-          </div>
-          <input type="file" id="file-input" multiple accept="video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm" style="display:none">
-          <div class="upload-list" id="upload-list"></div>
-        </div>
       </div>
 
       <div class="section" data-section="sound">
@@ -729,13 +654,8 @@
           <div class="sound-ref-row">
             <input type="text" id="sound-link-input" class="sound-ref-input" placeholder="YouTube, Spotify, SoundCloud link...">
             <button type="button" class="sound-ref-add-btn" id="sound-link-add-btn">+</button>
-            <button type="button" class="sound-ref-upload-btn" id="sound-upload-btn">
-              <span>&#8679;</span> .mp3
-            </button>
-            <input type="file" id="sound-file-input" multiple accept="audio/*,.mp3,.wav,.aac,.ogg,.m4a" style="display:none">
           </div>
           <div class="sound-links-list" id="sound-links-list"></div>
-          <div class="upload-list" id="sound-upload-list"></div>
         </div>
       </div>
 
@@ -749,16 +669,9 @@
       </div>
 
       <div class="section" data-section="files">
-        <div class="section-label">Files & Links <span class="optional-badge">optional</span></div>
-        <div class="section-hint">Logo, images, reference videos, fonts, etc. As many as you want.</div>
-        <div class="upload-dropzone" id="assets-dropzone">
-          <div class="upload-icon">&#8679;</div>
-          <div class="upload-text"><strong>Click here</strong> or drag your files</div>
-          <div class="upload-formats">.png .jpg .svg .mp4 .mov .ttf .otf .woff2 .pdf</div>
-        </div>
-        <input type="file" id="assets-input" multiple accept="image/*,video/*,.ttf,.otf,.woff,.woff2,.pdf,.svg,.ai,.eps,.psd" style="display:none">
-        <div class="upload-list" id="assets-list"></div>
-        <input type="text" name="links" placeholder="Links: website, Drive, WeTransfer, Figma..." style="margin-top:12px">
+        <div class="section-label">Links <span class="optional-badge">optional</span></div>
+        <div class="section-hint">Website, Figma, Drive, references... For files (logo, fonts, videos), use <strong>WeTransfer</strong> and paste the link below.</div>
+        <input type="text" name="links" placeholder="https://...">
       </div>
 
       <button type="submit" class="submit-btn">Submit Brief</button>
@@ -902,78 +815,9 @@
       });
     });
 
-    const uploadSection = document.getElementById('upload-section');
-    document.querySelectorAll('input[name="structure"]').forEach(r => {
-      r.addEventListener('change', () => {
-        uploadSection.classList.toggle('visible',
-          document.querySelector('input[name="structure"]:checked').value === 'Showcase');
-      });
-    });
-
     document.querySelectorAll('.structure-detail').forEach(ta => {
       ta.addEventListener('input', () => autoResize(ta));
     });
-
-    function formatSize(bytes) {
-      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + ' KB';
-      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-    }
-
-    function setupUploadZone(dropzoneId, inputId, listId, fileStore) {
-      const dz = document.getElementById(dropzoneId);
-      const inp = document.getElementById(inputId);
-      const list = document.getElementById(listId);
-
-      dz.addEventListener('click', () => inp.click());
-      dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
-      dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
-      dz.addEventListener('drop', e => {
-        e.preventDefault(); dz.classList.remove('dragover');
-        addFiles(Array.from(e.dataTransfer.files));
-      });
-      inp.addEventListener('change', () => { addFiles(Array.from(inp.files)); inp.value = ''; });
-
-      function addFiles(files) {
-        files.forEach(file => { fileStore.push(file); renderItem(file, fileStore.length - 1); });
-      }
-
-      function renderItem(file, index) {
-        const item = document.createElement('div');
-        item.className = 'upload-item';
-        const ext = file.name.split('.').pop().toUpperCase();
-        item.innerHTML = '<div class="file-icon">' + ext + '</div>';
-
-        if (file.type.startsWith('video/')) {
-          const vid = document.createElement('video');
-          vid.src = URL.createObjectURL(file);
-          vid.className = 'file-preview'; vid.muted = true; vid.preload = 'metadata';
-          vid.addEventListener('loadeddata', () => { vid.currentTime = 1; });
-          item.appendChild(vid);
-        } else if (file.type.startsWith('image/')) {
-          const img = document.createElement('img');
-          img.src = URL.createObjectURL(file);
-          img.className = 'file-preview';
-          item.appendChild(img);
-        }
-
-        const info = document.createElement('div');
-        info.className = 'file-info';
-        info.innerHTML = '<div class="file-name">' + file.name + '</div><div class="file-size">' + formatSize(file.size) + '</div>';
-        item.appendChild(info);
-
-        const removeBtn = document.createElement('button');
-        removeBtn.type = 'button'; removeBtn.className = 'file-remove';
-        removeBtn.innerHTML = '&times;';
-        removeBtn.onclick = () => { fileStore[index] = null; item.remove(); };
-        item.appendChild(removeBtn);
-        list.appendChild(item);
-      }
-    }
-
-    let showcaseFiles = [];
-    setupUploadZone('upload-dropzone', 'file-input', 'upload-list', showcaseFiles);
-    let assetFiles = [];
-    setupUploadZone('assets-dropzone', 'assets-input', 'assets-list', assetFiles);
 
     // Sound links
     const soundLinks = [];
@@ -1009,33 +853,6 @@
     document.getElementById('sound-link-add-btn').addEventListener('click', addSoundLink);
     soundLinkInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addSoundLink(); } });
 
-    // Sound files
-    let soundFiles = [];
-    const soundBtn = document.getElementById('sound-upload-btn');
-    const soundInput = document.getElementById('sound-file-input');
-    const soundList = document.getElementById('sound-upload-list');
-
-    soundBtn.addEventListener('click', () => soundInput.click());
-    soundInput.addEventListener('change', () => {
-      Array.from(soundInput.files).forEach(file => {
-        soundFiles.push(file);
-        const idx = soundFiles.length - 1;
-        const item = document.createElement('div');
-        item.className = 'upload-item';
-        item.innerHTML = '<div class="file-icon" style="background:#171717">' + file.name.split('.').pop().toUpperCase() + '</div>';
-        const info = document.createElement('div');
-        info.className = 'file-info';
-        info.innerHTML = '<div class="file-name">' + file.name + '</div><div class="file-size">' + formatSize(file.size) + '</div>';
-        item.appendChild(info);
-        const removeBtn = document.createElement('button');
-        removeBtn.type = 'button'; removeBtn.className = 'file-remove';
-        removeBtn.innerHTML = '&times;';
-        removeBtn.onclick = () => { soundFiles[idx] = null; item.remove(); };
-        item.appendChild(removeBtn);
-        soundList.appendChild(item);
-      });
-      soundInput.value = '';
-    });
 
     function getFramesData() {
       const frames = [];
@@ -1064,11 +881,8 @@
         structure_detail: checkedStructure.closest('.structure-option').querySelector('.structure-detail').value.trim(),
         sounds: data.getAll('sound').join(', '),
         sound_links: soundLinks.filter(Boolean).join(', '),
-        sound_files: soundFiles.filter(Boolean).map(f => f.name).join(', '),
         visual_ideas: data.get('visual_ideas'),
         links: data.get('links'),
-        showcase_files: showcaseFiles.filter(Boolean).map(f => f.name).join(', '),
-        asset_files: assetFiles.filter(Boolean).map(f => f.name).join(', '),
       };
 
       const btn = e.target.querySelector('button[type="submit"]');
