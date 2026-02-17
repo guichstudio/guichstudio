@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polycool — Brief Vidéo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f5f7;
+      color: #1d1d1f;
+      min-height: 100vh;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: #4a54cc;
+      transition: width 0.4s ease;
+      z-index: 100;
+      border-radius: 0 2px 2px 0;
+    }
+
+    .container {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    .logo {
+      font-size: 14px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 600;
+      color: #1d1d1f;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      color: #888;
+      font-size: 15px;
+      margin-bottom: 48px;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .section-number {
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1px solid #ddd;
+      color: #999;
+      font-size: 13px;
+      line-height: 28px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .section-label {
+      font-size: 18px;
+      font-weight: 500;
+      color: #1d1d1f;
+      margin-bottom: 4px;
+    }
+
+    .section-hint {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 14px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: #1d1d1f;
+      font-size: 15px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    textarea:focus {
+      border-color: #aaa;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #bbb;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* Tags input */
+    .tags-input {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 10px 12px;
+      min-height: 48px;
+      cursor: text;
+      transition: border-color 0.2s;
+    }
+
+    .tags-input:focus-within { border-color: #aaa; }
+
+    .tags-input .tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f0f0f2;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 13px;
+      color: #444;
+      animation: tagIn 0.15s ease;
+    }
+
+    @keyframes tagIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .tags-input .tag button {
+      background: none;
+      border: none;
+      color: #aaa;
+      cursor: pointer;
+      font-size: 15px;
+      padding: 0;
+      line-height: 1;
+    }
+
+    .tags-input .tag button:hover { color: #e44; }
+
+    .tags-input input {
+      flex: 1;
+      min-width: 120px;
+      background: none;
+      border: none;
+      padding: 4px;
+      color: #1d1d1f;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .tags-input input::placeholder { color: #bbb; }
+
+    /* Frames */
+    .frames-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 14px;
+    }
+
+    .frame-block {
+      animation: frameIn 0.2s ease;
+    }
+
+    @keyframes frameIn {
+      from { transform: translateY(8px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .frame-card {
+      background: #1d1d1f;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .frame-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px 0;
+    }
+
+    .frame-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #666;
+    }
+
+    .frame-delete {
+      background: none;
+      border: none;
+      color: #555;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      padding: 2px 4px;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+
+    .frame-delete:hover {
+      color: #ff4444;
+      background: rgba(255,68,68,0.1);
+    }
+
+    .frame-textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 12px 14px 16px;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 500;
+      font-family: inherit;
+      resize: none;
+      outline: none;
+      min-height: 80px;
+      line-height: 1.4;
+    }
+
+    .frame-textarea::placeholder { color: #444; }
+
+    .frame-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 6px 4px 0;
+    }
+
+    .frame-note-icon {
+      font-size: 13px;
+      color: #bbb;
+      margin-top: 9px;
+      flex-shrink: 0;
+    }
+
+    .frame-note textarea {
+      flex: 1;
+      background: none;
+      border: none;
+      border-bottom: 1px dashed #ddd;
+      border-radius: 0;
+      padding: 8px 0;
+      color: #666;
+      font-size: 13px;
+      font-family: inherit;
+      font-style: italic;
+      resize: none;
+      outline: none;
+      min-height: 28px;
+      line-height: 1.4;
+    }
+
+    .frame-note textarea::placeholder {
+      color: #bbb;
+      font-style: italic;
+    }
+
+    .frame-note textarea:focus {
+      border-bottom-color: #99a3ff;
+      color: #444;
+    }
+
+    .add-frame-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px;
+      background: #fff;
+      border: 2px dashed #ddd;
+      border-radius: 12px;
+      color: #999;
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .add-frame-btn:hover {
+      border-color: #bbb;
+      color: #666;
+      background: #fafafa;
+    }
+
+    .add-frame-btn .plus {
+      font-size: 18px;
+      font-weight: 300;
+    }
+
+    /* Sound chips */
+    .sound-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .sound-chip { position: relative; }
+
+    .sound-chip input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .sound-chip label {
+      display: block;
+      padding: 8px 16px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #888;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .sound-chip input:checked + label {
+      background: #eef0ff;
+      border-color: #99a3ff;
+      color: #4a54cc;
+    }
+
+    .sound-chip label:hover { border-color: #bbb; }
+
+    .sound-note {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 8px;
+    }
+
+    .sound-ref {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px dashed #e0e0e0;
+    }
+
+    .sound-ref-label {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    .sound-ref-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .sound-ref-input { flex: 1; }
+
+    .sound-ref-upload-btn {
+      flex-shrink: 0;
+      padding: 10px 16px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      color: #888;
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sound-ref-upload-btn:hover {
+      border-color: #99a3ff;
+      color: #4a54cc;
+      background: #f8f8ff;
+    }
+
+    /* Structure */
+    .structure-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .structure-option { position: relative; }
+
+    .structure-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .structure-option label {
+      display: block;
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .structure-option input:checked + label {
+      border-color: #99a3ff;
+      background: #f8f8ff;
+      border-radius: 10px 10px 0 0;
+      border-bottom: none;
+    }
+
+    .structure-option label:hover { border-color: #bbb; }
+
+    .structure-option .opt-title {
+      font-size: 15px;
+      color: #1d1d1f;
+      margin-bottom: 2px;
+    }
+
+    .structure-option .opt-desc {
+      font-size: 12px;
+      color: #999;
+    }
+
+    .structure-detail {
+      display: none;
+      width: 100%;
+      background: #f8f9ff;
+      border: 1px solid #99a3ff;
+      border-top: 1px dashed #c5caff;
+      border-radius: 0 0 10px 10px;
+      padding: 10px 16px 12px;
+      color: #555;
+      font-size: 13px;
+      font-family: inherit;
+      resize: none;
+      outline: none;
+      min-height: 40px;
+      line-height: 1.4;
+    }
+
+    .structure-detail::placeholder { color: #bbb; }
+
+    .structure-option input:checked ~ .structure-detail {
+      display: block;
+    }
+
+    /* Upload */
+    .upload-section {
+      display: none;
+      margin-top: 16px;
+      animation: frameIn 0.25s ease;
+    }
+
+    .upload-section.visible { display: block; }
+    .upload-section .section-hint { margin-bottom: 12px; }
+
+    .upload-dropzone {
+      border: 2px dashed #ddd;
+      border-radius: 12px;
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #fff;
+    }
+
+    .upload-dropzone:hover,
+    .upload-dropzone.dragover {
+      border-color: #99a3ff;
+      background: #f8f8ff;
+    }
+
+    .upload-dropzone .upload-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+      color: #ccc;
+    }
+
+    .upload-dropzone .upload-text {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .upload-dropzone .upload-text strong {
+      color: #4a54cc;
+      cursor: pointer;
+    }
+
+    .upload-dropzone .upload-formats {
+      font-size: 12px;
+      color: #bbb;
+      margin-top: 4px;
+    }
+
+    .upload-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .upload-list:empty { margin-top: 0; }
+
+    .upload-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #fff;
+      border: 1px solid #e5e5e7;
+      border-radius: 10px;
+      padding: 10px 14px;
+      animation: tagIn 0.15s ease;
+    }
+
+    .upload-item .file-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: #1d1d1f;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .upload-item .file-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .upload-item .file-name {
+      font-size: 14px;
+      color: #1d1d1f;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .upload-item .file-size {
+      font-size: 12px;
+      color: #aaa;
+    }
+
+    .upload-item .file-preview {
+      width: 48px;
+      height: 36px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: #000;
+      flex-shrink: 0;
+    }
+
+    .upload-item .file-remove {
+      background: none;
+      border: none;
+      color: #ccc;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 4px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+
+    .upload-item .file-remove:hover {
+      color: #e44;
+      background: #fef0f0;
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid #e5e5e7;
+      margin: 48px 0;
+    }
+
+    .optional-badge {
+      display: inline-block;
+      font-size: 11px;
+      color: #999;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 1px 6px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* Submit */
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: #1d1d1f;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 16px;
+    }
+
+    .submit-btn:hover { background: #333; }
+    .submit-btn:active { transform: scale(0.99); }
+
+    /* Success */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 120px 24px;
+    }
+
+    .success-screen .check {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #eafbe7;
+      border: 1px solid #b5e6a8;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .success-screen h2 {
+      font-size: 24px;
+      color: #1d1d1f;
+      margin-bottom: 8px;
+    }
+
+    .success-screen p {
+      color: #888;
+      font-size: 15px;
+    }
+
+    /* Mobile */
+    @media (max-width: 520px) {
+      .container { padding: 40px 16px 60px; }
+      h1 { font-size: 26px; }
+
+      .row-2col {
+        flex-direction: column !important;
+        gap: 10px !important;
+      }
+
+      .row-2col input { flex: unset !important; }
+
+      .sound-ref-row {
+        flex-direction: column;
+      }
+
+      .sound-ref-upload-btn {
+        justify-content: center;
+      }
+
+      .frame-textarea {
+        font-size: 16px;
+        min-height: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+
+  <div class="container">
+    <form id="brief-form" action="#" method="POST">
+      <div class="logo">Polycool</div>
+      <h1>Brief vidéo</h1>
+      <p class="subtitle">Remplis les champs ci-dessous. Pas de blabla, va droit au but.</p>
+
+      <!-- Nom / Email -->
+      <div class="section row-2col" style="display:flex;gap:12px;" data-section="info">
+        <input type="text" name="nom" placeholder="Ton nom" required style="flex:1">
+        <input type="email" name="email" placeholder="Email" required style="flex:1">
+      </div>
+
+      <!-- 1. Idée générale -->
+      <div class="section" data-section="idee">
+        <div class="section-number">1</div>
+        <div class="section-label">Idée générale</div>
+        <div class="section-hint">Mots-clés qui décrivent ton projet. Appuie Entrée après chaque mot-clé.</div>
+        <div class="tags-input" id="tags-idea">
+          <input type="text" placeholder="ex: lancement, luxe, immobilier...">
+        </div>
+        <input type="hidden" name="idee_generale" id="hidden-idee">
+      </div>
+
+      <!-- 2. Copy -->
+      <div class="section" data-section="copy">
+        <div class="section-number">2</div>
+        <div class="section-label">Copy</div>
+        <div class="section-hint">Écris le texte de chaque frame de ta vidéo. Ajoute autant de frames que nécessaire.</div>
+        <div class="frames-container" id="frames-container">
+          <div class="frame-block" data-frame="1">
+            <div class="frame-card">
+              <div class="frame-header">
+                <span class="frame-label">Frame 1</span>
+              </div>
+              <textarea class="frame-textarea" placeholder="ex: From today win every day" rows="2"></textarea>
+            </div>
+            <div class="frame-note">
+              <span class="frame-note-icon">&#9998;</span>
+              <textarea class="frame-comment" placeholder="Idée de motion, asset à montrer, transition..." rows="1"></textarea>
+            </div>
+          </div>
+          <div class="frame-block" data-frame="2">
+            <div class="frame-card">
+              <div class="frame-header">
+                <span class="frame-label">Frame 2</span>
+              </div>
+              <textarea class="frame-textarea" placeholder="ex: Stack your Cool coins" rows="2"></textarea>
+            </div>
+            <div class="frame-note">
+              <span class="frame-note-icon">&#9998;</span>
+              <textarea class="frame-comment" placeholder="Idée de motion, asset à montrer, transition..." rows="1"></textarea>
+            </div>
+          </div>
+          <div class="frame-block" data-frame="3">
+            <div class="frame-card">
+              <div class="frame-header">
+                <span class="frame-label">Frame 3</span>
+              </div>
+              <textarea class="frame-textarea" placeholder="ex: Get paid every day" rows="2"></textarea>
+            </div>
+            <div class="frame-note">
+              <span class="frame-note-icon">&#9998;</span>
+              <textarea class="frame-comment" placeholder="Idée de motion, asset à montrer, transition..." rows="1"></textarea>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="add-frame-btn" id="add-frame-btn">
+          <span class="plus">+</span> Ajouter une frame
+        </button>
+        <input type="hidden" name="copy_frames" id="hidden-frames">
+      </div>
+
+      <!-- 3. Structure -->
+      <div class="section" data-section="structure">
+        <div class="section-number">3</div>
+        <div class="section-label">Structure</div>
+        <div class="section-hint">Comment tu vois le déroulement de la vidéo ?</div>
+        <div class="structure-options">
+          <div class="structure-option">
+            <input type="radio" name="structure" id="s-hook" value="Hook → Valeur → CTA" checked>
+            <label for="s-hook">
+              <div class="opt-title">Hook → Valeur → CTA</div>
+              <div class="opt-desc">Accroche percutante, argument principal, appel à l'action</div>
+            </label>
+            <textarea class="structure-detail" placeholder="Décris ton hook, ta proposition de valeur, ton CTA..." rows="2"></textarea>
+          </div>
+          <div class="structure-option">
+            <input type="radio" name="structure" id="s-story" value="Storytelling">
+            <label for="s-story">
+              <div class="opt-title">Storytelling</div>
+              <div class="opt-desc">Problème → Solution → Résultat</div>
+            </label>
+            <textarea class="structure-detail" placeholder="Décris le problème, la solution, le résultat..." rows="2"></textarea>
+          </div>
+          <div class="structure-option">
+            <input type="radio" name="structure" id="s-showcase" value="Showcase">
+            <label for="s-showcase">
+              <div class="opt-title">Showcase</div>
+              <div class="opt-desc">Présentation visuelle du produit / service avec texte minimal</div>
+            </label>
+            <textarea class="structure-detail" placeholder="Décris ce que tu veux montrer, les features, le flow..." rows="2"></textarea>
+          </div>
+          <div class="structure-option">
+            <input type="radio" name="structure" id="s-custom" value="custom">
+            <label for="s-custom">
+              <div class="opt-title">Autre</div>
+              <div class="opt-desc">Tu décris ta propre structure</div>
+            </label>
+            <textarea class="structure-detail" placeholder="Décris ta structure de A à Z..." rows="2"></textarea>
+          </div>
+        </div>
+
+        <!-- Upload zone for Showcase -->
+        <div class="upload-section" id="upload-section">
+          <div class="section-hint">Upload tes screen recordings / vidéos produit (.mp4). Autant que tu veux.</div>
+          <div class="upload-dropzone" id="upload-dropzone">
+            <div class="upload-icon">&#9654;</div>
+            <div class="upload-text"><strong>Clique ici</strong> ou glisse tes fichiers</div>
+            <div class="upload-formats">.mp4, .mov, .webm</div>
+          </div>
+          <input type="file" id="file-input" multiple accept="video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm" style="display:none">
+          <div class="upload-list" id="upload-list"></div>
+        </div>
+      </div>
+
+      <!-- Son / Ambiance -->
+      <div class="section" data-section="son">
+        <div class="section-number">&#9835;</div>
+        <div class="section-label">Ambiance sonore</div>
+        <div class="section-hint">Choisis 1 à 3 vibes qui collent à ton projet.</div>
+        <div class="sound-grid">
+          <div class="sound-chip"><input type="checkbox" name="son" id="sn-epic" value="Épique / Cinématique"><label for="sn-epic">Épique / Cinématique</label></div>
+          <div class="sound-chip"><input type="checkbox" name="son" id="sn-chill" value="Chill / Lo-fi"><label for="sn-chill">Chill / Lo-fi</label></div>
+          <div class="sound-chip"><input type="checkbox" name="son" id="sn-energy" value="Énergique / Hype"><label for="sn-energy">Énergique / Hype</label></div>
+          <div class="sound-chip"><input type="checkbox" name="son" id="sn-corp" value="Corporate / Clean"><label for="sn-corp">Corporate / Clean</label></div>
+          <div class="sound-chip"><input type="checkbox" name="son" id="sn-dark" value="Dark / Mystérieux"><label for="sn-dark">Dark / Mystérieux</label></div>
+          <div class="sound-chip"><input type="checkbox" name="son" id="sn-luxury" value="Luxe / Élégant"><label for="sn-luxury">Luxe / Élégant</label></div>
+          <div class="sound-chip"><input type="checkbox" name="son" id="sn-fun" value="Fun / Playful"><label for="sn-fun">Fun / Playful</label></div>
+          <div class="sound-chip"><input type="checkbox" name="son" id="sn-minimal" value="Minimal / Ambient"><label for="sn-minimal">Minimal / Ambient</label></div>
+        </div>
+        <div class="sound-note">Max 3 choix</div>
+        <div class="sound-ref">
+          <div class="sound-ref-label">Tu as une ref en tête ?</div>
+          <div class="sound-ref-row">
+            <input type="text" name="son_lien" class="sound-ref-input" placeholder="Lien YouTube, Spotify, SoundCloud...">
+            <button type="button" class="sound-ref-upload-btn" id="sound-upload-btn">
+              <span>&#8679;</span> .mp3
+            </button>
+            <input type="file" id="sound-file-input" multiple accept="audio/*,.mp3,.wav,.aac,.ogg,.m4a" style="display:none">
+          </div>
+          <div class="upload-list" id="sound-upload-list"></div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- 4. Bonus -->
+      <div class="section" data-section="visuelles">
+        <div class="section-number">4</div>
+        <div class="section-label">Idées visuelles <span class="optional-badge">optionnel</span></div>
+        <div class="section-hint">T'as des trucs en tête ? Références, couleurs, style, éléments spécifiques...</div>
+        <textarea name="idees_visuelles" rows="3" placeholder="ex: tons sombres, typographie bold, transitions rapides, style Apple..."></textarea>
+      </div>
+
+      <!-- Fichiers / Liens -->
+      <div class="section" data-section="fichiers">
+        <div class="section-label">Fichiers & liens <span class="optional-badge">optionnel</span></div>
+        <div class="section-hint">Logo, images, vidéos de référence, fonts, etc. Autant que tu veux.</div>
+        <div class="upload-dropzone" id="assets-dropzone">
+          <div class="upload-icon">&#8679;</div>
+          <div class="upload-text"><strong>Clique ici</strong> ou glisse tes fichiers</div>
+          <div class="upload-formats">.png .jpg .svg .mp4 .mov .ttf .otf .woff2 .pdf</div>
+        </div>
+        <input type="file" id="assets-input" multiple accept="image/*,video/*,.ttf,.otf,.woff,.woff2,.pdf,.svg,.ai,.eps,.psd" style="display:none">
+        <div class="upload-list" id="assets-list"></div>
+        <input type="text" name="liens" placeholder="Liens : site web, Drive, WeTransfer, Figma..." style="margin-top:12px">
+      </div>
+
+      <button type="submit" class="submit-btn">Envoyer le brief</button>
+    </form>
+
+    <div class="success-screen" id="success">
+      <div class="check">&#10003;</div>
+      <h2>Brief envoyé</h2>
+      <p>Merci ! On revient vers toi rapidement.</p>
+    </div>
+  </div>
+
+  <script>
+    // ─── Auto-resize ───
+    function autoResize(el) {
+      el.style.height = 'auto';
+      el.style.height = el.scrollHeight + 'px';
+    }
+
+    // ─── Progress bar ───
+    const progressBar = document.getElementById('progress-bar');
+    const sections = {
+      info:       () => !!document.querySelector('[name="nom"]').value && !!document.querySelector('[name="email"]').value,
+      idee:       () => !!document.getElementById('hidden-idee').value,
+      copy:       () => !!document.querySelector('.frame-textarea')?.value?.trim(),
+      structure:  () => !!document.querySelector('input[name="structure"]:checked'),
+      son:        () => document.querySelectorAll('input[name="son"]:checked').length > 0,
+    };
+    const totalSections = Object.keys(sections).length;
+
+    function updateProgress() {
+      let filled = 0;
+      for (const key in sections) {
+        if (sections[key]()) filled++;
+      }
+      progressBar.style.width = Math.round((filled / totalSections) * 100) + '%';
+    }
+
+    // Listen globally for changes
+    document.getElementById('brief-form').addEventListener('input', updateProgress);
+    document.getElementById('brief-form').addEventListener('change', updateProgress);
+
+    // ─── Tags input ───
+    const tagsContainer = document.getElementById('tags-idea');
+    const tagsInput = tagsContainer.querySelector('input[type="text"]');
+    const hiddenIdee = document.getElementById('hidden-idee');
+    let tags = [];
+
+    function syncTags() {
+      hiddenIdee.value = tags.join(', ');
+      updateProgress();
+    }
+
+    function addTag(text) {
+      text = text.trim();
+      if (!text || tags.includes(text)) return;
+      tags.push(text);
+      const tag = document.createElement('span');
+      tag.className = 'tag';
+      tag.textContent = text;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.innerHTML = '&times;';
+      btn.onclick = () => {
+        tags = tags.filter(t => t !== text);
+        tag.remove();
+        syncTags();
+      };
+      tag.appendChild(btn);
+      tagsContainer.insertBefore(tag, tagsInput);
+      syncTags();
+    }
+
+    tagsInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ',') {
+        e.preventDefault();
+        addTag(tagsInput.value);
+        tagsInput.value = '';
+      }
+      if (e.key === 'Backspace' && !tagsInput.value && tags.length) {
+        const allTags = tagsContainer.querySelectorAll('.tag');
+        if (allTags.length) {
+          tags.pop();
+          allTags[allTags.length - 1].remove();
+          syncTags();
+        }
+      }
+    });
+
+    tagsContainer.addEventListener('click', () => tagsInput.focus());
+
+    // ─── Frames ───
+    const framesContainer = document.getElementById('frames-container');
+    const addFrameBtn = document.getElementById('add-frame-btn');
+    let frameCount = 3;
+
+    function updateFrameNumbers() {
+      const blocks = framesContainer.querySelectorAll('.frame-block');
+      blocks.forEach((block, i) => {
+        block.dataset.frame = i + 1;
+        block.querySelector('.frame-label').textContent = 'Frame ' + (i + 1);
+        const del = block.querySelector('.frame-delete');
+        if (del) del.style.display = blocks.length > 1 ? 'block' : 'none';
+      });
+      frameCount = blocks.length;
+    }
+
+    function initFrameBlock(block) {
+      const card = block.querySelector('.frame-card');
+      if (!card.querySelector('.frame-delete')) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'frame-delete';
+        btn.innerHTML = '&times;';
+        btn.onclick = () => { block.remove(); updateFrameNumbers(); };
+        card.querySelector('.frame-header').appendChild(btn);
+      }
+      block.querySelectorAll('.frame-textarea, .frame-comment').forEach(ta => {
+        ta.addEventListener('input', () => autoResize(ta));
+      });
+    }
+
+    framesContainer.querySelectorAll('.frame-block').forEach(initFrameBlock);
+    updateFrameNumbers();
+
+    addFrameBtn.addEventListener('click', () => {
+      frameCount++;
+      const block = document.createElement('div');
+      block.className = 'frame-block';
+      block.dataset.frame = frameCount;
+      block.innerHTML = `
+        <div class="frame-card">
+          <div class="frame-header">
+            <span class="frame-label">Frame ${frameCount}</span>
+            <button type="button" class="frame-delete">&times;</button>
+          </div>
+          <textarea class="frame-textarea" placeholder="Texte de cette frame..." rows="2"></textarea>
+        </div>
+        <div class="frame-note">
+          <span class="frame-note-icon">&#9998;</span>
+          <textarea class="frame-comment" placeholder="Idée de motion, asset à montrer, transition..." rows="1"></textarea>
+        </div>
+      `;
+      block.querySelector('.frame-delete').onclick = () => {
+        block.remove();
+        updateFrameNumbers();
+      };
+      block.querySelectorAll('.frame-textarea, .frame-comment').forEach(ta => {
+        ta.addEventListener('input', () => autoResize(ta));
+      });
+      framesContainer.appendChild(block);
+      block.querySelector('.frame-textarea').focus();
+      updateFrameNumbers();
+    });
+
+    // ─── Sound limit (max 3) ───
+    document.querySelectorAll('input[name="son"]').forEach(cb => {
+      cb.addEventListener('change', () => {
+        if (document.querySelectorAll('input[name="son"]:checked').length > 3) cb.checked = false;
+      });
+    });
+
+    // ─── Structure toggle ───
+    const uploadSection = document.getElementById('upload-section');
+
+    document.querySelectorAll('input[name="structure"]').forEach(r => {
+      r.addEventListener('change', () => {
+        const val = document.querySelector('input[name="structure"]:checked').value;
+        uploadSection.classList.toggle('visible', val === 'Showcase');
+      });
+    });
+
+    document.querySelectorAll('.structure-detail').forEach(ta => {
+      ta.addEventListener('input', () => autoResize(ta));
+    });
+
+    // ─── Upload zones (reusable) ───
+    function formatSize(bytes) {
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    function setupUploadZone(dropzoneId, inputId, listId, fileStore) {
+      const dz = document.getElementById(dropzoneId);
+      const inp = document.getElementById(inputId);
+      const list = document.getElementById(listId);
+
+      dz.addEventListener('click', () => inp.click());
+      dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
+      dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+      dz.addEventListener('drop', e => {
+        e.preventDefault();
+        dz.classList.remove('dragover');
+        addFiles(Array.from(e.dataTransfer.files));
+      });
+      inp.addEventListener('change', () => { addFiles(Array.from(inp.files)); inp.value = ''; });
+
+      function addFiles(files) {
+        files.forEach(file => {
+          fileStore.push(file);
+          renderItem(file, fileStore.length - 1);
+        });
+      }
+
+      function renderItem(file, index) {
+        const item = document.createElement('div');
+        item.className = 'upload-item';
+        const ext = file.name.split('.').pop().toUpperCase();
+        const isVideo = file.type.startsWith('video/');
+        const isImage = file.type.startsWith('image/');
+
+        item.innerHTML = '<div class="file-icon">' + ext + '</div>';
+
+        if (isVideo) {
+          const vid = document.createElement('video');
+          vid.src = URL.createObjectURL(file);
+          vid.className = 'file-preview';
+          vid.muted = true;
+          vid.preload = 'metadata';
+          vid.addEventListener('loadeddata', () => { vid.currentTime = 1; });
+          item.appendChild(vid);
+        } else if (isImage) {
+          const img = document.createElement('img');
+          img.src = URL.createObjectURL(file);
+          img.className = 'file-preview';
+          item.appendChild(img);
+        }
+
+        const info = document.createElement('div');
+        info.className = 'file-info';
+        info.innerHTML = '<div class="file-name">' + file.name + '</div><div class="file-size">' + formatSize(file.size) + '</div>';
+        item.appendChild(info);
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'file-remove';
+        removeBtn.innerHTML = '&times;';
+        removeBtn.onclick = () => { fileStore[index] = null; item.remove(); };
+        item.appendChild(removeBtn);
+
+        list.appendChild(item);
+      }
+    }
+
+    let showcaseFiles = [];
+    setupUploadZone('upload-dropzone', 'file-input', 'upload-list', showcaseFiles);
+
+    let assetFiles = [];
+    setupUploadZone('assets-dropzone', 'assets-input', 'assets-list', assetFiles);
+
+    // ─── Sound file upload ───
+    let soundFiles = [];
+    const soundBtn = document.getElementById('sound-upload-btn');
+    const soundInput = document.getElementById('sound-file-input');
+    const soundList = document.getElementById('sound-upload-list');
+
+    soundBtn.addEventListener('click', () => soundInput.click());
+    soundInput.addEventListener('change', () => {
+      Array.from(soundInput.files).forEach(file => {
+        soundFiles.push(file);
+        const idx = soundFiles.length - 1;
+        const item = document.createElement('div');
+        item.className = 'upload-item';
+        const ext = file.name.split('.').pop().toUpperCase();
+        item.innerHTML = '<div class="file-icon" style="background:#4a54cc">' + ext + '</div>';
+        const info = document.createElement('div');
+        info.className = 'file-info';
+        info.innerHTML = '<div class="file-name">' + file.name + '</div><div class="file-size">' + formatSize(file.size) + '</div>';
+        item.appendChild(info);
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'file-remove';
+        removeBtn.innerHTML = '&times;';
+        removeBtn.onclick = () => { soundFiles[idx] = null; item.remove(); };
+        item.appendChild(removeBtn);
+        soundList.appendChild(item);
+      });
+      soundInput.value = '';
+    });
+
+    // ─── Collect & submit ───
+    function getFramesData() {
+      const frames = [];
+      framesContainer.querySelectorAll('.frame-block').forEach(block => {
+        const text = block.querySelector('.frame-textarea').value.trim();
+        const note = block.querySelector('.frame-comment').value.trim();
+        if (text) frames.push({ frame: block.dataset.frame, text, note: note || '' });
+      });
+      return frames;
+    }
+
+    document.getElementById('brief-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const data = new FormData(e.target);
+      const frames = getFramesData();
+      document.getElementById('hidden-frames').value = JSON.stringify(frames);
+
+      const checkedStructure = document.querySelector('input[name="structure"]:checked');
+      const structureDetail = checkedStructure
+        .closest('.structure-option').querySelector('.structure-detail').value.trim();
+
+      const brief = {
+        nom: data.get('nom'),
+        email: data.get('email'),
+        idee_generale: data.get('idee_generale'),
+        copy_frames: frames,
+        structure: checkedStructure.value,
+        structure_detail: structureDetail,
+        sons: data.getAll('son'),
+        son_lien: data.get('son_lien'),
+        son_fichiers: soundFiles.filter(Boolean).map(f => f.name),
+        idees_visuelles: data.get('idees_visuelles'),
+        liens: data.get('liens'),
+        fichiers_showcase: showcaseFiles.filter(Boolean).map(f => f.name),
+        fichiers_assets: assetFiles.filter(Boolean).map(f => f.name),
+      };
+
+      console.log('Brief reçu:', brief);
+
+      // TODO: Envoie vers ton backend
+      // const formData = new FormData();
+      // formData.append('brief', JSON.stringify(brief));
+      // soundFiles.filter(Boolean).forEach(f => formData.append('sound', f));
+      // assetFiles.filter(Boolean).forEach(f => formData.append('asset', f));
+      // showcaseFiles.filter(Boolean).forEach(f => formData.append('showcase', f));
+      // fetch('https://ton-api.com/briefs', { method: 'POST', body: formData });
+
+      e.target.style.display = 'none';
+      document.getElementById('success').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Init progress
+    updateProgress();
+  </script>
+</body>
+</html>
