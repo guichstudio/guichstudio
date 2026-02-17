@@ -43,7 +43,7 @@ export default async function handler(req, res) {
 
       <h2 style="font-size:16px;color:#999;text-transform:uppercase;letter-spacing:1px">Sound / Mood</h2>
       <p style="font-size:15px">${esc(brief.sons || brief.sounds || '—')}</p>
-      ${brief.son_lien || brief.sound_link ? `<p style="font-size:14px">🔗 <a href="${esc(brief.son_lien || brief.sound_link)}">${esc(brief.son_lien || brief.sound_link)}</a></p>` : ''}
+      ${brief.son_liens || brief.sound_links ? `<p style="font-size:14px">🔗 ${esc(brief.son_liens || brief.sound_links).split(', ').map(l => '<a href="' + l + '">' + l + '</a>').join('<br>🔗 ')}</p>` : ''}
       ${brief.son_fichiers || brief.sound_files ? `<p style="font-size:14px;color:#666">📎 ${esc(brief.son_fichiers || brief.sound_files)}</p>` : ''}
 
       <h2 style="font-size:16px;color:#999;text-transform:uppercase;letter-spacing:1px">Visual Ideas</h2>
