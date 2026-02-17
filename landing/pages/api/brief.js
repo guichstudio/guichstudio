@@ -66,7 +66,7 @@ export default async function handler(req, res) {
 
     await resend.emails.send({
       from: process.env.RESEND_FROM || 'BuildLore <onboarding@resend.dev>',
-      to: process.env.BRIEF_EMAIL || 'hello@buildlore.top',
+      to: 'guich.studio@gmail.com',
       replyTo: clientEmail || undefined,
       subject: `Video Brief — ${clientName}`,
       html,
