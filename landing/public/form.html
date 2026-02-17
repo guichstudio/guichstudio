@@ -1178,7 +1178,7 @@
       return frames;
     }
 
-    document.getElementById('brief-form').addEventListener('submit', e => {
+    document.getElementById('brief-form').addEventListener('submit', async e => {
       e.preventDefault();
       const data = new FormData(e.target);
       const frames = getFramesData();
@@ -1190,23 +1190,38 @@
         nom: data.get('nom'),
         email: data.get('email'),
         idee_generale: data.get('idee_generale'),
-        copy_frames: frames,
+        copy_frames: JSON.stringify(frames),
         structure: checkedStructure.value,
         structure_detail: checkedStructure.closest('.structure-option').querySelector('.structure-detail').value.trim(),
-        sons: data.getAll('son'),
+        sons: data.getAll('son').join(', '),
         son_lien: data.get('son_lien'),
-        son_fichiers: soundFiles.filter(Boolean).map(f => f.name),
+        son_fichiers: soundFiles.filter(Boolean).map(f => f.name).join(', '),
         idees_visuelles: data.get('idees_visuelles'),
         liens: data.get('liens'),
-        fichiers_showcase: showcaseFiles.filter(Boolean).map(f => f.name),
-        fichiers_assets: assetFiles.filter(Boolean).map(f => f.name),
+        fichiers_showcase: showcaseFiles.filter(Boolean).map(f => f.name).join(', '),
+        fichiers_assets: assetFiles.filter(Boolean).map(f => f.name).join(', '),
       };
 
-      console.log('Brief reçu:', brief);
+      const btn = e.target.querySelector('button[type="submit"]');
+      const oldText = btn.textContent;
+      btn.textContent = 'Envoi en cours...';
+      btn.disabled = true;
 
-      e.target.style.display = 'none';
-      document.getElementById('success').style.display = 'block';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try {
+        const res = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(brief),
+        });
+        if (!res.ok) throw new Error('Erreur');
+        e.target.style.display = 'none';
+        document.getElementById('success').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err) {
+        btn.textContent = oldText;
+        btn.disabled = false;
+        alert('Erreur lors de l\'envoi. Veuillez réessayer.');
+      }
     });
 
     updateProgress();
