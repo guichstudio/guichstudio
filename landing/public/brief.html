@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuildLore — Video Brief</title>
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <style>
+    @font-face {
+      font-family: 'BigCaslon';
+      src: url('/fonts/BigCaslon.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'Inter';
+      src: url('/fonts/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #fff;
+      color: #171717;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: #171717;
+      transition: width 0.4s ease;
+      z-index: 100;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.6);
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-logo {
+      font-family: 'BigCaslon', serif;
+      font-size: 24px;
+      letter-spacing: -0.02em;
+      color: #171717;
+      text-decoration: none;
+    }
+
+    .header-link {
+      font-size: 18px;
+      color: #171717;
+      opacity: 0.7;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .header-link:hover { opacity: 1; }
+
+    .container {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    h1 {
+      font-family: 'BigCaslon', serif;
+      font-size: 36px;
+      font-weight: normal;
+      letter-spacing: -0.02em;
+      color: #171717;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      color: #a3a3a3;
+      font-size: 15px;
+      margin-bottom: 48px;
+    }
+
+    .section { margin-bottom: 40px; }
+
+    .section-number {
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      color: #a3a3a3;
+      font-size: 13px;
+      line-height: 28px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .section-label {
+      font-size: 18px;
+      font-weight: 500;
+      color: #171717;
+      margin-bottom: 4px;
+    }
+
+    .section-hint {
+      font-size: 13px;
+      color: #a3a3a3;
+      margin-bottom: 14px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: #171717;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    textarea:focus { border-color: #a3a3a3; }
+
+    input::placeholder,
+    textarea::placeholder { color: #d4d4d4; }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .tags-input {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      padding: 10px 12px;
+      min-height: 48px;
+      cursor: text;
+      transition: border-color 0.2s;
+    }
+
+    .tags-input:focus-within { border-color: #a3a3a3; }
+
+    .tags-input .tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 13px;
+      color: #525252;
+      animation: tagIn 0.15s ease;
+    }
+
+    @keyframes tagIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .tags-input .tag button {
+      background: none;
+      border: none;
+      color: #a3a3a3;
+      cursor: pointer;
+      font-size: 15px;
+      padding: 0;
+      line-height: 1;
+    }
+
+    .tags-input .tag button:hover { color: #dc2626; }
+
+    .tags-input input {
+      flex: 1;
+      min-width: 120px;
+      background: none;
+      border: none;
+      padding: 4px;
+      color: #171717;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .tags-input input::placeholder { color: #d4d4d4; }
+
+    .frames-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 14px;
+    }
+
+    .frame-block { animation: frameIn 0.2s ease; }
+
+    @keyframes frameIn {
+      from { transform: translateY(8px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .frame-card {
+      background: #171717;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .frame-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px 0;
+    }
+
+    .frame-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #525252;
+    }
+
+    .frame-delete {
+      background: none;
+      border: none;
+      color: #525252;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      padding: 2px 4px;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+
+    .frame-delete:hover {
+      color: #ef4444;
+      background: rgba(239,68,68,0.1);
+    }
+
+    .frame-textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 12px 14px 16px;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      resize: none;
+      outline: none;
+      min-height: 80px;
+      line-height: 1.4;
+    }
+
+    .frame-textarea::placeholder { color: #404040; }
+
+    .frame-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 6px 4px 0;
+    }
+
+    .frame-note-icon {
+      font-size: 13px;
+      color: #d4d4d4;
+      margin-top: 9px;
+      flex-shrink: 0;
+    }
+
+    .frame-note textarea {
+      flex: 1;
+      background: none;
+      border: none;
+      border-bottom: 1px dashed #e5e5e5;
+      border-radius: 0;
+      padding: 8px 0;
+      color: #737373;
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      font-style: italic;
+      resize: none;
+      outline: none;
+      min-height: 28px;
+      line-height: 1.4;
+    }
+
+    .frame-note textarea::placeholder {
+      color: #d4d4d4;
+      font-style: italic;
+    }
+
+    .frame-note textarea:focus {
+      border-bottom-color: #171717;
+      color: #525252;
+    }
+
+    .add-frame-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px;
+      background: #fafafa;
+      border: 2px dashed #e5e5e5;
+      border-radius: 12px;
+      color: #a3a3a3;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .add-frame-btn:hover {
+      border-color: #a3a3a3;
+      color: #737373;
+      background: #f5f5f5;
+    }
+
+    .add-frame-btn .plus { font-size: 18px; font-weight: 300; }
+
+    .sound-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .sound-chip { position: relative; }
+    .sound-chip input { position: absolute; opacity: 0; pointer-events: none; }
+
+    .sound-chip label {
+      display: block;
+      padding: 8px 16px;
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #a3a3a3;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .sound-chip input:checked + label {
+      background: #171717;
+      border-color: #171717;
+      color: #fff;
+    }
+
+    .sound-chip label:hover { border-color: #a3a3a3; }
+
+    .sound-note { font-size: 12px; color: #d4d4d4; margin-top: 8px; }
+
+    .sound-ref {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px dashed #e5e5e5;
+    }
+
+    .sound-ref-label { font-size: 13px; color: #a3a3a3; margin-bottom: 8px; }
+    .sound-ref-row { display: flex; gap: 8px; }
+    .sound-ref-input { flex: 1; }
+
+    .sound-ref-upload-btn {
+      flex-shrink: 0;
+      padding: 10px 16px;
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      color: #a3a3a3;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sound-ref-upload-btn:hover {
+      border-color: #171717;
+      color: #171717;
+      background: #f5f5f5;
+    }
+
+    .structure-options { display: flex; flex-direction: column; gap: 8px; }
+    .structure-option { position: relative; }
+    .structure-option input { position: absolute; opacity: 0; pointer-events: none; }
+
+    .structure-option label {
+      display: block;
+      padding: 14px 16px;
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .structure-option input:checked + label {
+      border-color: #171717;
+      background: #fff;
+      border-radius: 10px 10px 0 0;
+      border-bottom: none;
+    }
+
+    .structure-option label:hover { border-color: #a3a3a3; }
+    .structure-option .opt-title { font-size: 15px; color: #171717; margin-bottom: 2px; }
+    .structure-option .opt-desc { font-size: 12px; color: #a3a3a3; }
+
+    .structure-detail {
+      display: none;
+      width: 100%;
+      background: #fafafa;
+      border: 1px solid #171717;
+      border-top: 1px dashed #d4d4d4;
+      border-radius: 0 0 10px 10px;
+      padding: 10px 16px 12px;
+      color: #525252;
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      resize: none;
+      outline: none;
+      min-height: 40px;
+      line-height: 1.4;
+    }
+
+    .structure-detail::placeholder { color: #d4d4d4; }
+    .structure-option input:checked ~ .structure-detail { display: block; }
+
+    .upload-section { display: none; margin-top: 16px; animation: frameIn 0.25s ease; }
+    .upload-section.visible { display: block; }
+    .upload-section .section-hint { margin-bottom: 12px; }
+
+    .upload-dropzone {
+      border: 2px dashed #e5e5e5;
+      border-radius: 12px;
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #fafafa;
+    }
+
+    .upload-dropzone:hover,
+    .upload-dropzone.dragover { border-color: #171717; background: #f5f5f5; }
+
+    .upload-dropzone .upload-icon { font-size: 32px; margin-bottom: 8px; color: #d4d4d4; }
+    .upload-dropzone .upload-text { font-size: 14px; color: #a3a3a3; }
+    .upload-dropzone .upload-text strong { color: #171717; cursor: pointer; }
+    .upload-dropzone .upload-formats { font-size: 12px; color: #d4d4d4; margin-top: 4px; }
+
+    .upload-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+    .upload-list:empty { margin-top: 0; }
+
+    .upload-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      padding: 10px 14px;
+      animation: tagIn 0.15s ease;
+    }
+
+    .upload-item .file-icon { width: 36px; height: 36px; border-radius: 8px; background: #171717; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+    .upload-item .file-info { flex: 1; min-width: 0; }
+    .upload-item .file-name { font-size: 14px; color: #171717; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .upload-item .file-size { font-size: 12px; color: #a3a3a3; }
+    .upload-item .file-preview { width: 48px; height: 36px; border-radius: 6px; object-fit: cover; background: #000; flex-shrink: 0; }
+    .upload-item .file-remove { background: none; border: none; color: #d4d4d4; cursor: pointer; font-size: 18px; padding: 4px; border-radius: 4px; flex-shrink: 0; transition: all 0.15s; }
+    .upload-item .file-remove:hover { color: #dc2626; background: #fef2f2; }
+
+    .divider { border: none; border-top: 1px solid #e5e5e5; margin: 48px 0; }
+
+    .optional-badge {
+      display: inline-block;
+      font-size: 11px;
+      color: #a3a3a3;
+      border: 1px solid #e5e5e5;
+      border-radius: 4px;
+      padding: 1px 6px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: #171717;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 16px;
+    }
+
+    .submit-btn:hover { background: #404040; }
+    .submit-btn:active { transform: scale(0.99); }
+
+    .success-screen { display: none; text-align: center; padding: 120px 24px; }
+    .success-screen .check { width: 56px; height: 56px; border-radius: 50%; background: #f0fdf4; border: 1px solid #bbf7d0; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px; }
+    .success-screen h2 { font-family: 'BigCaslon', serif; font-size: 28px; font-weight: normal; color: #171717; margin-bottom: 8px; }
+    .success-screen p { color: #a3a3a3; font-size: 15px; }
+
+    @media (max-width: 520px) {
+      .container { padding: 32px 16px 60px; }
+      h1 { font-size: 28px; }
+      .row-2col { flex-direction: column !important; gap: 10px !important; }
+      .row-2col input { flex: unset !important; }
+      .sound-ref-row { flex-direction: column; }
+      .sound-ref-upload-btn { justify-content: center; }
+      .frame-textarea { font-size: 16px; min-height: 60px; }
+      .header-inner { padding: 12px 16px; }
+      .header-logo { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+
+  <div class="header">
+    <div class="header-inner">
+      <a href="https://www.buildlore.top" class="header-logo">BuildLore</a>
+      <a href="https://www.buildlore.top/work" class="header-link">Work</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <form id="brief-form" action="#" method="POST">
+      <h1>Video Brief</h1>
+      <p class="subtitle">Fill in the fields below. No fluff, get straight to the point.</p>
+
+      <div class="section row-2col" style="display:flex;gap:12px;" data-section="info">
+        <input type="text" name="name" placeholder="Your name" required style="flex:1">
+        <input type="email" name="email" placeholder="Email" required style="flex:1">
+      </div>
+
+      <div class="section" data-section="idea">
+        <div class="section-number">1</div>
+        <div class="section-label">General Idea</div>
+        <div class="section-hint">Keywords that describe your project. Press Enter after each keyword.</div>
+        <div class="tags-input" id="tags-idea">
+          <input type="text" placeholder="e.g. launch, luxury, real estate...">
+        </div>
+        <input type="hidden" name="general_idea" id="hidden-idea">
+      </div>
+
+      <div class="section" data-section="copy">
+        <div class="section-number">2</div>
+        <div class="section-label">Copy</div>
+        <div class="section-hint">Write the text for each frame of your video. Add as many frames as needed.</div>
+        <div class="frames-container" id="frames-container">
+          <div class="frame-block" data-frame="1">
+            <div class="frame-card">
+              <div class="frame-header"><span class="frame-label">Frame 1</span></div>
+              <textarea class="frame-textarea" placeholder="e.g. From today win every day" rows="2"></textarea>
+            </div>
+            <div class="frame-note">
+              <span class="frame-note-icon">&#9998;</span>
+              <textarea class="frame-comment" placeholder="Motion idea, asset to display, transition..." rows="1"></textarea>
+            </div>
+          </div>
+          <div class="frame-block" data-frame="2">
+            <div class="frame-card">
+              <div class="frame-header"><span class="frame-label">Frame 2</span></div>
+              <textarea class="frame-textarea" placeholder="e.g. Stack your Cool coins" rows="2"></textarea>
+            </div>
+            <div class="frame-note">
+              <span class="frame-note-icon">&#9998;</span>
+              <textarea class="frame-comment" placeholder="Motion idea, asset to display, transition..." rows="1"></textarea>
+            </div>
+          </div>
+          <div class="frame-block" data-frame="3">
+            <div class="frame-card">
+              <div class="frame-header"><span class="frame-label">Frame 3</span></div>
+              <textarea class="frame-textarea" placeholder="e.g. Get paid every day" rows="2"></textarea>
+            </div>
+            <div class="frame-note">
+              <span class="frame-note-icon">&#9998;</span>
+              <textarea class="frame-comment" placeholder="Motion idea, asset to display, transition..." rows="1"></textarea>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="add-frame-btn" id="add-frame-btn">
+          <span class="plus">+</span> Add a frame
+        </button>
+        <input type="hidden" name="copy_frames" id="hidden-frames">
+      </div>
+
+      <div class="section" data-section="structure">
+        <div class="section-number">3</div>
+        <div class="section-label">Structure</div>
+        <div class="section-hint">How do you see the video flow?</div>
+        <div class="structure-options">
+          <div class="structure-option">
+            <input type="radio" name="structure" id="s-hook" value="Hook → Value → CTA" checked>
+            <label for="s-hook">
+              <div class="opt-title">Hook → Value → CTA</div>
+              <div class="opt-desc">Punchy hook, main argument, call to action</div>
+            </label>
+            <textarea class="structure-detail" placeholder="Describe your hook, value proposition, CTA..." rows="2"></textarea>
+          </div>
+          <div class="structure-option">
+            <input type="radio" name="structure" id="s-story" value="Storytelling">
+            <label for="s-story">
+              <div class="opt-title">Storytelling</div>
+              <div class="opt-desc">Problem → Solution → Result</div>
+            </label>
+            <textarea class="structure-detail" placeholder="Describe the problem, solution, result..." rows="2"></textarea>
+          </div>
+          <div class="structure-option">
+            <input type="radio" name="structure" id="s-showcase" value="Showcase">
+            <label for="s-showcase">
+              <div class="opt-title">Showcase</div>
+              <div class="opt-desc">Visual product / service presentation with minimal text</div>
+            </label>
+            <textarea class="structure-detail" placeholder="Describe what you want to show, features, flow..." rows="2"></textarea>
+          </div>
+          <div class="structure-option">
+            <input type="radio" name="structure" id="s-custom" value="custom">
+            <label for="s-custom">
+              <div class="opt-title">Other</div>
+              <div class="opt-desc">Describe your own structure</div>
+            </label>
+            <textarea class="structure-detail" placeholder="Describe your structure from A to Z..." rows="2"></textarea>
+          </div>
+        </div>
+
+        <div class="upload-section" id="upload-section">
+          <div class="section-hint">Upload your screen recordings / product videos (.mp4). As many as you want.</div>
+          <div class="upload-dropzone" id="upload-dropzone">
+            <div class="upload-icon">&#9654;</div>
+            <div class="upload-text"><strong>Click here</strong> or drag your files</div>
+            <div class="upload-formats">.mp4, .mov, .webm</div>
+          </div>
+          <input type="file" id="file-input" multiple accept="video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm" style="display:none">
+          <div class="upload-list" id="upload-list"></div>
+        </div>
+      </div>
+
+      <div class="section" data-section="sound">
+        <div class="section-number">&#9835;</div>
+        <div class="section-label">Sound & Mood</div>
+        <div class="section-hint">Pick 1 to 3 vibes that match your project.</div>
+        <div class="sound-grid">
+          <div class="sound-chip"><input type="checkbox" name="sound" id="sn-epic" value="Epic / Cinematic"><label for="sn-epic">Epic / Cinematic</label></div>
+          <div class="sound-chip"><input type="checkbox" name="sound" id="sn-chill" value="Chill / Lo-fi"><label for="sn-chill">Chill / Lo-fi</label></div>
+          <div class="sound-chip"><input type="checkbox" name="sound" id="sn-energy" value="Energetic / Hype"><label for="sn-energy">Energetic / Hype</label></div>
+          <div class="sound-chip"><input type="checkbox" name="sound" id="sn-corp" value="Corporate / Clean"><label for="sn-corp">Corporate / Clean</label></div>
+          <div class="sound-chip"><input type="checkbox" name="sound" id="sn-dark" value="Dark / Mysterious"><label for="sn-dark">Dark / Mysterious</label></div>
+          <div class="sound-chip"><input type="checkbox" name="sound" id="sn-luxury" value="Luxury / Elegant"><label for="sn-luxury">Luxury / Elegant</label></div>
+          <div class="sound-chip"><input type="checkbox" name="sound" id="sn-fun" value="Fun / Playful"><label for="sn-fun">Fun / Playful</label></div>
+          <div class="sound-chip"><input type="checkbox" name="sound" id="sn-minimal" value="Minimal / Ambient"><label for="sn-minimal">Minimal / Ambient</label></div>
+        </div>
+        <div class="sound-note">Max 3 choices</div>
+        <div class="sound-ref">
+          <div class="sound-ref-label">Have a reference in mind?</div>
+          <div class="sound-ref-row">
+            <input type="text" name="sound_link" class="sound-ref-input" placeholder="YouTube, Spotify, SoundCloud link...">
+            <button type="button" class="sound-ref-upload-btn" id="sound-upload-btn">
+              <span>&#8679;</span> .mp3
+            </button>
+            <input type="file" id="sound-file-input" multiple accept="audio/*,.mp3,.wav,.aac,.ogg,.m4a" style="display:none">
+          </div>
+          <div class="upload-list" id="sound-upload-list"></div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="section" data-section="visuals">
+        <div class="section-number">4</div>
+        <div class="section-label">Visual Ideas <span class="optional-badge">optional</span></div>
+        <div class="section-hint">Got anything in mind? References, colors, style, specific elements...</div>
+        <textarea name="visual_ideas" rows="3" placeholder="e.g. dark tones, bold typography, fast transitions, Apple style..."></textarea>
+      </div>
+
+      <div class="section" data-section="files">
+        <div class="section-label">Files & Links <span class="optional-badge">optional</span></div>
+        <div class="section-hint">Logo, images, reference videos, fonts, etc. As many as you want.</div>
+        <div class="upload-dropzone" id="assets-dropzone">
+          <div class="upload-icon">&#8679;</div>
+          <div class="upload-text"><strong>Click here</strong> or drag your files</div>
+          <div class="upload-formats">.png .jpg .svg .mp4 .mov .ttf .otf .woff2 .pdf</div>
+        </div>
+        <input type="file" id="assets-input" multiple accept="image/*,video/*,.ttf,.otf,.woff,.woff2,.pdf,.svg,.ai,.eps,.psd" style="display:none">
+        <div class="upload-list" id="assets-list"></div>
+        <input type="text" name="links" placeholder="Links: website, Drive, WeTransfer, Figma..." style="margin-top:12px">
+      </div>
+
+      <button type="submit" class="submit-btn">Submit Brief</button>
+    </form>
+
+    <div class="success-screen" id="success">
+      <div class="check">&#10003;</div>
+      <h2>Brief Sent</h2>
+      <p>Thanks! We'll get back to you shortly.</p>
+    </div>
+  </div>
+
+  <script>
+    function autoResize(el) {
+      el.style.height = 'auto';
+      el.style.height = el.scrollHeight + 'px';
+    }
+
+    const progressBar = document.getElementById('progress-bar');
+    const sections = {
+      info:      () => !!document.querySelector('[name="name"]').value && !!document.querySelector('[name="email"]').value,
+      idea:      () => !!document.getElementById('hidden-idea').value,
+      copy:      () => !!document.querySelector('.frame-textarea')?.value?.trim(),
+      structure: () => !!document.querySelector('input[name="structure"]:checked'),
+      sound:     () => document.querySelectorAll('input[name="sound"]:checked').length > 0,
+    };
+    const totalSections = Object.keys(sections).length;
+
+    function updateProgress() {
+      let filled = 0;
+      for (const key in sections) { if (sections[key]()) filled++; }
+      progressBar.style.width = Math.round((filled / totalSections) * 100) + '%';
+    }
+
+    document.getElementById('brief-form').addEventListener('input', updateProgress);
+    document.getElementById('brief-form').addEventListener('change', updateProgress);
+
+    const tagsContainer = document.getElementById('tags-idea');
+    const tagsInput = tagsContainer.querySelector('input[type="text"]');
+    const hiddenIdea = document.getElementById('hidden-idea');
+    let tags = [];
+
+    function syncTags() {
+      hiddenIdea.value = tags.join(', ');
+      updateProgress();
+    }
+
+    function addTag(text) {
+      text = text.trim();
+      if (!text || tags.includes(text)) return;
+      tags.push(text);
+      const tag = document.createElement('span');
+      tag.className = 'tag';
+      tag.textContent = text;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.innerHTML = '&times;';
+      btn.onclick = () => { tags = tags.filter(t => t !== text); tag.remove(); syncTags(); };
+      tag.appendChild(btn);
+      tagsContainer.insertBefore(tag, tagsInput);
+      syncTags();
+    }
+
+    tagsInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ',') {
+        e.preventDefault();
+        addTag(tagsInput.value);
+        tagsInput.value = '';
+      }
+      if (e.key === 'Backspace' && !tagsInput.value && tags.length) {
+        const allTags = tagsContainer.querySelectorAll('.tag');
+        if (allTags.length) { tags.pop(); allTags[allTags.length - 1].remove(); syncTags(); }
+      }
+    });
+
+    tagsContainer.addEventListener('click', () => tagsInput.focus());
+
+    const framesContainer = document.getElementById('frames-container');
+    const addFrameBtn = document.getElementById('add-frame-btn');
+    let frameCount = 3;
+
+    function updateFrameNumbers() {
+      const blocks = framesContainer.querySelectorAll('.frame-block');
+      blocks.forEach((block, i) => {
+        block.dataset.frame = i + 1;
+        block.querySelector('.frame-label').textContent = 'Frame ' + (i + 1);
+        const del = block.querySelector('.frame-delete');
+        if (del) del.style.display = blocks.length > 1 ? 'block' : 'none';
+      });
+      frameCount = blocks.length;
+    }
+
+    function initFrameBlock(block) {
+      const card = block.querySelector('.frame-card');
+      if (!card.querySelector('.frame-delete')) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'frame-delete';
+        btn.innerHTML = '&times;';
+        btn.onclick = () => { block.remove(); updateFrameNumbers(); };
+        card.querySelector('.frame-header').appendChild(btn);
+      }
+      block.querySelectorAll('.frame-textarea, .frame-comment').forEach(ta => {
+        ta.addEventListener('input', () => autoResize(ta));
+      });
+    }
+
+    framesContainer.querySelectorAll('.frame-block').forEach(initFrameBlock);
+    updateFrameNumbers();
+
+    addFrameBtn.addEventListener('click', () => {
+      frameCount++;
+      const block = document.createElement('div');
+      block.className = 'frame-block';
+      block.dataset.frame = frameCount;
+      block.innerHTML = `
+        <div class="frame-card">
+          <div class="frame-header">
+            <span class="frame-label">Frame ${frameCount}</span>
+            <button type="button" class="frame-delete">&times;</button>
+          </div>
+          <textarea class="frame-textarea" placeholder="Text for this frame..." rows="2"></textarea>
+        </div>
+        <div class="frame-note">
+          <span class="frame-note-icon">&#9998;</span>
+          <textarea class="frame-comment" placeholder="Motion idea, asset to display, transition..." rows="1"></textarea>
+        </div>
+      `;
+      block.querySelector('.frame-delete').onclick = () => { block.remove(); updateFrameNumbers(); };
+      block.querySelectorAll('.frame-textarea, .frame-comment').forEach(ta => {
+        ta.addEventListener('input', () => autoResize(ta));
+      });
+      framesContainer.appendChild(block);
+      block.querySelector('.frame-textarea').focus();
+      updateFrameNumbers();
+    });
+
+    document.querySelectorAll('input[name="sound"]').forEach(cb => {
+      cb.addEventListener('change', () => {
+        if (document.querySelectorAll('input[name="sound"]:checked').length > 3) cb.checked = false;
+      });
+    });
+
+    const uploadSection = document.getElementById('upload-section');
+    document.querySelectorAll('input[name="structure"]').forEach(r => {
+      r.addEventListener('change', () => {
+        uploadSection.classList.toggle('visible',
+          document.querySelector('input[name="structure"]:checked').value === 'Showcase');
+      });
+    });
+
+    document.querySelectorAll('.structure-detail').forEach(ta => {
+      ta.addEventListener('input', () => autoResize(ta));
+    });
+
+    function formatSize(bytes) {
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    function setupUploadZone(dropzoneId, inputId, listId, fileStore) {
+      const dz = document.getElementById(dropzoneId);
+      const inp = document.getElementById(inputId);
+      const list = document.getElementById(listId);
+
+      dz.addEventListener('click', () => inp.click());
+      dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
+      dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+      dz.addEventListener('drop', e => {
+        e.preventDefault(); dz.classList.remove('dragover');
+        addFiles(Array.from(e.dataTransfer.files));
+      });
+      inp.addEventListener('change', () => { addFiles(Array.from(inp.files)); inp.value = ''; });
+
+      function addFiles(files) {
+        files.forEach(file => { fileStore.push(file); renderItem(file, fileStore.length - 1); });
+      }
+
+      function renderItem(file, index) {
+        const item = document.createElement('div');
+        item.className = 'upload-item';
+        const ext = file.name.split('.').pop().toUpperCase();
+        item.innerHTML = '<div class="file-icon">' + ext + '</div>';
+
+        if (file.type.startsWith('video/')) {
+          const vid = document.createElement('video');
+          vid.src = URL.createObjectURL(file);
+          vid.className = 'file-preview'; vid.muted = true; vid.preload = 'metadata';
+          vid.addEventListener('loadeddata', () => { vid.currentTime = 1; });
+          item.appendChild(vid);
+        } else if (file.type.startsWith('image/')) {
+          const img = document.createElement('img');
+          img.src = URL.createObjectURL(file);
+          img.className = 'file-preview';
+          item.appendChild(img);
+        }
+
+        const info = document.createElement('div');
+        info.className = 'file-info';
+        info.innerHTML = '<div class="file-name">' + file.name + '</div><div class="file-size">' + formatSize(file.size) + '</div>';
+        item.appendChild(info);
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button'; removeBtn.className = 'file-remove';
+        removeBtn.innerHTML = '&times;';
+        removeBtn.onclick = () => { fileStore[index] = null; item.remove(); };
+        item.appendChild(removeBtn);
+        list.appendChild(item);
+      }
+    }
+
+    let showcaseFiles = [];
+    setupUploadZone('upload-dropzone', 'file-input', 'upload-list', showcaseFiles);
+    let assetFiles = [];
+    setupUploadZone('assets-dropzone', 'assets-input', 'assets-list', assetFiles);
+
+    let soundFiles = [];
+    const soundBtn = document.getElementById('sound-upload-btn');
+    const soundInput = document.getElementById('sound-file-input');
+    const soundList = document.getElementById('sound-upload-list');
+
+    soundBtn.addEventListener('click', () => soundInput.click());
+    soundInput.addEventListener('change', () => {
+      Array.from(soundInput.files).forEach(file => {
+        soundFiles.push(file);
+        const idx = soundFiles.length - 1;
+        const item = document.createElement('div');
+        item.className = 'upload-item';
+        item.innerHTML = '<div class="file-icon" style="background:#171717">' + file.name.split('.').pop().toUpperCase() + '</div>';
+        const info = document.createElement('div');
+        info.className = 'file-info';
+        info.innerHTML = '<div class="file-name">' + file.name + '</div><div class="file-size">' + formatSize(file.size) + '</div>';
+        item.appendChild(info);
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button'; removeBtn.className = 'file-remove';
+        removeBtn.innerHTML = '&times;';
+        removeBtn.onclick = () => { soundFiles[idx] = null; item.remove(); };
+        item.appendChild(removeBtn);
+        soundList.appendChild(item);
+      });
+      soundInput.value = '';
+    });
+
+    function getFramesData() {
+      const frames = [];
+      framesContainer.querySelectorAll('.frame-block').forEach(block => {
+        const text = block.querySelector('.frame-textarea').value.trim();
+        const note = block.querySelector('.frame-comment').value.trim();
+        if (text) frames.push({ frame: block.dataset.frame, text, note: note || '' });
+      });
+      return frames;
+    }
+
+    document.getElementById('brief-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const data = new FormData(e.target);
+      const frames = getFramesData();
+      document.getElementById('hidden-frames').value = JSON.stringify(frames);
+
+      const checkedStructure = document.querySelector('input[name="structure"]:checked');
+
+      const brief = {
+        name: data.get('name'),
+        email: data.get('email'),
+        general_idea: data.get('general_idea'),
+        copy_frames: frames,
+        structure: checkedStructure.value,
+        structure_detail: checkedStructure.closest('.structure-option').querySelector('.structure-detail').value.trim(),
+        sounds: data.getAll('sound'),
+        sound_link: data.get('sound_link'),
+        sound_files: soundFiles.filter(Boolean).map(f => f.name),
+        visual_ideas: data.get('visual_ideas'),
+        links: data.get('links'),
+        showcase_files: showcaseFiles.filter(Boolean).map(f => f.name),
+        asset_files: assetFiles.filter(Boolean).map(f => f.name),
+      };
+
+      console.log('Brief received:', brief);
+
+      e.target.style.display = 'none';
+      document.getElementById('success').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    updateProgress();
+  </script>
+</body>
+</html>
