@@ -551,8 +551,8 @@
       <p class="subtitle">Fill in the fields below. No fluff, get straight to the point.</p>
 
       <div class="section row-2col" style="display:flex;gap:12px;" data-section="info">
-        <input type="text" name="name" placeholder="Your name" required style="flex:1">
-        <input type="email" name="email" placeholder="Email" required style="flex:1">
+        <input type="text" name="name" placeholder="Your name" style="flex:1">
+        <input type="email" name="email" placeholder="Email" style="flex:1">
       </div>
 
       <div class="section" data-section="idea">
@@ -865,7 +865,11 @@
         const tag = document.createElement('div');
         tag.className = 'link-tag';
         const idx = links.length - 1;
-        tag.innerHTML = '<a href="' + val + '" target="_blank">' + val + '</a>';
+        const a = document.createElement('a');
+        a.href = val;
+        a.target = '_blank';
+        a.textContent = val;
+        tag.appendChild(a);
         const rm = document.createElement('button');
         rm.type = 'button'; rm.className = 'remove-link'; rm.innerHTML = '&times;';
         rm.onclick = () => { links[idx] = null; tag.remove(); };
@@ -962,6 +966,7 @@
           });
         }
         updateProgress();
+        framesContainer.querySelectorAll('.frame-textarea, .frame-comment').forEach(ta => autoResize(ta));
       } catch {}
     }
 

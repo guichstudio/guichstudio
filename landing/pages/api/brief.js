@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   try {
     const brief = req.body;
-    const clientName = brief.nom || brief.name || 'Unknown';
+    const clientName = brief.name || 'Unknown';
     const clientEmail = brief.email || '';
 
     // Parse frames
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
       <hr style="border:none;border-top:1px solid #e5e5e5;margin:24px 0">
 
       <h2 style="font-size:16px;color:#999;text-transform:uppercase;letter-spacing:1px">General Idea</h2>
-      <p style="font-size:15px">${esc(brief.idee_generale || brief.general_idea || '—')}</p>
+      <p style="font-size:15px">${esc(brief.general_idea || '—')}</p>
 
       <h2 style="font-size:16px;color:#999;text-transform:uppercase;letter-spacing:1px">Copy</h2>
       ${framesHtml || '<p style="color:#999">No frames</p>'}
@@ -42,14 +42,14 @@ export default async function handler(req, res) {
       ${brief.structure_detail ? `<p style="font-size:14px;color:#666">${esc(brief.structure_detail)}</p>` : ''}
 
       <h2 style="font-size:16px;color:#999;text-transform:uppercase;letter-spacing:1px">Sound / Mood</h2>
-      <p style="font-size:15px">${esc(brief.sons || brief.sounds || '—')}</p>
-      ${formatLinks(brief.son_liens || brief.sound_links)}
+      <p style="font-size:15px">${esc(brief.sounds || '—')}</p>
+      ${formatLinks(brief.sound_links)}
 
       <h2 style="font-size:16px;color:#999;text-transform:uppercase;letter-spacing:1px">Visual Ideas</h2>
-      <p style="font-size:15px">${esc(brief.idees_visuelles || brief.visual_ideas || '—')}</p>
+      <p style="font-size:15px">${esc(brief.visual_ideas || '—')}</p>
 
       <h2 style="font-size:16px;color:#999;text-transform:uppercase;letter-spacing:1px">Links</h2>
-      ${formatLinks(brief.liens || brief.links) || '<p style="color:#999">—</p>'}
+      ${formatLinks(brief.links) || '<p style="color:#999">—</p>'}
 
       <hr style="border:none;border-top:1px solid #e5e5e5;margin:24px 0">
       <p style="font-size:12px;color:#999">Sent from buildlore.top</p>
@@ -80,7 +80,6 @@ function formatLinks(str) {
   const links = str.split(', ').filter(Boolean);
   if (!links.length) return '';
   return links.map(l =>
-    `<p style="font-size:14px;margin:4px 0">🔗 <a href="${l}" style="color:#171717">${esc(l)}</a></p>`
+    `<p style="font-size:14px;margin:4px 0">🔗 <a href="${esc(l)}" style="color:#171717">${esc(l)}</a></p>`
   ).join('');
 }
-
