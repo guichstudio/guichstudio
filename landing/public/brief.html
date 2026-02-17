@@ -999,9 +999,9 @@
       btn.disabled = true;
 
       try {
-        const res = await fetch('https://formspree.io/f/xojnwywa', {
+        const res = await fetch('/api/brief', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(brief),
         });
         const result = await res.json().catch(() => null);

@@ -17,6 +17,7 @@
         "next-sitemap": "^4.2.3",
         "react": "18.2.0",
         "react-dom": "18.2.0",
+        "resend": "^6.9.2",
         "stripe": "^18.5.0"
     },
     "devDependencies": {
