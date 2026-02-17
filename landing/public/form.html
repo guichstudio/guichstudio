@@ -3,15 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Polycool — Brief Vidéo</title>
+  <title>BuildLore — Brief Vidéo</title>
+  <link rel="icon" href="/favicon.ico" sizes="any">
   <style>
+    @font-face {
+      font-family: 'BigCaslon';
+      src: url('/fonts/BigCaslon.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'Inter';
+      src: url('/fonts/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f5f5f7;
-      color: #1d1d1f;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #fff;
+      color: #171717;
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     /* Progress bar */
@@ -19,36 +36,67 @@
       position: fixed;
       top: 0;
       left: 0;
-      height: 3px;
-      background: #4a54cc;
+      height: 2px;
+      background: #171717;
       transition: width 0.4s ease;
       z-index: 100;
-      border-radius: 0 2px 2px 0;
     }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.6);
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-logo {
+      font-family: 'BigCaslon', serif;
+      font-size: 24px;
+      letter-spacing: -0.02em;
+      color: #171717;
+      text-decoration: none;
+    }
+
+    .header-link {
+      font-size: 18px;
+      color: #171717;
+      opacity: 0.7;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .header-link:hover { opacity: 1; }
 
     .container {
       max-width: 620px;
       margin: 0 auto;
-      padding: 60px 24px 80px;
-    }
-
-    .logo {
-      font-size: 14px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: #999;
-      margin-bottom: 8px;
+      padding: 48px 24px 80px;
     }
 
     h1 {
-      font-size: 32px;
-      font-weight: 600;
-      color: #1d1d1f;
+      font-family: 'BigCaslon', serif;
+      font-size: 36px;
+      font-weight: normal;
+      letter-spacing: -0.02em;
+      color: #171717;
       margin-bottom: 6px;
     }
 
     .subtitle {
-      color: #888;
+      color: #a3a3a3;
       font-size: 15px;
       margin-bottom: 48px;
     }
@@ -62,9 +110,9 @@
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      background: #fff;
-      border: 1px solid #ddd;
-      color: #999;
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      color: #a3a3a3;
       font-size: 13px;
       line-height: 28px;
       text-align: center;
@@ -74,13 +122,13 @@
     .section-label {
       font-size: 18px;
       font-weight: 500;
-      color: #1d1d1f;
+      color: #171717;
       margin-bottom: 4px;
     }
 
     .section-hint {
       font-size: 13px;
-      color: #888;
+      color: #a3a3a3;
       margin-bottom: 14px;
     }
 
@@ -88,13 +136,13 @@
     input[type="email"],
     textarea {
       width: 100%;
-      background: #fff;
-      border: 1px solid #ddd;
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
       border-radius: 10px;
       padding: 14px 16px;
-      color: #1d1d1f;
+      color: #171717;
       font-size: 15px;
-      font-family: inherit;
+      font-family: 'Inter', sans-serif;
       transition: border-color 0.2s;
       outline: none;
     }
@@ -102,12 +150,12 @@
     input[type="text"]:focus,
     input[type="email"]:focus,
     textarea:focus {
-      border-color: #aaa;
+      border-color: #a3a3a3;
     }
 
     input::placeholder,
     textarea::placeholder {
-      color: #bbb;
+      color: #d4d4d4;
     }
 
     textarea {
@@ -115,13 +163,13 @@
       min-height: 100px;
     }
 
-    /* Tags input */
+    /* Tags */
     .tags-input {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      background: #fff;
-      border: 1px solid #ddd;
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
       border-radius: 10px;
       padding: 10px 12px;
       min-height: 48px;
@@ -129,18 +177,18 @@
       transition: border-color 0.2s;
     }
 
-    .tags-input:focus-within { border-color: #aaa; }
+    .tags-input:focus-within { border-color: #a3a3a3; }
 
     .tags-input .tag {
       display: flex;
       align-items: center;
       gap: 6px;
-      background: #f0f0f2;
-      border: 1px solid #ddd;
+      background: #fff;
+      border: 1px solid #e5e5e5;
       border-radius: 6px;
       padding: 4px 10px;
       font-size: 13px;
-      color: #444;
+      color: #525252;
       animation: tagIn 0.15s ease;
     }
 
@@ -152,14 +200,14 @@
     .tags-input .tag button {
       background: none;
       border: none;
-      color: #aaa;
+      color: #a3a3a3;
       cursor: pointer;
       font-size: 15px;
       padding: 0;
       line-height: 1;
     }
 
-    .tags-input .tag button:hover { color: #e44; }
+    .tags-input .tag button:hover { color: #dc2626; }
 
     .tags-input input {
       flex: 1;
@@ -167,12 +215,12 @@
       background: none;
       border: none;
       padding: 4px;
-      color: #1d1d1f;
+      color: #171717;
       font-size: 14px;
       outline: none;
     }
 
-    .tags-input input::placeholder { color: #bbb; }
+    .tags-input input::placeholder { color: #d4d4d4; }
 
     /* Frames */
     .frames-container {
@@ -182,9 +230,7 @@
       margin-bottom: 14px;
     }
 
-    .frame-block {
-      animation: frameIn 0.2s ease;
-    }
+    .frame-block { animation: frameIn 0.2s ease; }
 
     @keyframes frameIn {
       from { transform: translateY(8px); opacity: 0; }
@@ -192,7 +238,7 @@
     }
 
     .frame-card {
-      background: #1d1d1f;
+      background: #171717;
       border-radius: 12px;
       overflow: hidden;
     }
@@ -209,13 +255,13 @@
       font-weight: 600;
       letter-spacing: 1px;
       text-transform: uppercase;
-      color: #666;
+      color: #525252;
     }
 
     .frame-delete {
       background: none;
       border: none;
-      color: #555;
+      color: #525252;
       cursor: pointer;
       font-size: 18px;
       line-height: 1;
@@ -225,8 +271,8 @@
     }
 
     .frame-delete:hover {
-      color: #ff4444;
-      background: rgba(255,68,68,0.1);
+      color: #ef4444;
+      background: rgba(239,68,68,0.1);
     }
 
     .frame-textarea {
@@ -237,14 +283,14 @@
       color: #fff;
       font-size: 18px;
       font-weight: 500;
-      font-family: inherit;
+      font-family: 'Inter', sans-serif;
       resize: none;
       outline: none;
       min-height: 80px;
       line-height: 1.4;
     }
 
-    .frame-textarea::placeholder { color: #444; }
+    .frame-textarea::placeholder { color: #404040; }
 
     .frame-note {
       display: flex;
@@ -255,7 +301,7 @@
 
     .frame-note-icon {
       font-size: 13px;
-      color: #bbb;
+      color: #d4d4d4;
       margin-top: 9px;
       flex-shrink: 0;
     }
@@ -264,12 +310,12 @@
       flex: 1;
       background: none;
       border: none;
-      border-bottom: 1px dashed #ddd;
+      border-bottom: 1px dashed #e5e5e5;
       border-radius: 0;
       padding: 8px 0;
-      color: #666;
+      color: #737373;
       font-size: 13px;
-      font-family: inherit;
+      font-family: 'Inter', sans-serif;
       font-style: italic;
       resize: none;
       outline: none;
@@ -278,13 +324,13 @@
     }
 
     .frame-note textarea::placeholder {
-      color: #bbb;
+      color: #d4d4d4;
       font-style: italic;
     }
 
     .frame-note textarea:focus {
-      border-bottom-color: #99a3ff;
-      color: #444;
+      border-bottom-color: #171717;
+      color: #525252;
     }
 
     .add-frame-btn {
@@ -294,20 +340,20 @@
       gap: 8px;
       width: 100%;
       padding: 14px;
-      background: #fff;
-      border: 2px dashed #ddd;
+      background: #fafafa;
+      border: 2px dashed #e5e5e5;
       border-radius: 12px;
-      color: #999;
+      color: #a3a3a3;
       font-size: 14px;
-      font-family: inherit;
+      font-family: 'Inter', sans-serif;
       cursor: pointer;
       transition: all 0.2s;
     }
 
     .add-frame-btn:hover {
-      border-color: #bbb;
-      color: #666;
-      background: #fafafa;
+      border-color: #a3a3a3;
+      color: #737373;
+      background: #f5f5f5;
     }
 
     .add-frame-btn .plus {
@@ -315,7 +361,7 @@
       font-weight: 300;
     }
 
-    /* Sound chips */
+    /* Sound */
     .sound-grid {
       display: flex;
       flex-wrap: wrap;
@@ -333,39 +379,39 @@
     .sound-chip label {
       display: block;
       padding: 8px 16px;
-      background: #fff;
-      border: 1px solid #ddd;
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
       border-radius: 8px;
       font-size: 14px;
-      color: #888;
+      color: #a3a3a3;
       cursor: pointer;
       transition: all 0.2s;
       user-select: none;
     }
 
     .sound-chip input:checked + label {
-      background: #eef0ff;
-      border-color: #99a3ff;
-      color: #4a54cc;
+      background: #171717;
+      border-color: #171717;
+      color: #fff;
     }
 
-    .sound-chip label:hover { border-color: #bbb; }
+    .sound-chip label:hover { border-color: #a3a3a3; }
 
     .sound-note {
       font-size: 12px;
-      color: #aaa;
+      color: #d4d4d4;
       margin-top: 8px;
     }
 
     .sound-ref {
       margin-top: 16px;
       padding-top: 14px;
-      border-top: 1px dashed #e0e0e0;
+      border-top: 1px dashed #e5e5e5;
     }
 
     .sound-ref-label {
       font-size: 13px;
-      color: #888;
+      color: #a3a3a3;
       margin-bottom: 8px;
     }
 
@@ -379,12 +425,12 @@
     .sound-ref-upload-btn {
       flex-shrink: 0;
       padding: 10px 16px;
-      background: #fff;
-      border: 1px solid #ddd;
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
       border-radius: 10px;
-      color: #888;
+      color: #a3a3a3;
       font-size: 14px;
-      font-family: inherit;
+      font-family: 'Inter', sans-serif;
       cursor: pointer;
       transition: all 0.2s;
       display: flex;
@@ -393,9 +439,9 @@
     }
 
     .sound-ref-upload-btn:hover {
-      border-color: #99a3ff;
-      color: #4a54cc;
-      background: #f8f8ff;
+      border-color: #171717;
+      color: #171717;
+      background: #f5f5f5;
     }
 
     /* Structure */
@@ -416,51 +462,51 @@
     .structure-option label {
       display: block;
       padding: 14px 16px;
-      background: #fff;
-      border: 1px solid #ddd;
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
       border-radius: 10px;
       cursor: pointer;
       transition: all 0.2s;
     }
 
     .structure-option input:checked + label {
-      border-color: #99a3ff;
-      background: #f8f8ff;
+      border-color: #171717;
+      background: #fff;
       border-radius: 10px 10px 0 0;
       border-bottom: none;
     }
 
-    .structure-option label:hover { border-color: #bbb; }
+    .structure-option label:hover { border-color: #a3a3a3; }
 
     .structure-option .opt-title {
       font-size: 15px;
-      color: #1d1d1f;
+      color: #171717;
       margin-bottom: 2px;
     }
 
     .structure-option .opt-desc {
       font-size: 12px;
-      color: #999;
+      color: #a3a3a3;
     }
 
     .structure-detail {
       display: none;
       width: 100%;
-      background: #f8f9ff;
-      border: 1px solid #99a3ff;
-      border-top: 1px dashed #c5caff;
+      background: #fafafa;
+      border: 1px solid #171717;
+      border-top: 1px dashed #d4d4d4;
       border-radius: 0 0 10px 10px;
       padding: 10px 16px 12px;
-      color: #555;
+      color: #525252;
       font-size: 13px;
-      font-family: inherit;
+      font-family: 'Inter', sans-serif;
       resize: none;
       outline: none;
       min-height: 40px;
       line-height: 1.4;
     }
 
-    .structure-detail::placeholder { color: #bbb; }
+    .structure-detail::placeholder { color: #d4d4d4; }
 
     .structure-option input:checked ~ .structure-detail {
       display: block;
@@ -477,40 +523,40 @@
     .upload-section .section-hint { margin-bottom: 12px; }
 
     .upload-dropzone {
-      border: 2px dashed #ddd;
+      border: 2px dashed #e5e5e5;
       border-radius: 12px;
       padding: 32px 20px;
       text-align: center;
       cursor: pointer;
       transition: all 0.2s;
-      background: #fff;
+      background: #fafafa;
     }
 
     .upload-dropzone:hover,
     .upload-dropzone.dragover {
-      border-color: #99a3ff;
-      background: #f8f8ff;
+      border-color: #171717;
+      background: #f5f5f5;
     }
 
     .upload-dropzone .upload-icon {
       font-size: 32px;
       margin-bottom: 8px;
-      color: #ccc;
+      color: #d4d4d4;
     }
 
     .upload-dropzone .upload-text {
       font-size: 14px;
-      color: #888;
+      color: #a3a3a3;
     }
 
     .upload-dropzone .upload-text strong {
-      color: #4a54cc;
+      color: #171717;
       cursor: pointer;
     }
 
     .upload-dropzone .upload-formats {
       font-size: 12px;
-      color: #bbb;
+      color: #d4d4d4;
       margin-top: 4px;
     }
 
@@ -527,8 +573,8 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      background: #fff;
-      border: 1px solid #e5e5e7;
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
       border-radius: 10px;
       padding: 10px 14px;
       animation: tagIn 0.15s ease;
@@ -538,7 +584,7 @@
       width: 36px;
       height: 36px;
       border-radius: 8px;
-      background: #1d1d1f;
+      background: #171717;
       color: #fff;
       display: flex;
       align-items: center;
@@ -555,7 +601,7 @@
 
     .upload-item .file-name {
       font-size: 14px;
-      color: #1d1d1f;
+      color: #171717;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -563,7 +609,7 @@
 
     .upload-item .file-size {
       font-size: 12px;
-      color: #aaa;
+      color: #a3a3a3;
     }
 
     .upload-item .file-preview {
@@ -578,7 +624,7 @@
     .upload-item .file-remove {
       background: none;
       border: none;
-      color: #ccc;
+      color: #d4d4d4;
       cursor: pointer;
       font-size: 18px;
       padding: 4px;
@@ -588,22 +634,22 @@
     }
 
     .upload-item .file-remove:hover {
-      color: #e44;
-      background: #fef0f0;
+      color: #dc2626;
+      background: #fef2f2;
     }
 
     /* Divider */
     .divider {
       border: none;
-      border-top: 1px solid #e5e5e7;
+      border-top: 1px solid #e5e5e5;
       margin: 48px 0;
     }
 
     .optional-badge {
       display: inline-block;
       font-size: 11px;
-      color: #999;
-      border: 1px solid #ddd;
+      color: #a3a3a3;
+      border: 1px solid #e5e5e5;
       border-radius: 4px;
       padding: 1px 6px;
       margin-left: 8px;
@@ -614,19 +660,19 @@
     .submit-btn {
       width: 100%;
       padding: 16px;
-      background: #1d1d1f;
+      background: #171717;
       color: #fff;
       border: none;
       border-radius: 10px;
       font-size: 16px;
       font-weight: 600;
-      font-family: inherit;
+      font-family: 'Inter', sans-serif;
       cursor: pointer;
       transition: all 0.2s;
       margin-top: 16px;
     }
 
-    .submit-btn:hover { background: #333; }
+    .submit-btn:hover { background: #404040; }
     .submit-btn:active { transform: scale(0.99); }
 
     /* Success */
@@ -640,8 +686,8 @@
       width: 56px;
       height: 56px;
       border-radius: 50%;
-      background: #eafbe7;
-      border: 1px solid #b5e6a8;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -650,20 +696,22 @@
     }
 
     .success-screen h2 {
-      font-size: 24px;
-      color: #1d1d1f;
+      font-family: 'BigCaslon', serif;
+      font-size: 28px;
+      font-weight: normal;
+      color: #171717;
       margin-bottom: 8px;
     }
 
     .success-screen p {
-      color: #888;
+      color: #a3a3a3;
       font-size: 15px;
     }
 
     /* Mobile */
     @media (max-width: 520px) {
-      .container { padding: 40px 16px 60px; }
-      h1 { font-size: 26px; }
+      .container { padding: 32px 16px 60px; }
+      h1 { font-size: 28px; }
 
       .row-2col {
         flex-direction: column !important;
@@ -672,27 +720,31 @@
 
       .row-2col input { flex: unset !important; }
 
-      .sound-ref-row {
-        flex-direction: column;
-      }
-
-      .sound-ref-upload-btn {
-        justify-content: center;
-      }
+      .sound-ref-row { flex-direction: column; }
+      .sound-ref-upload-btn { justify-content: center; }
 
       .frame-textarea {
         font-size: 16px;
         min-height: 60px;
       }
+
+      .header-inner { padding: 12px 16px; }
+      .header-logo { font-size: 20px; }
     }
   </style>
 </head>
 <body>
   <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
 
+  <div class="header">
+    <div class="header-inner">
+      <a href="https://www.buildlore.top" class="header-logo">BuildLore</a>
+      <a href="https://www.buildlore.top/work" class="header-link">Work</a>
+    </div>
+  </div>
+
   <div class="container">
     <form id="brief-form" action="#" method="POST">
-      <div class="logo">Polycool</div>
       <h1>Brief vidéo</h1>
       <p class="subtitle">Remplis les champs ci-dessous. Pas de blabla, va droit au but.</p>
 
@@ -802,7 +854,6 @@
           </div>
         </div>
 
-        <!-- Upload zone for Showcase -->
         <div class="upload-section" id="upload-section">
           <div class="section-hint">Upload tes screen recordings / vidéos produit (.mp4). Autant que tu veux.</div>
           <div class="upload-dropzone" id="upload-dropzone">
@@ -879,36 +930,32 @@
   </div>
 
   <script>
-    // ─── Auto-resize ───
     function autoResize(el) {
       el.style.height = 'auto';
       el.style.height = el.scrollHeight + 'px';
     }
 
-    // ─── Progress bar ───
+    // Progress bar
     const progressBar = document.getElementById('progress-bar');
     const sections = {
-      info:       () => !!document.querySelector('[name="nom"]').value && !!document.querySelector('[name="email"]').value,
-      idee:       () => !!document.getElementById('hidden-idee').value,
-      copy:       () => !!document.querySelector('.frame-textarea')?.value?.trim(),
-      structure:  () => !!document.querySelector('input[name="structure"]:checked'),
-      son:        () => document.querySelectorAll('input[name="son"]:checked').length > 0,
+      info:      () => !!document.querySelector('[name="nom"]').value && !!document.querySelector('[name="email"]').value,
+      idee:      () => !!document.getElementById('hidden-idee').value,
+      copy:      () => !!document.querySelector('.frame-textarea')?.value?.trim(),
+      structure: () => !!document.querySelector('input[name="structure"]:checked'),
+      son:       () => document.querySelectorAll('input[name="son"]:checked').length > 0,
     };
     const totalSections = Object.keys(sections).length;
 
     function updateProgress() {
       let filled = 0;
-      for (const key in sections) {
-        if (sections[key]()) filled++;
-      }
+      for (const key in sections) { if (sections[key]()) filled++; }
       progressBar.style.width = Math.round((filled / totalSections) * 100) + '%';
     }
 
-    // Listen globally for changes
     document.getElementById('brief-form').addEventListener('input', updateProgress);
     document.getElementById('brief-form').addEventListener('change', updateProgress);
 
-    // ─── Tags input ───
+    // Tags
     const tagsContainer = document.getElementById('tags-idea');
     const tagsInput = tagsContainer.querySelector('input[type="text"]');
     const hiddenIdee = document.getElementById('hidden-idee');
@@ -929,11 +976,7 @@
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.innerHTML = '&times;';
-      btn.onclick = () => {
-        tags = tags.filter(t => t !== text);
-        tag.remove();
-        syncTags();
-      };
+      btn.onclick = () => { tags = tags.filter(t => t !== text); tag.remove(); syncTags(); };
       tag.appendChild(btn);
       tagsContainer.insertBefore(tag, tagsInput);
       syncTags();
@@ -947,17 +990,13 @@
       }
       if (e.key === 'Backspace' && !tagsInput.value && tags.length) {
         const allTags = tagsContainer.querySelectorAll('.tag');
-        if (allTags.length) {
-          tags.pop();
-          allTags[allTags.length - 1].remove();
-          syncTags();
-        }
+        if (allTags.length) { tags.pop(); allTags[allTags.length - 1].remove(); syncTags(); }
       }
     });
 
     tagsContainer.addEventListener('click', () => tagsInput.focus());
 
-    // ─── Frames ───
+    // Frames
     const framesContainer = document.getElementById('frames-container');
     const addFrameBtn = document.getElementById('add-frame-btn');
     let frameCount = 3;
@@ -1009,10 +1048,7 @@
           <textarea class="frame-comment" placeholder="Idée de motion, asset à montrer, transition..." rows="1"></textarea>
         </div>
       `;
-      block.querySelector('.frame-delete').onclick = () => {
-        block.remove();
-        updateFrameNumbers();
-      };
+      block.querySelector('.frame-delete').onclick = () => { block.remove(); updateFrameNumbers(); };
       block.querySelectorAll('.frame-textarea, .frame-comment').forEach(ta => {
         ta.addEventListener('input', () => autoResize(ta));
       });
@@ -1021,20 +1057,19 @@
       updateFrameNumbers();
     });
 
-    // ─── Sound limit (max 3) ───
+    // Sound max 3
     document.querySelectorAll('input[name="son"]').forEach(cb => {
       cb.addEventListener('change', () => {
         if (document.querySelectorAll('input[name="son"]:checked').length > 3) cb.checked = false;
       });
     });
 
-    // ─── Structure toggle ───
+    // Structure toggle
     const uploadSection = document.getElementById('upload-section');
-
     document.querySelectorAll('input[name="structure"]').forEach(r => {
       r.addEventListener('change', () => {
-        const val = document.querySelector('input[name="structure"]:checked').value;
-        uploadSection.classList.toggle('visible', val === 'Showcase');
+        uploadSection.classList.toggle('visible',
+          document.querySelector('input[name="structure"]:checked').value === 'Showcase');
       });
     });
 
@@ -1042,7 +1077,7 @@
       ta.addEventListener('input', () => autoResize(ta));
     });
 
-    // ─── Upload zones (reusable) ───
+    // Upload zones
     function formatSize(bytes) {
       if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + ' KB';
       return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
@@ -1057,37 +1092,28 @@
       dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
       dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
       dz.addEventListener('drop', e => {
-        e.preventDefault();
-        dz.classList.remove('dragover');
+        e.preventDefault(); dz.classList.remove('dragover');
         addFiles(Array.from(e.dataTransfer.files));
       });
       inp.addEventListener('change', () => { addFiles(Array.from(inp.files)); inp.value = ''; });
 
       function addFiles(files) {
-        files.forEach(file => {
-          fileStore.push(file);
-          renderItem(file, fileStore.length - 1);
-        });
+        files.forEach(file => { fileStore.push(file); renderItem(file, fileStore.length - 1); });
       }
 
       function renderItem(file, index) {
         const item = document.createElement('div');
         item.className = 'upload-item';
         const ext = file.name.split('.').pop().toUpperCase();
-        const isVideo = file.type.startsWith('video/');
-        const isImage = file.type.startsWith('image/');
-
         item.innerHTML = '<div class="file-icon">' + ext + '</div>';
 
-        if (isVideo) {
+        if (file.type.startsWith('video/')) {
           const vid = document.createElement('video');
           vid.src = URL.createObjectURL(file);
-          vid.className = 'file-preview';
-          vid.muted = true;
-          vid.preload = 'metadata';
+          vid.className = 'file-preview'; vid.muted = true; vid.preload = 'metadata';
           vid.addEventListener('loadeddata', () => { vid.currentTime = 1; });
           item.appendChild(vid);
-        } else if (isImage) {
+        } else if (file.type.startsWith('image/')) {
           const img = document.createElement('img');
           img.src = URL.createObjectURL(file);
           img.className = 'file-preview';
@@ -1100,23 +1126,20 @@
         item.appendChild(info);
 
         const removeBtn = document.createElement('button');
-        removeBtn.type = 'button';
-        removeBtn.className = 'file-remove';
+        removeBtn.type = 'button'; removeBtn.className = 'file-remove';
         removeBtn.innerHTML = '&times;';
         removeBtn.onclick = () => { fileStore[index] = null; item.remove(); };
         item.appendChild(removeBtn);
-
         list.appendChild(item);
       }
     }
 
     let showcaseFiles = [];
     setupUploadZone('upload-dropzone', 'file-input', 'upload-list', showcaseFiles);
-
     let assetFiles = [];
     setupUploadZone('assets-dropzone', 'assets-input', 'assets-list', assetFiles);
 
-    // ─── Sound file upload ───
+    // Sound upload
     let soundFiles = [];
     const soundBtn = document.getElementById('sound-upload-btn');
     const soundInput = document.getElementById('sound-file-input');
@@ -1129,15 +1152,13 @@
         const idx = soundFiles.length - 1;
         const item = document.createElement('div');
         item.className = 'upload-item';
-        const ext = file.name.split('.').pop().toUpperCase();
-        item.innerHTML = '<div class="file-icon" style="background:#4a54cc">' + ext + '</div>';
+        item.innerHTML = '<div class="file-icon" style="background:#171717">' + file.name.split('.').pop().toUpperCase() + '</div>';
         const info = document.createElement('div');
         info.className = 'file-info';
         info.innerHTML = '<div class="file-name">' + file.name + '</div><div class="file-size">' + formatSize(file.size) + '</div>';
         item.appendChild(info);
         const removeBtn = document.createElement('button');
-        removeBtn.type = 'button';
-        removeBtn.className = 'file-remove';
+        removeBtn.type = 'button'; removeBtn.className = 'file-remove';
         removeBtn.innerHTML = '&times;';
         removeBtn.onclick = () => { soundFiles[idx] = null; item.remove(); };
         item.appendChild(removeBtn);
@@ -1146,7 +1167,7 @@
       soundInput.value = '';
     });
 
-    // ─── Collect & submit ───
+    // Submit
     function getFramesData() {
       const frames = [];
       framesContainer.querySelectorAll('.frame-block').forEach(block => {
@@ -1164,8 +1185,6 @@
       document.getElementById('hidden-frames').value = JSON.stringify(frames);
 
       const checkedStructure = document.querySelector('input[name="structure"]:checked');
-      const structureDetail = checkedStructure
-        .closest('.structure-option').querySelector('.structure-detail').value.trim();
 
       const brief = {
         nom: data.get('nom'),
@@ -1173,7 +1192,7 @@
         idee_generale: data.get('idee_generale'),
         copy_frames: frames,
         structure: checkedStructure.value,
-        structure_detail: structureDetail,
+        structure_detail: checkedStructure.closest('.structure-option').querySelector('.structure-detail').value.trim(),
         sons: data.getAll('son'),
         son_lien: data.get('son_lien'),
         son_fichiers: soundFiles.filter(Boolean).map(f => f.name),
@@ -1185,20 +1204,11 @@
 
       console.log('Brief reçu:', brief);
 
-      // TODO: Envoie vers ton backend
-      // const formData = new FormData();
-      // formData.append('brief', JSON.stringify(brief));
-      // soundFiles.filter(Boolean).forEach(f => formData.append('sound', f));
-      // assetFiles.filter(Boolean).forEach(f => formData.append('asset', f));
-      // showcaseFiles.filter(Boolean).forEach(f => formData.append('showcase', f));
-      // fetch('https://ton-api.com/briefs', { method: 'POST', body: formData });
-
       e.target.style.display = 'none';
       document.getElementById('success').style.display = 'block';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Init progress
     updateProgress();
   </script>
 </body>
