@@ -293,7 +293,7 @@ export const allTags = [
         },
     {
         slug: '0015-1',
-        title: 'Polycool.live',
+        title: 'polycoolapp.com',
         role: 'Art Direction & Production',
         tags: ['Web 3'],
         thumb: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/0015_1-thumbnail.webp',
@@ -303,7 +303,7 @@ export const allTags = [
     },
     {
         slug: 'final',
-        title: 'Polycool.live',
+        title: 'polycoolapp.com',
         role: 'Art Direction & Production',
         tags: ['Web 3'],
         thumb: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/final-thumbnail.webp',
@@ -313,13 +313,39 @@ export const allTags = [
     },
     {
         slug: 'polycool-devfunxpoly',
-        title: 'Polycool.live',
+        title: 'polycoolapp.com',
         role: 'Art Direction & Production',
         tags: ['Web 3'],
         thumb: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/polycool_devfunxpoly_video-thumbnail.webp',
         video: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/polycool_devfunxpoly_video.mp4',
         client: '-',
         description: 'Launch video and teaser for <a href="https://polycool.live" target="_blank" rel="noopener noreferrer" style="text-decoration:underline">Polycool.live</a>, an AI-powered trading bot built on predictive markets such as <a href="https://polymarket.com" target="_blank" rel="noopener noreferrer" style="text-decoration:underline">Polymarket</a> and <a href="https://kalshi.com" target="_blank" rel="noopener noreferrer" style="text-decoration:underline">Kalshi</a>. The creative direction blends dynamic motion design with data-driven visuals to capture the speed and precision of automated market predictions.\n\nFrom concept to delivery, the production combines bold visual storytelling with the technical language of Web3, positioning Polycool.live as a next-generation tool for traders navigating the predictive market landscape.'
+    },
+    {
+        slug: 'mentatminds-hp',
+        title: 'mentatminds.com',
+        role: 'Motion design & Production',
+        tags: ['Web 3'],
+        thumb: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/mentatxHP-thumbnail.webp',
+        video: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/mentatxHP.mp4',
+        year: '2026',
+        month: '04',
+        day: '08',
+        client: '-',
+        description: "Mentat Minds is an advanced delegation platform that optimizes TAO staking on the Bittensor network, allowing users to maximize yield through automated subnet selection and validator strategies. Led the video presentation for Mentat Minds' new partnership and the launch of its financial product, translating complex staking and AI-driven strategies into a clear, compelling visual narrative. The project focused on positioning the product, highlighting its value proposition, and creating a strong, engaging launch asset designed to drive adoption and credibility within the Bittensor ecosystem."
+    },
+    {
+        slug: 'mentatminds-product',
+        title: 'mentatminds.com',
+        role: 'Motion design & Production',
+        tags: ['Web 3'],
+        thumb: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/Mentatproduct-thumbnail.webp',
+        video: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/Mentatproduct.mp4',
+        year: '2026',
+        month: '04',
+        day: '08',
+        client: '-',
+        description: "Mentat Minds is an advanced delegation platform that optimizes TAO staking on the Bittensor network, allowing users to maximize yield through automated subnet selection and validator strategies. Led the video presentation for Mentat Minds' new partnership and the launch of its financial product, translating complex staking and AI-driven strategies into a clear, compelling visual narrative. The project focused on positioning the product, highlighting its value proposition, and creating a strong, engaging launch asset designed to drive adoption and credibility within the Bittensor ecosystem."
     },
     {
         slug: 'rad-carter-ft-jaia-rose',
