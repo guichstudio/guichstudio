@@ -3,7 +3,6 @@ import LogoCarousel from './LogoCarousel';
 import TwitterCarouselScratch from './TwitterCarouselScratch';
 import Button from './Button';
 import ServiceCards from './ServiceCards';
-import PricingCards from './PricingCards';
 import FAQ from './FAQ';
 import CTA from './CTA';
 
@@ -72,8 +71,6 @@ export default function Hero() {
       <div id="service-cards">
         <ServiceCards />
       </div>
-
-      <PricingCards />
 
       <FAQ />
 
