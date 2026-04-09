@@ -13,30 +13,34 @@ export default function CTA() {
           {/* Heading */}
           <motion.h2
             initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
             className="text-4xl md:text-6xl lg:text-7xl font-bold text-black mb-12 leading-tight"
           >
             <motion.div
               initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
               className="overflow-hidden"
             >
               Learn how we build
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: -100 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.5 }}
               className="overflow-hidden"
             >
               retention with
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 1.0 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.7 }}
               className="overflow-hidden"
             >
               story.
@@ -45,7 +49,13 @@ export default function CTA() {
 
           {/* Email + CTA */}
           {!showForm && (
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto rounded-full">
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto rounded-full"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+            >
               <input
                 type="email"
                 placeholder="my@email.com"
@@ -60,7 +70,7 @@ export default function CTA() {
               >
                 Book free audit
               </Button>
-            </div>
+            </motion.div>
           )}
 
           {/* Formulaire Tally - affiché conditionnellement */}

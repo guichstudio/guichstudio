@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import Button from './Button';
 
 const services = [
@@ -48,7 +49,13 @@ export default function ServiceCards() {
   };
 
   return (
-    <div className="mt-16 bg-neutral-50 rounded-3xl p-8 sm:p-10 lg:p-16">
+    <motion.div
+      className="mt-16 bg-neutral-50 rounded-3xl p-8 sm:p-10 lg:p-16"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+    >
       <p className="text-xs sm:text-sm tracking-[0.2em] text-neutral-400 uppercase mb-8 lg:mb-10 text-center">
         What we do
       </p>
@@ -87,6 +94,6 @@ export default function ServiceCards() {
           Start a project
         </Button>
       </div>
-    </div>
+    </motion.div>
   );
 }

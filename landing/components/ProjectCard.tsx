@@ -48,7 +48,7 @@ export default function ProjectCard({ project }: { project: Project }) {
 
       const v = videoRef.current;
       if (v) {
-        v.muted = false; // 🔊 enable sound
+        v.muted = false;
         setMuted(false);
         v.play().catch(() => {});
       }
@@ -89,13 +89,14 @@ export default function ProjectCard({ project }: { project: Project }) {
       onPointerLeave={handleLeave}
       onClick={handleClick}
     >
-      <div className="relative aspect-[16/10]">
+      <div className="relative aspect-[16/10] overflow-hidden">
         {/* Thumbnail */}
         <Image
           src={project.thumb}
           alt={`${project.title} — ${project.role}`}
           fill
-          className={`absolute inset-0 object-cover transition-opacity duration-300
+          className={`absolute inset-0 object-cover transition-all duration-500
+            group-hover:scale-[1.03]
             ${showVideo && ready ? 'opacity-0' : 'opacity-100'}`}
         />
 
@@ -111,12 +112,25 @@ export default function ProjectCard({ project }: { project: Project }) {
               setReady(true);
               if (showVideo) videoRef.current?.play().catch(() => {});
             }}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300
+            className={`absolute inset-0 h-full w-full object-cover transition-all duration-500
+              group-hover:scale-[1.03]
               ${showVideo && ready ? 'opacity-100' : 'opacity-0'}`}
           >
             <source src={project.video} type="video/mp4" />
           </video>
         )}
+
+        {/* Hover overlay with title */}
+        <div
+          className={`absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent
+            flex items-end p-4 transition-opacity duration-300
+            ${hovered && !(showVideo && ready) ? 'opacity-100' : 'opacity-0'}`}
+        >
+          <div>
+            <p className="text-white font-semibold text-lg">{project.title}</p>
+            <p className="text-white/70 text-sm">{project.role}</p>
+          </div>
+        </div>
 
         {/* Sound toggle */}
         {showVideo && (
