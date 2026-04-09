@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import LogoCarousel from './LogoCarousel';
 import TwitterCarouselScratch from './TwitterCarouselScratch';
-import Button from './Button';
 import ServiceCards from './ServiceCards';
 import CTA from './CTA';
 
@@ -51,26 +50,6 @@ export default function Hero() {
       <LogoCarousel />
 
       <TwitterCarouselScratch />
-
-      <div className="mt-8 flex justify-center">
-        <Button
-          onClick={() => {
-            const element = document.getElementById('service-cards');
-            if (element) {
-              const navbarHeight = 80;
-              const elementPosition = element.offsetTop - navbarHeight;
-              window.scrollTo({
-                top: elementPosition,
-                behavior: 'smooth',
-              });
-            }
-          }}
-          variant="primary"
-          size="md"
-        >
-          See more
-        </Button>
-      </div>
 
       <motion.div
         id="service-cards"

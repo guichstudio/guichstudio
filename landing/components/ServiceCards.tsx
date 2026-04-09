@@ -2,26 +2,25 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import Button from './Button';
 
 const services = [
   {
     id: 'promo-video',
     label: 'Promo video',
     description:
-      'Motion, narrative and campaign films, from first concept to final delivery. We handle creative direction, production and edit.',
+      'Motion, narrative, campaign films and 3D design, from first concept to final delivery. We handle creative direction, production and edit.',
   },
   {
     id: 'branding',
     label: 'Branding',
     description:
-      'Identity and visual systems for brands that need to hold across mediums, from screen to space.',
+      'Identity, visual systems and 3D design for brands that need to hold across mediums, from screen to space.',
   },
   {
     id: 'visual-installation',
     label: 'Visual installation',
     description:
-      'Projection mapping, generative environments and spatial light experiences, from intimate room-scale to architectural.',
+      'Projection mapping, 3D design, generative environments and spatial light experiences, from intimate room-scale to architectural.',
   },
   {
     id: 'artistic-direction',
@@ -40,13 +39,6 @@ const services = [
 export default function ServiceCards() {
   const [activeTab, setActiveTab] = useState(services[0].id);
   const active = services.find((s) => s.id === activeTab) ?? services[0];
-
-  const getCalendlyUrl = () => {
-    const now = new Date();
-    const currentMonth = now.getMonth() + 1;
-    const currentYear = now.getFullYear();
-    return `https://calendly.com/guichstudio/30min?back=1&month=${currentYear}-${currentMonth.toString().padStart(2, '0')}`;
-  };
 
   return (
     <motion.div
@@ -81,18 +73,10 @@ export default function ServiceCards() {
       <div className="max-w-2xl lg:max-w-3xl mx-auto text-center">
         <p
           key={active.id}
-          className="text-neutral-600 tracking-tighter lg:text-lg leading-relaxed mb-8 animate-fade-in"
+          className="text-neutral-600 tracking-tighter lg:text-lg leading-relaxed animate-fade-in"
         >
           {active.description}
         </p>
-
-        <Button
-          variant="secondary"
-          size="md"
-          onClick={() => window.open(getCalendlyUrl(), '_blank')}
-        >
-          Start a project
-        </Button>
       </div>
     </motion.div>
   );
