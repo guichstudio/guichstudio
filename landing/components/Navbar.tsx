@@ -35,8 +35,8 @@ export default function Navbar() {
         </nav>
       </header>
 
-      {/* Sticky bottom CTA */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+      {/* Sticky bottom CTAs */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3">
         <a
           href={getCalendlyUrl()}
           target="_blank"
@@ -44,6 +44,13 @@ export default function Navbar() {
           className="inline-flex items-center justify-center rounded-full bg-black text-white px-8 py-3 text-sm font-medium shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl"
         >
           Book a call
+        </a>
+        <a
+          href="mailto:guich.studio@gmail.com"
+          className="inline-flex items-center justify-center rounded-full bg-black text-white w-12 h-12 shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl"
+          aria-label="Send email"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
         </a>
       </div>
     </>
