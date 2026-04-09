@@ -90,7 +90,7 @@ export default function Hero() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
       >
-        <p className="max-w-2xl lg:max-w-3xl text-neutral-600 text-center tracking-tighter lg:text-lg leading-relaxed">
+        <p className="max-w-3xl lg:max-w-4xl text-black text-center tracking-tighter text-xl lg:text-2xl font-semibold leading-relaxed">
           Visual experience studio for brands, founders and product leaders in Web3 and live events. We move fast, work with full autonomy, and deliver high-quality brands and products that stay ahead. Enhanced by deep Web3 expertise, applied AI, and structured yet flexible processes. From installations and projection mapping to films and creative direction, anywhere in the world.
         </p>
       </motion.div>

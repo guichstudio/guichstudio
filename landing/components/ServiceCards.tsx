@@ -50,7 +50,7 @@ export default function ServiceCards() {
 
   return (
     <motion.div
-      className="mt-16 bg-neutral-50 rounded-3xl p-8 sm:p-10 lg:p-16"
+      className="mt-16"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
