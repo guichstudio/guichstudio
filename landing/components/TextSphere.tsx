@@ -8,7 +8,7 @@ interface TextSphereProps {
   fontSize?: number;
   /** Continuous auto-rotation around Y axis, in degrees per second. 0 disables. */
   spin?: number;
-  /** Initial X tilt in degrees. */
+  /** Initial X tilt in degrees (locked — user input cannot change this). */
   tiltX?: number;
   /** Z rotation of the whole text stage in degrees. */
   tiltZ?: number;
@@ -18,9 +18,15 @@ interface TextSphereProps {
 /**
  * 3D text wrapped around a sphere. Pure CSS 3D transforms — no 3D library.
  *
- * When `spin` > 0, each line is force-wrapped to a full 360° so the text
- * becomes a continuous marquee that rotates around the sphere. The user can
- * still tilt / offset the rotation with the mouse or a finger.
+ * Typography is normalized: every glyph sits in a 1em-tall inline-block box
+ * so baselines align, and per-character arc widths come from canvas
+ * measurement of the actual loaded Inter font. All lines share a single
+ * uniform degrees-per-pixel density derived from the longest line, so the
+ * apparent letter spacing stays homogeneous between rings.
+ *
+ * Interaction is drag-based (pointer events) with `touch-action: none` on
+ * the stage, so dragging a finger rotates the sphere instead of scrolling
+ * the page. Auto-spin pauses while the user is dragging.
  */
 export default function TextSphere({
   text = 'Buildlore is a design brand directive studio. Here to get high value content and build the lore you need',
@@ -33,8 +39,10 @@ export default function TextSphere({
   className = '',
 }: TextSphereProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [rot, setRot] = useState({ x: tiltX, y: 0 });
-  const [charAngles, setCharAngles] = useState<number[][] | null>(null);
+  const [rotY, setRotY] = useState(0);
+  const [measured, setMeasured] = useState<{
+    angles: number[][];
+  } | null>(null);
 
   // Split the text into lines. Caller may pass an explicit array.
   const lines = useMemo(() => {
@@ -52,79 +60,117 @@ export default function TextSphere({
     return out;
   }, [text, linesProp]);
 
-  // Uniform fallback step used while fonts load / before canvas measurement.
-  const fallbackDegPerChar = ((fontSize * 0.42) / radius) * (180 / Math.PI);
-
-  // Measure each character's natural width with a canvas, then force the
-  // whole line to wrap exactly 360° around the sphere with each glyph taking
-  // an arc proportional to its measured width. Guarantees no gaps, no
-  // uniform-step artefacts, and text visible at every rotation angle.
+  // Measure each character with the same font settings used in CSS. Then
+  // pick a single uniform degPerPx density (based on the longest line) so
+  // every line has the same apparent letter spacing; the longest line fills
+  // exactly 360°, shorter lines cover slightly less but at the same density.
   useEffect(() => {
     let cancelled = false;
-    const measure = () => {
+    const run = () => {
       if (cancelled) return;
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
       ctx.font = `800 ${fontSize}px 'Inter', ui-sans-serif, system-ui, sans-serif`;
 
-      const result = lines.map((line) => {
+      const perLine = lines.map((line) => {
         const chars = line.split('');
         const widths = chars.map((ch) =>
           ctx.measureText(ch === '\u00A0' ? ' ' : ch).width,
         );
         const total = widths.reduce((a, b) => a + b, 0) || 1;
-        const angles: number[] = [];
+        return { widths, total };
+      });
+
+      const maxTotal = Math.max(...perLine.map((l) => l.total));
+      const degPerPx = 360 / maxTotal;
+
+      const angles = perLine.map(({ widths, total }) => {
+        const lineArcDeg = total * degPerPx;
+        const start = -lineArcDeg / 2;
+        const out: number[] = [];
         let cursor = 0;
-        for (let i = 0; i < chars.length; i++) {
+        for (let i = 0; i < widths.length; i++) {
           const centerPx = cursor + widths[i] / 2;
           cursor += widths[i];
-          // Proportional 0..360° wrap, centered so the middle of the line
-          // faces the camera at rest.
-          angles.push((centerPx / total) * 360 - 180);
+          out.push(start + centerPx * degPerPx);
         }
-        return angles;
+        return out;
       });
-      if (!cancelled) setCharAngles(result);
+
+      if (!cancelled) setMeasured({ angles });
     };
 
-    // Wait for fonts to be ready so measurement matches rendered widths.
     const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
     if (fonts && fonts.ready) {
-      fonts.ready.then(measure).catch(measure);
+      fonts.ready.then(run).catch(run);
     } else {
-      measure();
+      run();
     }
     return () => {
       cancelled = true;
     };
   }, [lines, fontSize, radius]);
 
+  // Drag-based interaction — pointer events give us unified mouse / touch
+  // handling, setPointerCapture keeps the drag locked to one pointer, and
+  // touch-action: none on the stage stops the mobile browser from stealing
+  // the gesture for scrolling.
   useEffect(() => {
-    // Only horizontal (Y) rotation is user-controlled. X tilt is locked at
-    // the base tiltX value so the sphere never nods up or down.
-    let userTargetYOff = 0;
-    let userCurrentYOff = 0;
-    let baseY = 0;
+    const el = containerRef.current;
+    if (!el) return;
+
+    let baseY = 0; // accumulated rotation from auto-spin + finished drags
+    let liveY = 0; // live rotation from current drag (before release)
+    let displayY = 0; // smoothed value actually applied
+    let dragging = false;
+    let pointerId: number | null = null;
+    let dragStartX = 0;
+    let dragStartBaseY = 0;
     let lastTs: number | null = null;
 
-    const updateTarget = (clientX: number) => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const dx = (clientX - cx) / (window.innerWidth / 2);
-      userTargetYOff = dx * 90;
+    const pxToDeg = 0.5; // how much rotation per px of finger travel
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (dragging) return;
+      dragging = true;
+      pointerId = e.pointerId;
+      dragStartX = e.clientX;
+      // freeze the current total rotation into baseY so liveY starts at 0
+      dragStartBaseY = baseY + liveY;
+      baseY = dragStartBaseY;
+      liveY = 0;
+      try {
+        el.setPointerCapture(e.pointerId);
+      } catch {
+        /* not all browsers */
+      }
     };
 
-    const onMouseMove = (e: MouseEvent) => updateTarget(e.clientX);
-    const onTouch = (e: TouchEvent) => {
-      if (e.touches.length === 0) return;
-      updateTarget(e.touches[0].clientX);
+    const onPointerMove = (e: PointerEvent) => {
+      if (!dragging || e.pointerId !== pointerId) return;
+      const dx = e.clientX - dragStartX;
+      liveY = dx * pxToDeg;
     };
 
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('touchstart', onTouch, { passive: true });
-    window.addEventListener('touchmove', onTouch, { passive: true });
+    const onPointerUp = (e: PointerEvent) => {
+      if (!dragging || e.pointerId !== pointerId) return;
+      dragging = false;
+      pointerId = null;
+      baseY += liveY;
+      liveY = 0;
+      try {
+        el.releasePointerCapture(e.pointerId);
+      } catch {
+        /* ignore */
+      }
+    };
+
+    el.addEventListener('pointerdown', onPointerDown);
+    el.addEventListener('pointermove', onPointerMove);
+    el.addEventListener('pointerup', onPointerUp);
+    el.addEventListener('pointercancel', onPointerUp);
+    el.addEventListener('lostpointercapture', onPointerUp);
 
     const rafRef = { id: 0 };
     const loop = (ts: number) => {
@@ -132,42 +178,49 @@ export default function TextSphere({
       const dt = Math.min(0.05, (ts - lastTs) / 1000);
       lastTs = ts;
 
-      // Continuous auto-rotation around Y
-      baseY = (baseY + spin * dt) % 360;
+      // Auto-spin only when idle
+      if (!dragging && spin > 0) {
+        baseY = (baseY + spin * dt) % 360;
+      }
 
-      // Ease user horizontal offset toward the target
-      const ease = 0.08;
-      userCurrentYOff += (userTargetYOff - userCurrentYOff) * ease;
+      const target = baseY + liveY;
+      // Smooth so fast drags don't jitter, but stay snappy.
+      const ease = dragging ? 0.35 : 0.18;
+      displayY += (target - displayY) * ease;
 
-      setRot({
-        x: tiltX,
-        y: baseY + userCurrentYOff,
-      });
+      setRotY(displayY);
       rafRef.id = requestAnimationFrame(loop);
     };
     rafRef.id = requestAnimationFrame(loop);
 
     return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('touchstart', onTouch);
-      window.removeEventListener('touchmove', onTouch);
+      el.removeEventListener('pointerdown', onPointerDown);
+      el.removeEventListener('pointermove', onPointerMove);
+      el.removeEventListener('pointerup', onPointerUp);
+      el.removeEventListener('pointercancel', onPointerUp);
+      el.removeEventListener('lostpointercapture', onPointerUp);
       cancelAnimationFrame(rafRef.id);
     };
-  }, [spin, tiltX]);
+  }, [spin]);
 
   const sphereSize = radius * 2;
   const boxSize = Math.round(radius * 2.8);
-  const lineHeight = Math.round(fontSize * 1.0);
+  const lineHeight = Math.round(fontSize * 1.05);
+
+  // Uniform fallback step used while fonts load / before canvas measurement.
+  const fallbackDegPerChar = ((fontSize * 0.42) / radius) * (180 / Math.PI);
 
   return (
     <div
       ref={containerRef}
-      className={`relative mx-auto select-none font-body ${className}`}
+      className={`relative mx-auto select-none ${className}`}
       style={{
         width: boxSize,
         height: boxSize,
         perspective: `${radius * 5}px`,
         fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif",
+        touchAction: 'none',
+        cursor: 'grab',
       }}
       aria-label={text}
       role="img"
@@ -175,7 +228,7 @@ export default function TextSphere({
       {/* The white 3D-looking sphere */}
       <div
         aria-hidden="true"
-        className="absolute rounded-full"
+        className="absolute rounded-full pointer-events-none"
         style={{
           width: sphereSize,
           height: sphereSize,
@@ -192,21 +245,21 @@ export default function TextSphere({
 
       {/* 3D text stage */}
       <div
-        className="absolute"
+        className="absolute pointer-events-none"
         style={{
           left: '50%',
           top: '50%',
           width: 0,
           height: 0,
           transformStyle: 'preserve-3d',
-          transform: `rotateX(${rot.x}deg) rotateY(${rot.y}deg) rotateZ(${tiltZ}deg)`,
+          transform: `rotateX(${tiltX}deg) rotateY(${rotY}deg) rotateZ(${tiltZ}deg)`,
           willChange: 'transform',
         }}
       >
         {lines.map((line, li) => {
           const n = line.length;
           const y = (li - (lines.length - 1) / 2) * lineHeight;
-          const measuredAngles = charAngles?.[li];
+          const measuredAngles = measured?.angles[li];
           return (
             <div
               key={li}
@@ -218,8 +271,6 @@ export default function TextSphere({
               }}
             >
               {line.split('').map((ch, i) => {
-                // Proportional spacing once canvas has measured; uniform
-                // fallback before fonts are ready.
                 const angle = measuredAngles
                   ? measuredAngles[i]
                   : (i - (n - 1) / 2) * fallbackDegPerChar;
@@ -231,8 +282,13 @@ export default function TextSphere({
                     style={{
                       left: 0,
                       top: 0,
+                      display: 'inline-block',
                       fontSize,
-                      letterSpacing: '-0.04em',
+                      lineHeight: 1,
+                      height: '1em',
+                      padding: 0,
+                      margin: 0,
+                      letterSpacing: 0,
                       transformOrigin: '0 0 0',
                       transform: `translate(-50%, -50%) translateY(${y}px) rotateY(${angle}deg) translateZ(${radius}px)`,
                       backfaceVisibility: 'hidden',

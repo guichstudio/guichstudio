@@ -47,18 +47,26 @@
         justify-content: center;
         padding: 48px 16px;
         overflow-x: hidden;
+        overscroll-behavior: none;
       }
       .stage {
         position: relative;
         margin: 0 auto;
         user-select: none;
         -webkit-user-select: none;
+        /* Stop the mobile browser from stealing touches for page scroll. */
+        touch-action: none;
+        cursor: grab;
+      }
+      .stage:active {
+        cursor: grabbing;
       }
       .sphere {
         position: absolute;
         left: 50%;
         top: 50%;
         border-radius: 50%;
+        pointer-events: none;
         background: radial-gradient(
           circle at 35% 28%,
           #ffffff 0%,
@@ -79,6 +87,7 @@
         height: 0;
         transform-style: preserve-3d;
         will-change: transform;
+        pointer-events: none;
       }
       .line {
         position: absolute;
@@ -90,10 +99,15 @@
         position: absolute;
         left: 0;
         top: 0;
+        display: inline-block;
         font-family: 'Inter', sans-serif;
         font-weight: 800;
         color: #0a0a0a;
-        letter-spacing: -0.04em;
+        line-height: 1;
+        height: 1em;
+        padding: 0;
+        margin: 0;
+        letter-spacing: 0;
         transform-origin: 0 0 0;
         backface-visibility: hidden;
         -webkit-backface-visibility: hidden;
@@ -110,7 +124,7 @@
   </head>
   <body>
     <div id="stage" class="stage" role="img" aria-label="Rotating text sphere"></div>
-    <p class="hint">Move left / right to scroll the text around the sphere.</p>
+    <p class="hint">Drag the sphere left / right to spin it.</p>
 
     <script>
       const MISSION_LINES = [
@@ -124,7 +138,7 @@
       const SPIN = 14; // deg / second
       const TILT_X = -12;
       const TILT_Z = -8;
-      const LINE_HEIGHT = Math.round(FONT_SIZE * 1.0);
+      const LINE_HEIGHT = Math.round(FONT_SIZE * 1.05);
       const SPHERE_SIZE = RADIUS * 2;
       const BOX_SIZE = Math.round(RADIUS * 2.8);
       const ARC_PER_CHAR = FONT_SIZE * 0.42;
@@ -135,7 +149,6 @@
       stage.style.height = BOX_SIZE + 'px';
       stage.style.perspective = RADIUS * 5 + 'px';
 
-      // Sphere
       const sphere = document.createElement('div');
       sphere.className = 'sphere';
       sphere.style.width = SPHERE_SIZE + 'px';
@@ -144,44 +157,50 @@
       sphere.style.marginTop = -RADIUS + 'px';
       stage.appendChild(sphere);
 
-      // Text stage
       const textStage = document.createElement('div');
       textStage.className = 'text-stage';
       stage.appendChild(textStage);
 
-      // Measure each character with canvas and lay them out so the line
-      // wraps exactly 360° around the sphere, with each glyph taking an arc
-      // proportional to its measured width. No gaps, no uniform artefacts,
-      // and the text is visible no matter the rotation.
-      function measureChars() {
+      // Measure each character with canvas, then pick a single uniform
+      // degrees-per-pixel density (based on the longest line) so every ring
+      // has the same apparent letter spacing. The longest line fills exactly
+      // 360°, shorter lines cover slightly less but at the same density.
+      function computeAngles() {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         ctx.font =
           "800 " +
           FONT_SIZE +
           "px 'Inter', ui-sans-serif, system-ui, sans-serif";
-        return MISSION_LINES.map((line) => {
-          const chars = line.split('');
-          const widths = chars.map((c) =>
-            ctx.measureText(c === '\u00A0' ? ' ' : c).width,
-          );
+        const perLine = MISSION_LINES.map((line) => {
+          const widths = line
+            .split('')
+            .map((c) => ctx.measureText(c === '\u00A0' ? ' ' : c).width);
           const total = widths.reduce((a, b) => a + b, 0) || 1;
+          return { widths, total };
+        });
+        const maxTotal = Math.max.apply(
+          null,
+          perLine.map((l) => l.total),
+        );
+        const degPerPx = 360 / maxTotal;
+        return perLine.map(({ widths, total }) => {
+          const lineArc = total * degPerPx;
+          const start = -lineArc / 2;
           const out = [];
           let cursor = 0;
-          for (let i = 0; i < chars.length; i++) {
+          for (let i = 0; i < widths.length; i++) {
             const centerPx = cursor + widths[i] / 2;
             cursor += widths[i];
-            // Proportional 0..360° wrap, centered so the middle of the line
-            // faces the camera at rest.
-            out.push((centerPx / total) * 360 - 180);
+            out.push(start + centerPx * degPerPx);
           }
           return out;
         });
       }
 
       function buildText(charAngles) {
-        // Clear any previous text rings.
-        while (textStage.firstChild) textStage.removeChild(textStage.firstChild);
+        while (textStage.firstChild)
+          textStage.removeChild(textStage.firstChild);
         MISSION_LINES.forEach((line, li) => {
           const lineEl = document.createElement('div');
           lineEl.className = 'line';
@@ -218,51 +237,71 @@
       });
       buildText(uniformFallback);
 
-      // Re-measure once Inter is actually loaded so widths are correct.
-      const applyMeasured = () => buildText(measureChars());
+      // Re-measure once Inter is actually loaded.
+      const applyMeasured = () => buildText(computeAngles());
       if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(applyMeasured).catch(applyMeasured);
       } else {
         applyMeasured();
       }
 
-      // Input: only horizontal scroll moves the sphere around its Y axis.
-      // Vertical pointer motion is ignored — the sphere never tilts up/down.
-      let userTargetYOff = 0;
-      let userCurYOff = 0;
+      // Drag-based interaction using pointer events. Pointer capture keeps
+      // the drag locked to the single finger, touch-action: none on the
+      // stage stops the mobile browser from scrolling the page.
       let baseY = 0;
+      let liveY = 0;
+      let displayY = 0;
+      let dragging = false;
+      let activePointer = null;
+      let dragStartX = 0;
       let lastTs = null;
+      const PX_TO_DEG = 0.5;
 
-      function updateTarget(clientX) {
-        const rect = stage.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const dx = (clientX - cx) / (window.innerWidth / 2);
-        userTargetYOff = dx * 90;
-      }
-
-      window.addEventListener('mousemove', (e) => updateTarget(e.clientX));
-      const onTouch = (e) => {
-        if (!e.touches || e.touches.length === 0) return;
-        updateTarget(e.touches[0].clientX);
+      stage.addEventListener('pointerdown', (e) => {
+        if (dragging) return;
+        dragging = true;
+        activePointer = e.pointerId;
+        dragStartX = e.clientX;
+        liveY = 0;
+        try {
+          stage.setPointerCapture(e.pointerId);
+        } catch (err) {}
+      });
+      stage.addEventListener('pointermove', (e) => {
+        if (!dragging || e.pointerId !== activePointer) return;
+        liveY = (e.clientX - dragStartX) * PX_TO_DEG;
+      });
+      const endDrag = (e) => {
+        if (!dragging || e.pointerId !== activePointer) return;
+        dragging = false;
+        activePointer = null;
+        baseY += liveY;
+        liveY = 0;
+        try {
+          stage.releasePointerCapture(e.pointerId);
+        } catch (err) {}
       };
-      window.addEventListener('touchstart', onTouch, { passive: true });
-      window.addEventListener('touchmove', onTouch, { passive: true });
+      stage.addEventListener('pointerup', endDrag);
+      stage.addEventListener('pointercancel', endDrag);
+      stage.addEventListener('lostpointercapture', endDrag);
 
       function loop(ts) {
         if (lastTs === null) lastTs = ts;
         const dt = Math.min(0.05, (ts - lastTs) / 1000);
         lastTs = ts;
 
-        baseY = (baseY + SPIN * dt) % 360;
-
-        const ease = 0.08;
-        userCurYOff += (userTargetYOff - userCurYOff) * ease;
+        if (!dragging) {
+          baseY = (baseY + SPIN * dt) % 360;
+        }
+        const target = baseY + liveY;
+        const ease = dragging ? 0.35 : 0.18;
+        displayY += (target - displayY) * ease;
 
         textStage.style.transform =
           'rotateX(' +
           TILT_X +
           'deg) rotateY(' +
-          (baseY + userCurYOff) +
+          displayY +
           'deg) rotateZ(' +
           TILT_Z +
           'deg)';
