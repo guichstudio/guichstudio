@@ -52,6 +52,61 @@ export default function TextSphere({
   const [measured, setMeasured] = useState<number[][] | null>(null);
   const reactId = useId().replace(/[:]/g, '');
 
+  // Randomized volcanic-rock texture params. Generated client-side on mount
+  // to avoid SSR hydration mismatches, so each page load gets a different
+  // noise seed and crater layout.
+  type Crater = {
+    cx: number;
+    cy: number;
+    r: number;
+    opacity: number;
+    ix: number;
+    iy: number;
+  };
+  const [tex, setTex] = useState<{
+    grainSeed: number;
+    grainFreq: number;
+    warpSeed: number;
+    warpFreq: number;
+    pitsSeed: number;
+    pitsFreq: number;
+    craters: Crater[];
+  }>({
+    grainSeed: 12,
+    grainFreq: 1.6,
+    warpSeed: 7,
+    warpFreq: 0.028,
+    pitsSeed: 4,
+    pitsFreq: 0.18,
+    craters: [],
+  });
+  useEffect(() => {
+    const rand = (min: number, max: number) =>
+      min + Math.random() * (max - min);
+    const randi = (min: number, max: number) => Math.floor(rand(min, max));
+    const craters: Crater[] = [];
+    const n = randi(10, 16);
+    for (let i = 0; i < n; i++) {
+      craters.push({
+        cx: rand(15, 185),
+        cy: rand(15, 185),
+        r: rand(3, 10),
+        opacity: rand(0.75, 1),
+        ix: rand(-1.2, 1.2),
+        iy: rand(-1.2, 1.2),
+      });
+    }
+    setTex({
+      grainSeed: randi(0, 100),
+      grainFreq: rand(1.4, 1.9),
+      warpSeed: randi(0, 100),
+      warpFreq: rand(0.02, 0.035),
+      pitsSeed: randi(0, 100),
+      pitsFreq: rand(0.14, 0.22),
+      craters,
+    });
+  }, []);
+
   // Responsive sizing: scale the sphere down on narrow viewports so the box
   // always fits on screen and stays centered.
   const BOX_TO_R_RATIO = 2.4;
@@ -338,32 +393,62 @@ export default function TextSphere({
           style={{ display: 'block' }}
         >
           <defs>
-            <filter id={`${fId}-grain`}>
+            {/* Warped fine grain — the main rough rock surface. The grain
+                noise is displaced by a very low-frequency warp noise so the
+                result is irregular instead of looking like a uniform tile. */}
+            <filter
+              id={`${fId}-grain`}
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+            >
               <feTurbulence
                 type="fractalNoise"
-                baseFrequency="1.4"
-                numOctaves={5}
-                seed={12}
-                stitchTiles="stitch"
+                baseFrequency={tex.warpFreq}
+                numOctaves={2}
+                seed={tex.warpSeed}
+                result="warp"
               />
-              <feColorMatrix values="0 0 0 0 0.19  0 0 0 0 0.16  0 0 0 0 0.13  1.6 0 0 0 -0.5" />
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency={tex.grainFreq}
+                numOctaves={5}
+                seed={tex.grainSeed}
+                stitchTiles="stitch"
+                result="grain"
+              />
+              <feDisplacementMap
+                in="grain"
+                in2="warp"
+                scale="14"
+                xChannelSelector="R"
+                yChannelSelector="G"
+                result="displaced"
+              />
+              <feColorMatrix
+                in="displaced"
+                values="0 0 0 0 0.2  0 0 0 0 0.17  0 0 0 0 0.14  1.7 0 0 0 -0.55"
+              />
             </filter>
+            {/* Medium pits — low frequency noise with amplified alpha so
+                larger darker patches show through. */}
             <filter id={`${fId}-pits`}>
               <feTurbulence
                 type="fractalNoise"
-                baseFrequency="0.25 0.4"
+                baseFrequency={tex.pitsFreq}
                 numOctaves={2}
-                seed={4}
+                seed={tex.pitsSeed}
                 stitchTiles="stitch"
               />
-              <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3 0 0 0 -1.6" />
+              <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  2.8 0 0 0 -1.7" />
             </filter>
-            <radialGradient
-              id={`${fId}-hi`}
-              cx="35%"
-              cy="25%"
-              r="65%"
-            >
+            {/* Small blur so the crater circles read as soft pits instead
+                of perfect stamped circles. */}
+            <filter id={`${fId}-blur`}>
+              <feGaussianBlur stdDeviation="1.2" />
+            </filter>
+            <radialGradient id={`${fId}-hi`} cx="35%" cy="25%" r="65%">
               <stop offset="0%" stopColor="rgba(255,255,255,0.22)" />
               <stop offset="40%" stopColor="rgba(255,255,255,0)" />
             </radialGradient>
@@ -371,6 +456,27 @@ export default function TextSphere({
           <rect width="200" height="200" fill="#0e0e0e" />
           <rect width="200" height="200" filter={`url(#${fId}-grain)`} />
           <rect width="200" height="200" filter={`url(#${fId}-pits)`} />
+          {/* Randomly placed crater circles for sharp dark pits. Each has
+              an outer soft-blurred ring and an inner deeper hole. */}
+          {tex.craters.map((c, i) => (
+            <g key={i}>
+              <circle
+                cx={c.cx}
+                cy={c.cy}
+                r={c.r}
+                fill="#000"
+                opacity={c.opacity}
+                filter={`url(#${fId}-blur)`}
+              />
+              <circle
+                cx={c.cx + c.ix}
+                cy={c.cy + c.iy}
+                r={c.r * 0.55}
+                fill="#000"
+                opacity={0.92}
+              />
+            </g>
+          ))}
           <rect width="200" height="200" fill={`url(#${fId}-hi)`} />
         </svg>
       </div>

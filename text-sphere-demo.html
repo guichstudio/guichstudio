@@ -161,34 +161,96 @@
       stage.style.height = BOX_SIZE + 'px';
       stage.style.perspective = RADIUS * 5 + 'px';
 
-      // Sphere element with inline SVG texture (volcanic rock look).
+      // Sphere element with randomized inline SVG texture. Every page load
+      // gets fresh noise seeds and a different crater layout so it never
+      // looks like a repeating tile.
       const sphere = document.createElement('div');
       sphere.className = 'sphere';
       sphere.style.width = SPHERE_SIZE + 'px';
       sphere.style.height = SPHERE_SIZE + 'px';
       sphere.style.marginLeft = -RADIUS + 'px';
       sphere.style.marginTop = -RADIUS + 'px';
-      sphere.innerHTML =
-        '<svg viewBox="0 0 200 200" preserveAspectRatio="none">' +
-        '<defs>' +
-        '<filter id="grain">' +
-        '<feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="5" seed="12" stitchTiles="stitch"/>' +
-        '<feColorMatrix values="0 0 0 0 0.19  0 0 0 0 0.16  0 0 0 0 0.13  1.6 0 0 0 -0.5"/>' +
-        '</filter>' +
-        '<filter id="pits">' +
-        '<feTurbulence type="fractalNoise" baseFrequency="0.25 0.4" numOctaves="2" seed="4" stitchTiles="stitch"/>' +
-        '<feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3 0 0 0 -1.6"/>' +
-        '</filter>' +
-        '<radialGradient id="hi" cx="35%" cy="25%" r="65%">' +
-        '<stop offset="0%" stop-color="rgba(255,255,255,0.22)"/>' +
-        '<stop offset="40%" stop-color="rgba(255,255,255,0)"/>' +
-        '</radialGradient>' +
-        '</defs>' +
-        '<rect width="200" height="200" fill="#0e0e0e"/>' +
-        '<rect width="200" height="200" filter="url(#grain)"/>' +
-        '<rect width="200" height="200" filter="url(#pits)"/>' +
-        '<rect width="200" height="200" fill="url(#hi)"/>' +
-        '</svg>';
+
+      (function buildSphereTexture() {
+        const rand = (a, b) => a + Math.random() * (b - a);
+        const randi = (a, b) => Math.floor(rand(a, b));
+        const grainSeed = randi(0, 100);
+        const grainFreq = rand(1.4, 1.9);
+        const warpSeed = randi(0, 100);
+        const warpFreq = rand(0.02, 0.035);
+        const pitsSeed = randi(0, 100);
+        const pitsFreq = rand(0.14, 0.22);
+
+        const numCraters = randi(10, 16);
+        let craterSvg = '';
+        for (let i = 0; i < numCraters; i++) {
+          const cx = rand(15, 185);
+          const cy = rand(15, 185);
+          const cr = rand(3, 10);
+          const op = rand(0.75, 1);
+          const ix = rand(-1.2, 1.2);
+          const iy = rand(-1.2, 1.2);
+          craterSvg +=
+            '<circle cx="' +
+            cx +
+            '" cy="' +
+            cy +
+            '" r="' +
+            cr +
+            '" fill="#000" opacity="' +
+            op +
+            '" filter="url(#blur)"/>' +
+            '<circle cx="' +
+            (cx + ix) +
+            '" cy="' +
+            (cy + iy) +
+            '" r="' +
+            cr * 0.55 +
+            '" fill="#000" opacity="0.92"/>';
+        }
+
+        sphere.innerHTML =
+          '<svg viewBox="0 0 200 200" preserveAspectRatio="none">' +
+          '<defs>' +
+          // Warped fine grain: warp noise displaces grain noise so the
+          // surface doesn't look like a repeating tile.
+          '<filter id="grain" x="0" y="0" width="100%" height="100%">' +
+          '<feTurbulence type="fractalNoise" baseFrequency="' +
+          warpFreq +
+          '" numOctaves="2" seed="' +
+          warpSeed +
+          '" result="warp"/>' +
+          '<feTurbulence type="fractalNoise" baseFrequency="' +
+          grainFreq +
+          '" numOctaves="5" seed="' +
+          grainSeed +
+          '" stitchTiles="stitch" result="grain"/>' +
+          '<feDisplacementMap in="grain" in2="warp" scale="14" xChannelSelector="R" yChannelSelector="G" result="d"/>' +
+          '<feColorMatrix in="d" values="0 0 0 0 0.2  0 0 0 0 0.17  0 0 0 0 0.14  1.7 0 0 0 -0.55"/>' +
+          '</filter>' +
+          // Medium pits: low-frequency alpha noise for larger dark patches.
+          '<filter id="pits">' +
+          '<feTurbulence type="fractalNoise" baseFrequency="' +
+          pitsFreq +
+          '" numOctaves="2" seed="' +
+          pitsSeed +
+          '" stitchTiles="stitch"/>' +
+          '<feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  2.8 0 0 0 -1.7"/>' +
+          '</filter>' +
+          '<filter id="blur"><feGaussianBlur stdDeviation="1.2"/></filter>' +
+          '<radialGradient id="hi" cx="35%" cy="25%" r="65%">' +
+          '<stop offset="0%" stop-color="rgba(255,255,255,0.22)"/>' +
+          '<stop offset="40%" stop-color="rgba(255,255,255,0)"/>' +
+          '</radialGradient>' +
+          '</defs>' +
+          '<rect width="200" height="200" fill="#0e0e0e"/>' +
+          '<rect width="200" height="200" filter="url(#grain)"/>' +
+          '<rect width="200" height="200" filter="url(#pits)"/>' +
+          craterSvg +
+          '<rect width="200" height="200" fill="url(#hi)"/>' +
+          '</svg>';
+      })();
+
       stage.appendChild(sphere);
 
       // Text stage
