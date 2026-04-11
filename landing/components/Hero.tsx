@@ -77,7 +77,7 @@ export default function Hero() {
         <p className="sr-only">{MISSION_TEXT}</p>
         <TextSphere
           text={MISSION_TEXT}
-          lines={6}
+          lines={8}
           radius={260}
           fontSize={32}
           spin={-14}
