@@ -16,6 +16,7 @@ const MISSION_LINES = [
   'Enhanced by deep Web3 expertise, applied AI, and structured yet flexible processes.',
   'From installations and projection mapping to films and creative direction, anywhere in the world.',
 ];
+const MISSION_TEXT = MISSION_LINES.join(' ');
 
 export default function Hero() {
   return (
@@ -78,9 +79,9 @@ export default function Hero() {
         viewport={{ once: true, amount: 0.3 }}
       >
         {/* Accessible/SEO copy of the mission statement */}
-        <p className="sr-only">{MISSION_LINES.join(' ')}</p>
+        <p className="sr-only">{MISSION_TEXT}</p>
         <TextSphere
-          text={MISSION_LINES.join(' ')}
+          text={MISSION_TEXT}
           lines={MISSION_LINES}
           radius={260}
           fontSize={32}

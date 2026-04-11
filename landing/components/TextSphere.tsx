@@ -27,12 +27,19 @@ interface TextSphereProps {
  * Typography: every glyph sits in a 1em-tall inline-block box so baselines
  * align, and per-character arc widths come from real DOM measurement
  * (getBoundingClientRect on inline-block spans with the same CSS as the final
- * render). All lines share a single uniform degrees-per-pixel density derived
- * from the longest line, so the apparent letter spacing stays homogeneous.
+ * render). Each line is then scaled to fill exactly 360° of arc, so the
+ * first and last glyph of every ring meet at the back of the sphere with no
+ * visible seam.
  *
  * Interaction: drag-based pointer events with `touch-action: none` on the
  * stage so dragging a finger rotates the sphere instead of scrolling the
- * page. Auto-spin pauses while the user is actively dragging.
+ * page. Auto-spin pauses while the user is actively dragging, and the
+ * whole animation loop pauses when the sphere is scrolled off-screen
+ * (IntersectionObserver) to save mobile battery.
+ *
+ * Perf: the per-frame rotation is applied directly to the text-stage DOM
+ * node via a ref — not through React state — so the RAF loop never triggers
+ * a React re-render. Measurement state only flips once per font load.
  */
 export default function TextSphere({
   text = 'Buildlore is a design brand directive studio. Here to get high value content and build the lore you need',
@@ -45,7 +52,7 @@ export default function TextSphere({
   className = '',
 }: TextSphereProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [rotY, setRotY] = useState(0);
+  const textStageRef = useRef<HTMLDivElement>(null);
   const [measured, setMeasured] = useState<number[][] | null>(null);
 
   // Responsive sizing: scale the sphere down on narrow viewports so the box
@@ -198,9 +205,15 @@ export default function TextSphere({
     };
   }, [lines, fontSize, radius]);
 
-  // Drag-based interaction. Pointer events unify mouse + touch, pointer
-  // capture locks the drag to the originating pointer, and touch-action:none
-  // on the stage stops the mobile browser from scrolling the page instead.
+  // Drag-based interaction + off-screen pause. Pointer events unify mouse
+  // and touch, pointer capture locks the drag to one pointer, and
+  // `touch-action: none` on the stage (set in the JSX style) stops the
+  // mobile browser from stealing the gesture for page scroll. An
+  // IntersectionObserver pauses the whole RAF loop whenever the sphere is
+  // scrolled out of view, so the animation doesn't waste battery on mobile.
+  //
+  // The per-frame transform is written directly to textStageRef.current
+  // via style.transform — no React state, no reconciliation every frame.
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -212,8 +225,44 @@ export default function TextSphere({
     let pointerId: number | null = null;
     let dragStartX = 0;
     let lastTs: number | null = null;
+    let rafId = 0;
+    let visible = true;
 
     const PX_TO_DEG = 0.5;
+
+    const applyTransform = () => {
+      const stage = textStageRef.current;
+      if (stage) {
+        stage.style.transform = `rotateX(${tiltX}deg) rotateY(${displayY}deg) rotateZ(${tiltZ}deg)`;
+      }
+    };
+
+    const loop = (ts: number) => {
+      if (lastTs === null) lastTs = ts;
+      const dt = Math.min(0.05, (ts - lastTs) / 1000);
+      lastTs = ts;
+
+      if (!dragging && spin !== 0) {
+        baseY = (baseY + spin * dt) % 360;
+      }
+      const target = baseY + liveY;
+      const ease = dragging ? 0.35 : 0.18;
+      displayY += (target - displayY) * ease;
+
+      applyTransform();
+      rafId = requestAnimationFrame(loop);
+    };
+
+    const startLoop = () => {
+      if (rafId !== 0) return;
+      lastTs = null;
+      rafId = requestAnimationFrame(loop);
+    };
+    const stopLoop = () => {
+      if (rafId === 0) return;
+      cancelAnimationFrame(rafId);
+      rafId = 0;
+    };
 
     const onPointerDown = (e: PointerEvent) => {
       if (dragging) return;
@@ -226,6 +275,9 @@ export default function TextSphere({
       } catch {
         /* older browser */
       }
+      // If the user drags a sphere that was paused off-screen (unlikely
+      // but possible with flaky observers), kick the loop back on.
+      if (visible) startLoop();
     };
 
     const onPointerMove = (e: PointerEvent) => {
@@ -252,33 +304,39 @@ export default function TextSphere({
     el.addEventListener('pointercancel', onPointerUp);
     el.addEventListener('lostpointercapture', onPointerUp);
 
-    let rafId = 0;
-    const loop = (ts: number) => {
-      if (lastTs === null) lastTs = ts;
-      const dt = Math.min(0.05, (ts - lastTs) / 1000);
-      lastTs = ts;
+    // Paint the initial transform so the text stage doesn't flash untilted
+    // before the first RAF fires.
+    applyTransform();
 
-      if (!dragging && spin !== 0) {
-        baseY = (baseY + spin * dt) % 360;
-      }
-      const target = baseY + liveY;
-      const ease = dragging ? 0.35 : 0.18;
-      displayY += (target - displayY) * ease;
-
-      setRotY(displayY);
-      rafId = requestAnimationFrame(loop);
-    };
-    rafId = requestAnimationFrame(loop);
+    const observer =
+      typeof IntersectionObserver !== 'undefined'
+        ? new IntersectionObserver(
+            (entries) => {
+              const entry = entries[0];
+              visible = !!entry?.isIntersecting;
+              if (visible) startLoop();
+              else stopLoop();
+            },
+            { threshold: 0 },
+          )
+        : null;
+    if (observer) {
+      observer.observe(el);
+    } else {
+      // No IO support — just run the loop unconditionally.
+      startLoop();
+    }
 
     return () => {
+      if (observer) observer.disconnect();
       el.removeEventListener('pointerdown', onPointerDown);
       el.removeEventListener('pointermove', onPointerMove);
       el.removeEventListener('pointerup', onPointerUp);
       el.removeEventListener('pointercancel', onPointerUp);
       el.removeEventListener('lostpointercapture', onPointerUp);
-      cancelAnimationFrame(rafId);
+      stopLoop();
     };
-  }, [spin]);
+  }, [spin, tiltX, tiltZ]);
 
   const sphereSize = radius * 2;
   const boxSize = Math.round(radius * 2.8);
@@ -321,8 +379,9 @@ export default function TextSphere({
         }}
       />
 
-      {/* 3D text stage */}
+      {/* 3D text stage — transform is written imperatively in the RAF loop */}
       <div
+        ref={textStageRef}
         className="absolute pointer-events-none"
         style={{
           left: '50%',
@@ -330,7 +389,7 @@ export default function TextSphere({
           width: 0,
           height: 0,
           transformStyle: 'preserve-3d',
-          transform: `rotateX(${tiltX}deg) rotateY(${rotY}deg) rotateZ(${tiltZ}deg)`,
+          transform: `rotateX(${tiltX}deg) rotateY(0deg) rotateZ(${tiltZ}deg)`,
           willChange: 'transform',
         }}
       >
