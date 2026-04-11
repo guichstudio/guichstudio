@@ -72,6 +72,10 @@ export default function TextSphere({
   const sphereSize = radius * 2;
   const boxSize = Math.round(radius * 2.8);
   const lineHeight = Math.round(fontSize * 1.9);
+  // Arc length per character (in px along the sphere surface).
+  // Gives natural spacing regardless of how long the line is.
+  const arcPerChar = fontSize * 0.58;
+  const degPerChar = (arcPerChar / radius) * (180 / Math.PI);
 
   return (
     <div
@@ -130,7 +134,8 @@ export default function TextSphere({
               }}
             >
               {line.split('').map((ch, i) => {
-                const angle = (i / n) * 360;
+                // Center line at angle 0 so the middle of the text faces the camera.
+                const angle = (i - (n - 1) / 2) * degPerChar;
                 const display = ch === ' ' ? '\u00A0' : ch;
                 return (
                   <span

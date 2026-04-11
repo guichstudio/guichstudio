@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>3D Text Sphere — BuildLore</title>
+    <style>
+      :root {
+        --bg: #f3f3f3;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg);
+        font-family:
+          -apple-system,
+          BlinkMacSystemFont,
+          'Inter',
+          'Segoe UI',
+          Roboto,
+          sans-serif;
+        min-height: 100vh;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 16px;
+      }
+      .stage {
+        position: relative;
+        margin: 0 auto;
+        user-select: none;
+      }
+      .sphere {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle at 35% 28%,
+          #ffffff 0%,
+          #fafafa 35%,
+          #eaeaea 70%,
+          #cfcfcf 100%
+        );
+        box-shadow:
+          0 30px 80px rgba(0, 0, 0, 0.18),
+          inset -20px -35px 70px rgba(0, 0, 0, 0.08),
+          inset 15px 20px 40px rgba(255, 255, 255, 0.65);
+      }
+      .text-stage {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 0;
+        height: 0;
+        transform-style: preserve-3d;
+        will-change: transform;
+      }
+      .line {
+        position: absolute;
+        left: 0;
+        top: 0;
+        transform-style: preserve-3d;
+      }
+      .char {
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-weight: 800;
+        color: #0a0a0a;
+        letter-spacing: 0.01em;
+        transform-origin: 0 0 0;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        white-space: pre;
+      }
+      .hint {
+        margin-top: 40px;
+        color: #888;
+        font-size: 13px;
+        letter-spacing: 0.02em;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="stage" class="stage" role="img" aria-label="Text sphere"></div>
+    <p class="hint">Move your cursor to rotate the sphere.</p>
+
+    <script>
+      const TEXT =
+        'Buildlore is a design brand directive studio. Here to get high value content and build the lore you need';
+      const RADIUS = 200;
+      const FONT_SIZE = 22;
+      const NUM_LINES = 3;
+      const LINE_HEIGHT = Math.round(FONT_SIZE * 1.9);
+      const SPHERE_SIZE = RADIUS * 2;
+      const BOX_SIZE = Math.round(RADIUS * 2.8);
+      const ARC_PER_CHAR = FONT_SIZE * 0.58;
+      const DEG_PER_CHAR = (ARC_PER_CHAR / RADIUS) * (180 / Math.PI);
+
+      const stage = document.getElementById('stage');
+      stage.style.width = BOX_SIZE + 'px';
+      stage.style.height = BOX_SIZE + 'px';
+      stage.style.perspective = RADIUS * 5 + 'px';
+
+      // Sphere
+      const sphere = document.createElement('div');
+      sphere.className = 'sphere';
+      sphere.style.width = SPHERE_SIZE + 'px';
+      sphere.style.height = SPHERE_SIZE + 'px';
+      sphere.style.marginLeft = -RADIUS + 'px';
+      sphere.style.marginTop = -RADIUS + 'px';
+      stage.appendChild(sphere);
+
+      // Text stage
+      const textStage = document.createElement('div');
+      textStage.className = 'text-stage';
+      stage.appendChild(textStage);
+
+      // Split text into N lines on word boundaries
+      const words = TEXT.trim().split(/\s+/);
+      const per = Math.ceil(words.length / NUM_LINES);
+      const lines = [];
+      for (let i = 0; i < NUM_LINES; i++) {
+        const slice = words.slice(i * per, (i + 1) * per).join(' ');
+        if (slice) lines.push(slice);
+      }
+
+      lines.forEach((line, li) => {
+        const lineEl = document.createElement('div');
+        lineEl.className = 'line';
+        const y = (li - (lines.length - 1) / 2) * LINE_HEIGHT;
+        const n = line.length;
+        for (let i = 0; i < n; i++) {
+          const angle = (i - (n - 1) / 2) * DEG_PER_CHAR;
+          const ch = line[i] === ' ' ? '\u00A0' : line[i];
+          const span = document.createElement('span');
+          span.className = 'char';
+          span.textContent = ch;
+          span.style.fontSize = FONT_SIZE + 'px';
+          span.style.transform =
+            'translate(-50%, -50%) translateY(' +
+            y +
+            'px) rotateY(' +
+            angle +
+            'deg) translateZ(' +
+            RADIUS +
+            'px)';
+          lineEl.appendChild(span);
+        }
+        textStage.appendChild(lineEl);
+      });
+
+      // Cursor-driven rotation with easing
+      let targetX = -8,
+        targetY = 0;
+      let curX = -8,
+        curY = 0;
+
+      window.addEventListener('mousemove', (e) => {
+        const rect = stage.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dx = (e.clientX - cx) / (window.innerWidth / 2);
+        const dy = (e.clientY - cy) / (window.innerHeight / 2);
+        targetX = -8 - dy * 25;
+        targetY = dx * 70;
+      });
+
+      function loop() {
+        const ease = 0.07;
+        curX += (targetX - curX) * ease;
+        curY += (targetY - curY) * ease;
+        textStage.style.transform =
+          'rotateX(' +
+          curX +
+          'deg) rotateY(' +
+          curY +
+          'deg) rotateZ(-12deg)';
+        requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
+    </script>
+  </body>
+</html>
