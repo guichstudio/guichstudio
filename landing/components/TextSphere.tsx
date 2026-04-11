@@ -56,7 +56,9 @@ export default function TextSphere({
   const [measured, setMeasured] = useState<number[][] | null>(null);
 
   // Responsive sizing: scale the sphere down on narrow viewports so the box
-  // always fits on screen and stays centered.
+  // always fits on screen and stays centered. On mobile (<600px wide) the
+  // sphere takes ~60% of viewport width instead of the desktop ~92%, so it
+  // doesn't visually eat the whole screen.
   const BOX_TO_R_RATIO = 2.4;
   const [viewportW, setViewportW] = useState<number>(
     typeof window !== 'undefined' ? window.innerWidth : 1440,
@@ -70,7 +72,11 @@ export default function TextSphere({
       window.removeEventListener('orientationchange', onResize);
     };
   }, []);
-  const scale = Math.min(1, (viewportW * 0.92) / (maxRadius * BOX_TO_R_RATIO));
+  const fillRatio = viewportW < 600 ? 0.6 : 0.92;
+  const scale = Math.min(
+    1,
+    (viewportW * fillRatio) / (maxRadius * BOX_TO_R_RATIO),
+  );
   const radius = Math.max(80, Math.round(maxRadius * scale));
   const fontSize = Math.max(12, Math.round(maxFontSize * scale));
 

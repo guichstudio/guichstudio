@@ -127,20 +127,38 @@
     <p class="hint">Drag the sphere left / right to spin it.</p>
 
     <script>
-      const MISSION_LINES = [
-        'Visual experience studio for brands, founders and product leaders in Web3 and live events.',
-        'We move fast, work with full autonomy, and deliver high-quality brands and products that stay ahead.',
-        'Enhanced by deep Web3 expertise, applied AI, and structured yet flexible processes.',
-        'From installations and projection mapping to films and creative direction, anywhere in the world.',
-      ];
+      const MISSION_TEXT =
+        'Visual experience studio for brands, founders and product leaders in Web3 and live events. We move fast, work with full autonomy, and deliver high-quality brands and products that stay ahead. Enhanced by deep Web3 expertise, applied AI, and structured yet flexible processes. From installations and projection mapping to films and creative direction, anywhere in the world.';
+
+      // Auto-wrap the mission text into N balanced chunks by word count —
+      // same algorithm as the React component. 6 lines → ~62 chars each,
+      // which fits nicely on a sphere of circumference 2πR without any
+      // character compression.
+      const NUM_LINES = 6;
+      function wrapLines(text, n) {
+        const words = text.trim().split(/\s+/);
+        const per = Math.ceil(words.length / n);
+        const out = [];
+        for (let i = 0; i < n; i++) {
+          const slice = words.slice(i * per, (i + 1) * per).join(' ');
+          if (slice) out.push(slice);
+        }
+        return out;
+      }
+      const MISSION_LINES = wrapLines(MISSION_TEXT, NUM_LINES);
 
       // Responsive sizing — the sphere always fits on screen and stays
-      // centered. Everything else (font, line-height, box) scales from it.
+      // centered. On narrow viewports (<600px) the sphere only takes ~60%
+      // of the viewport so it doesn't eat the whole screen on mobile.
       const MAX_RADIUS = 260;
       const MAX_FONT_SIZE = 32;
       const BOX_TO_R = 2.4;
       const viewportW = window.innerWidth;
-      const scale = Math.min(1, (viewportW * 0.92) / (MAX_RADIUS * BOX_TO_R));
+      const fillRatio = viewportW < 600 ? 0.6 : 0.92;
+      const scale = Math.min(
+        1,
+        (viewportW * fillRatio) / (MAX_RADIUS * BOX_TO_R),
+      );
       const RADIUS = Math.max(80, Math.round(MAX_RADIUS * scale));
       const FONT_SIZE = Math.max(12, Math.round(MAX_FONT_SIZE * scale));
       // Negative = left-to-right scroll of the text around the sphere.
