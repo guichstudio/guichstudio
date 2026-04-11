@@ -146,7 +146,7 @@
       const SPIN = 14; // deg / second
       const TILT_X = -12;
       const TILT_Z = -8;
-      const LINE_HEIGHT = Math.round(FONT_SIZE * 1.05);
+      const LINE_HEIGHT = Math.round(FONT_SIZE * 1.2);
       const SPHERE_SIZE = RADIUS * 2;
       const BOX_SIZE = Math.round(RADIUS * BOX_TO_R);
       const ARC_PER_CHAR = FONT_SIZE * 0.42;
@@ -169,37 +169,73 @@
       textStage.className = 'text-stage';
       stage.appendChild(textStage);
 
-      // Measure each character with canvas, then pick a single uniform
-      // degrees-per-pixel density (based on the longest line) so every ring
-      // has the same apparent letter spacing. The longest line fills exactly
-      // 360°, shorter lines cover slightly less but at the same density.
-      function computeAngles() {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        ctx.font =
-          "800 " +
-          FONT_SIZE +
-          "px 'Inter', ui-sans-serif, system-ui, sans-serif";
-        const perLine = MISSION_LINES.map((line) => {
-          const widths = line
-            .split('')
-            .map((c) => ctx.measureText(c === '\u00A0' ? ' ' : c).width);
-          const total = widths.reduce((a, b) => a + b, 0) || 1;
-          return { widths, total };
+      // Measure character widths using real DOM inline-block spans with
+      // the same CSS as the final render. getBoundingClientRect().width
+      // returns the browser's actual advance width — 100% matching the
+      // final render. Canvas.measureText is unreliable on iOS Safari.
+      function measureDOM() {
+        const container = document.createElement('div');
+        container.setAttribute('aria-hidden', 'true');
+        container.style.cssText = [
+          'visibility:hidden',
+          'position:absolute',
+          'pointer-events:none',
+          'top:-99999px',
+          'left:0',
+          "font-family:'Inter',ui-sans-serif,system-ui,sans-serif",
+          'font-weight:800',
+          'font-size:' + FONT_SIZE + 'px',
+          'line-height:1',
+          'letter-spacing:0',
+          'font-kerning:none',
+          'white-space:nowrap',
+        ].join(';');
+        document.body.appendChild(container);
+
+        const perLineSpans = MISSION_LINES.map((line) => {
+          const lineDiv = document.createElement('div');
+          lineDiv.style.whiteSpace = 'nowrap';
+          const spans = [];
+          for (let i = 0; i < line.length; i++) {
+            const ch = line[i] === ' ' ? '\u00A0' : line[i];
+            const s = document.createElement('span');
+            s.style.cssText =
+              'display:inline-block;padding:0;margin:0;line-height:1;height:1em;letter-spacing:0;white-space:pre';
+            s.textContent = ch;
+            lineDiv.appendChild(s);
+            spans.push(s);
+          }
+          container.appendChild(lineDiv);
+          return spans;
         });
-        const maxTotal = Math.max.apply(
-          null,
-          perLine.map((l) => l.total),
+
+        // Force reflow so rects are fresh.
+        void container.offsetHeight;
+
+        const widths = perLineSpans.map((spans) =>
+          spans.map((s) => Math.max(1, s.getBoundingClientRect().width)),
         );
+
+        document.body.removeChild(container);
+        return widths;
+      }
+
+      function computeAngles() {
+        const widths = measureDOM();
+        const totals = widths.map(
+          (w) => w.reduce((a, b) => a + b, 0) || 1,
+        );
+        const maxTotal = Math.max.apply(null, totals);
         const degPerPx = 360 / maxTotal;
-        return perLine.map(({ widths, total }) => {
+        return widths.map((lineWidths, li) => {
+          const total = totals[li];
           const lineArc = total * degPerPx;
           const start = -lineArc / 2;
           const out = [];
           let cursor = 0;
-          for (let i = 0; i < widths.length; i++) {
-            const centerPx = cursor + widths[i] / 2;
-            cursor += widths[i];
+          for (let i = 0; i < lineWidths.length; i++) {
+            const centerPx = cursor + lineWidths[i] / 2;
+            cursor += lineWidths[i];
             out.push(start + centerPx * degPerPx);
           }
           return out;
@@ -245,33 +281,24 @@
       });
       buildText(uniformFallback);
 
-      // Poll document.fonts.check() until Inter is actually loaded, then
-      // re-measure and rebuild. `document.fonts.ready` resolves too early
-      // on some mobile browsers when the font is declared via a non-blocking
-      // <link>, so we explicitly check and retry.
-      const fontSpec = "800 " + FONT_SIZE + "px 'Inter'";
+      // Explicitly load Inter with a Promise, settle 50ms so iOS Safari
+      // actually applies the glyph metrics, measure with the DOM, then
+      // rebuild. Retry once 500ms later to catch very late font loads.
+      const fontSpec = '800 ' + FONT_SIZE + 'px Inter';
       const applyMeasured = () => buildText(computeAngles());
-      if (document.fonts) {
-        try {
-          document.fonts.load(fontSpec);
-        } catch (e) {}
-      }
-      let attempts = 0;
-      const maxAttempts = 30; // ~3 seconds total
-      function tryMeasure() {
-        const ready =
-          !document.fonts ||
-          !document.fonts.check ||
-          document.fonts.check(fontSpec) ||
-          attempts >= maxAttempts;
-        if (ready) {
-          applyMeasured();
-          return;
+      const delay = (ms) => new Promise((r) => setTimeout(r, ms));
+
+      (async function () {
+        if (document.fonts && document.fonts.load) {
+          try {
+            await Promise.race([document.fonts.load(fontSpec), delay(2000)]);
+          } catch (e) {}
         }
-        attempts += 1;
-        setTimeout(tryMeasure, 100);
-      }
-      tryMeasure();
+        await delay(50);
+        applyMeasured();
+        await delay(500);
+        applyMeasured();
+      })();
 
       // Drag-based interaction using pointer events. Pointer capture keeps
       // the drag locked to the single finger, touch-action: none on the

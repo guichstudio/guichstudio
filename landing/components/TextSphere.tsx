@@ -82,41 +82,86 @@ export default function TextSphere({
     return out;
   }, [text, linesProp]);
 
-  // Measure each character with the same font used in CSS. Widths only
-  // match rendered glyphs once Inter is actually loaded, so we poll
-  // document.fonts.check() before measuring. Pick a single uniform
-  // degPerPx density (based on the longest line) so every ring has the
-  // same apparent letter spacing.
+  // Measure each character using real DOM inline-block spans with the exact
+  // same CSS as the final render. getBoundingClientRect().width returns the
+  // browser's actual advance width for that glyph in that font — 100%
+  // matching what will be drawn. Canvas.measureText is unreliable on iOS
+  // Safari when the requested font is loaded via a non-blocking <link>.
   useEffect(() => {
     let cancelled = false;
-    let timer: number | null = null;
+    const timers: number[] = [];
 
-    const compute = () => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-      ctx.font = `800 ${fontSize}px 'Inter', ui-sans-serif, system-ui, sans-serif`;
+    const measureDOM = (): number[][] | null => {
+      if (lines.length === 0) return null;
+      const container = document.createElement('div');
+      container.setAttribute('aria-hidden', 'true');
+      container.style.cssText = [
+        'visibility:hidden',
+        'position:absolute',
+        'pointer-events:none',
+        'top:-99999px',
+        'left:0',
+        "font-family:'Inter',ui-sans-serif,system-ui,sans-serif",
+        'font-weight:800',
+        `font-size:${fontSize}px`,
+        'line-height:1',
+        'letter-spacing:0',
+        'font-kerning:none',
+        'white-space:nowrap',
+      ].join(';');
+      document.body.appendChild(container);
 
-      const perLine = lines.map((line) => {
-        const chars = line.split('');
-        const widths = chars.map((ch) =>
-          ctx.measureText(ch === '\u00A0' ? ' ' : ch).width,
-        );
-        const total = widths.reduce((a, b) => a + b, 0) || 1;
-        return { widths, total };
+      const perLineSpans: HTMLSpanElement[][] = lines.map((line) => {
+        const lineDiv = document.createElement('div');
+        lineDiv.style.whiteSpace = 'nowrap';
+        const spans: HTMLSpanElement[] = [];
+        for (let i = 0; i < line.length; i++) {
+          const ch = line[i] === ' ' ? '\u00A0' : line[i];
+          const s = document.createElement('span');
+          s.style.cssText =
+            'display:inline-block;padding:0;margin:0;line-height:1;height:1em;letter-spacing:0;white-space:pre';
+          s.textContent = ch;
+          lineDiv.appendChild(s);
+          spans.push(s);
+        }
+        container.appendChild(lineDiv);
+        return spans;
       });
 
-      const maxTotal = Math.max(...perLine.map((l) => l.total));
+      // Force layout so bounding rects are fresh.
+      void container.offsetHeight;
+
+      const widths = perLineSpans.map((spans) =>
+        spans.map((s) => {
+          const w = s.getBoundingClientRect().width;
+          // Safety floor so a 0-width measurement can never collapse all
+          // following chars onto the same angle.
+          return Math.max(1, w);
+        }),
+      );
+
+      document.body.removeChild(container);
+      return widths;
+    };
+
+    const computeAndSet = () => {
+      if (cancelled) return;
+      const widths = measureDOM();
+      if (!widths) return;
+
+      const totals = widths.map((w) => w.reduce((a, b) => a + b, 0) || 1);
+      const maxTotal = Math.max(...totals);
       const degPerPx = 360 / maxTotal;
 
-      const angles = perLine.map(({ widths, total }) => {
+      const angles = widths.map((lineWidths, li) => {
+        const total = totals[li];
         const lineArcDeg = total * degPerPx;
         const start = -lineArcDeg / 2;
         const out: number[] = [];
         let cursor = 0;
-        for (let i = 0; i < widths.length; i++) {
-          const centerPx = cursor + widths[i] / 2;
-          cursor += widths[i];
+        for (let i = 0; i < lineWidths.length; i++) {
+          const centerPx = cursor + lineWidths[i] / 2;
+          cursor += lineWidths[i];
           out.push(start + centerPx * degPerPx);
         }
         return out;
@@ -126,34 +171,49 @@ export default function TextSphere({
     };
 
     const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
-    const fontSpec = `800 ${fontSize}px 'Inter'`;
+    const fontSpec = `800 ${fontSize}px Inter`;
 
-    let attempts = 0;
-    const maxAttempts = 30; // ~3s max
-    const tryMeasure = () => {
-      if (cancelled) return;
-      const ready =
-        !fonts ||
-        !fonts.check ||
-        fonts.check(fontSpec) ||
-        attempts >= maxAttempts;
-      if (ready) {
-        compute();
-        return;
+    const run = async () => {
+      // Explicitly ask the browser to load Inter at this weight/size, race
+      // with a 2s timeout so we don't hang on a failing network.
+      if (fonts && fonts.load) {
+        try {
+          await Promise.race([
+            fonts.load(fontSpec),
+            new Promise((r) => {
+              const id = window.setTimeout(r, 2000);
+              timers.push(id);
+            }),
+          ]);
+        } catch {
+          /* ignore */
+        }
       }
-      attempts += 1;
-      timer = window.setTimeout(tryMeasure, 100);
+      // Settle delay — iOS Safari sometimes reports the font as loaded
+      // before the glyph metrics are actually applied to the DOM.
+      await new Promise((r) => {
+        const id = window.setTimeout(r, 50);
+        timers.push(id);
+      });
+      if (cancelled) return;
+      computeAndSet();
+
+      // One retry 500ms later in case the first measurement happened while
+      // the font was still swapping. If the layout is identical, this is a
+      // cheap no-op.
+      await new Promise((r) => {
+        const id = window.setTimeout(r, 500);
+        timers.push(id);
+      });
+      if (cancelled) return;
+      computeAndSet();
     };
 
-    // Ask the browser to load the font if it's declared, then poll.
-    if (fonts && fonts.load) {
-      fonts.load(fontSpec).catch(() => {});
-    }
-    tryMeasure();
+    run();
 
     return () => {
       cancelled = true;
-      if (timer !== null) clearTimeout(timer);
+      for (const id of timers) clearTimeout(id);
     };
   }, [lines, fontSize, radius]);
 
@@ -250,7 +310,9 @@ export default function TextSphere({
 
   const sphereSize = radius * 2;
   const boxSize = Math.round(radius * 2.8);
-  const lineHeight = Math.round(fontSize * 1.05);
+  // ~20% leading so glyph ascenders/descenders of one line don't bleed
+  // into the next. Still tight but visually clean.
+  const lineHeight = Math.round(fontSize * 1.2);
 
   // Uniform fallback step used while fonts load / before canvas measurement.
   const fallbackDegPerChar = ((fontSize * 0.42) / radius) * (180 / Math.PI);
