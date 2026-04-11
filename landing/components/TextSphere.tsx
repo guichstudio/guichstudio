@@ -315,8 +315,11 @@ export default function TextSphere({
           marginLeft: -radius,
           marginTop: -radius,
           backgroundImage: "url('/sphere-texture.jpg')",
-          backgroundSize: 'cover',
+          // Scale up past the dark falloff at the edge of the photo so the
+          // circular clip doesn't look like it has a stroke.
+          backgroundSize: '118% 118%',
           backgroundPosition: 'center',
+          backgroundColor: '#1a1a1a',
           boxShadow: '0 30px 80px rgba(0,0,0,0.45)',
         }}
       />
@@ -367,9 +370,9 @@ export default function TextSphere({
                       padding: 0,
                       margin: 0,
                       letterSpacing: 0,
-                      color: '#0a0a0a',
+                      color: '#ffffff',
                       textShadow:
-                        '0 1px 2px rgba(255,255,255,0.5), 0 0 3px rgba(255,255,255,0.3)',
+                        '0 1px 3px rgba(0,0,0,0.75), 0 0 4px rgba(0,0,0,0.55)',
                       transformOrigin: '0 0 0',
                       // translate(-50%, -50%) MUST be last in the chain so
                       // it's applied FIRST — in the glyph's local frame
