@@ -144,20 +144,19 @@ export default function TextSphere({
       const widths = measureDOM();
       if (!widths) return;
 
-      const totals = widths.map((w) => w.reduce((a, b) => a + b, 0) || 1);
-      const maxTotal = Math.max(...totals);
-      const degPerPx = 360 / maxTotal;
-
-      const angles = widths.map((lineWidths, li) => {
-        const total = totals[li];
-        const lineArcDeg = total * degPerPx;
-        const start = -lineArcDeg / 2;
+      // Each line is scaled to fill exactly 360° of arc so there is never
+      // a visible gap at the line's seam. Letter spacing is adjusted
+      // per-line: a shorter line stretches, a longer line compresses. The
+      // first and last chars then meet exactly at the back of the sphere.
+      const angles = widths.map((lineWidths) => {
+        const total = lineWidths.reduce((a, b) => a + b, 0) || 1;
         const out: number[] = [];
         let cursor = 0;
         for (let i = 0; i < lineWidths.length; i++) {
           const centerPx = cursor + lineWidths[i] / 2;
           cursor += lineWidths[i];
-          out.push(start + centerPx * degPerPx);
+          // centered on 0 (middle of the line faces the camera at rest)
+          out.push((centerPx / total) * 360 - 180);
         }
         return out;
       });
