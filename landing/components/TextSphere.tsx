@@ -138,8 +138,13 @@ export default function TextSphere({
       // Force layout so rects are fresh.
       void container.offsetHeight;
 
+      // Small constant pad added to every measured width. It becomes extra
+      // breathing room between glyphs once the line is scaled to fill 360°.
+      const SPACING_PX = 2;
       const widths = perLineSpans.map((spans) =>
-        spans.map((s) => Math.max(1, s.getBoundingClientRect().width)),
+        spans.map(
+          (s) => Math.max(1, s.getBoundingClientRect().width) + SPACING_PX,
+        ),
       );
 
       document.body.removeChild(container);
@@ -361,7 +366,9 @@ export default function TextSphere({
       aria-label={text}
       role="img"
     >
-      {/* The white 3D-looking sphere */}
+      {/* White 3D sphere. Gradient tuned so the outer edge is distinctly
+          darker than the page background — otherwise the sphere becomes
+          invisible against a white body. */}
       <div
         aria-hidden="true"
         className="absolute rounded-full pointer-events-none"
@@ -373,9 +380,9 @@ export default function TextSphere({
           marginLeft: -radius,
           marginTop: -radius,
           background:
-            'radial-gradient(circle at 35% 28%, #ffffff 0%, #fafafa 35%, #eaeaea 70%, #cfcfcf 100%)',
+            'radial-gradient(circle at 35% 28%, #fafafa 0%, #ededed 35%, #d0d0d0 70%, #a8a8a8 100%)',
           boxShadow:
-            '0 30px 80px rgba(0,0,0,0.18), inset -20px -35px 70px rgba(0,0,0,0.08), inset 15px 20px 40px rgba(255,255,255,0.65)',
+            '0 30px 80px rgba(0,0,0,0.28), inset -25px -40px 80px rgba(0,0,0,0.18), inset 15px 20px 40px rgba(255,255,255,0.55)',
         }}
       />
 
