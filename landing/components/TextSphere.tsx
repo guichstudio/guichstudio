@@ -303,7 +303,7 @@ export default function TextSphere({
       aria-label={text}
       role="img"
     >
-      {/* The white 3D-looking sphere */}
+      {/* Sphere with the reference photo baked in as a background texture */}
       <div
         aria-hidden="true"
         className="absolute rounded-full pointer-events-none"
@@ -314,10 +314,10 @@ export default function TextSphere({
           top: '50%',
           marginLeft: -radius,
           marginTop: -radius,
-          background:
-            'radial-gradient(circle at 35% 28%, #ffffff 0%, #fafafa 35%, #eaeaea 70%, #cfcfcf 100%)',
-          boxShadow:
-            '0 30px 80px rgba(0,0,0,0.18), inset -20px -35px 70px rgba(0,0,0,0.08), inset 15px 20px 40px rgba(255,255,255,0.65)',
+          backgroundImage: "url('/sphere-texture.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          boxShadow: '0 30px 80px rgba(0,0,0,0.45)',
         }}
       />
 
@@ -356,7 +356,7 @@ export default function TextSphere({
                 return (
                   <span
                     key={i}
-                    className="absolute font-extrabold text-neutral-900"
+                    className="absolute font-extrabold"
                     style={{
                       left: 0,
                       top: 0,
@@ -367,6 +367,9 @@ export default function TextSphere({
                       padding: 0,
                       margin: 0,
                       letterSpacing: 0,
+                      color: '#0a0a0a',
+                      textShadow:
+                        '0 1px 2px rgba(255,255,255,0.5), 0 0 3px rgba(255,255,255,0.3)',
                       transformOrigin: '0 0 0',
                       // translate(-50%, -50%) MUST be last in the chain so
                       // it's applied FIRST — in the glyph's local frame
