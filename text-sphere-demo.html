@@ -148,14 +148,14 @@
       const MISSION_LINES = wrapLines(MISSION_TEXT, NUM_LINES);
 
       // Responsive sizing — the sphere always fits on screen and stays
-      // centered. On narrow viewports (<600px) the sphere takes ~70% of
-      // the viewport (matching the user's red-circle target). FONT_SIZE
-      // is clamped to 14 minimum so mobile text stays readable.
+      // centered. Threshold 900 covers iPad portrait (768-834) so it also
+      // gets the smaller-sphere layout. FONT_SIZE is clamped to 14 minimum
+      // so mobile text stays readable.
       const MAX_RADIUS = 260;
       const MAX_FONT_SIZE = 32;
       const BOX_TO_R = 2.4;
       const viewportW = window.innerWidth;
-      const fillRatio = viewportW < 600 ? 0.7 : 0.92;
+      const fillRatio = viewportW < 900 ? 0.7 : 0.92;
       const scale = Math.min(
         1,
         (viewportW * fillRatio) / (MAX_RADIUS * BOX_TO_R),
