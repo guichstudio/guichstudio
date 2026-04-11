@@ -2,31 +2,45 @@ import { useRef, useEffect, useState, useMemo } from 'react';
 
 interface TextSphereProps {
   text?: string;
+  /** Number of lines (auto-split by word count) or explicit array of lines. */
+  lines?: number | string[];
   radius?: number;
   fontSize?: number;
-  lines?: number;
+  /** Continuous auto-rotation around Y axis, in degrees per second. 0 disables. */
+  spin?: number;
+  /** Initial X tilt in degrees. */
+  tiltX?: number;
+  /** Z rotation of the whole text stage in degrees. */
+  tiltZ?: number;
   className?: string;
 }
 
 /**
- * 3D text wrapped around a sphere. Rotates smoothly with the cursor.
- * Pure CSS 3D transforms — no external 3D library required.
+ * 3D text wrapped around a sphere. Pure CSS 3D transforms — no 3D library.
+ *
+ * When `spin` > 0, each line is force-wrapped to a full 360° so the text
+ * becomes a continuous marquee that rotates around the sphere. The user can
+ * still tilt / offset the rotation with the mouse or a finger.
  */
 export default function TextSphere({
   text = 'Buildlore is a design brand directive studio. Here to get high value content and build the lore you need',
+  lines: linesProp = 3,
   radius = 200,
   fontSize = 22,
-  lines: numLines = 3,
+  spin = 0,
+  tiltX = -8,
+  tiltZ = -12,
   className = '',
 }: TextSphereProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [rot, setRot] = useState({ x: -8, y: 0 });
-  const targetRef = useRef({ x: -8, y: 0 });
-  const currentRef = useRef({ x: -8, y: 0 });
-  const rafRef = useRef<number | null>(null);
+  const [rot, setRot] = useState({ x: tiltX, y: 0 });
 
-  // Split the text into N lines on word boundaries so each line wraps the sphere.
+  // Split the text into lines. Caller may pass an explicit array.
   const lines = useMemo(() => {
+    if (Array.isArray(linesProp)) {
+      return linesProp.filter((s) => s && s.length > 0);
+    }
+    const numLines = Math.max(1, linesProp);
     const words = text.trim().split(/\s+/);
     const per = Math.ceil(words.length / numLines);
     const out: string[] = [];
@@ -35,9 +49,22 @@ export default function TextSphere({
       if (slice) out.push(slice);
     }
     return out;
-  }, [text, numLines]);
+  }, [text, linesProp]);
+
+  // Wrap mode: when spinning, force each line to span 360° so it becomes a
+  // continuous ring. When static, use natural per-char arc length so the
+  // text stays readable on the front.
+  const isSpinning = spin > 0;
+  const arcPerChar = fontSize * 0.58;
+  const degPerCharStatic = (arcPerChar / radius) * (180 / Math.PI);
 
   useEffect(() => {
+    // User-driven offsets (tilt in X, Y-shift on top of auto-rotation)
+    const userTarget = { x: tiltX, yOffset: 0 };
+    const userCurrent = { x: tiltX, yOffset: 0 };
+    let baseY = 0;
+    let lastTs: number | null = null;
+
     const updateTarget = (clientX: number, clientY: number) => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
@@ -45,59 +72,64 @@ export default function TextSphere({
       const cy = rect.top + rect.height / 2;
       const dx = (clientX - cx) / (window.innerWidth / 2);
       const dy = (clientY - cy) / (window.innerHeight / 2);
-      targetRef.current = {
-        x: -8 - dy * 25,
-        y: dx * 70,
-      };
+      userTarget.x = tiltX - dy * 25;
+      userTarget.yOffset = dx * 50;
     };
 
     const onMouseMove = (e: MouseEvent) => updateTarget(e.clientX, e.clientY);
-    const onTouchMove = (e: TouchEvent) => {
+    const onTouch = (e: TouchEvent) => {
       if (e.touches.length === 0) return;
       const t = e.touches[0];
       updateTarget(t.clientX, t.clientY);
     };
-    const onTouchStart = onTouchMove;
 
     window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('touchmove', onTouchMove, { passive: true });
-    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchstart', onTouch, { passive: true });
+    window.addEventListener('touchmove', onTouch, { passive: true });
 
-    const loop = () => {
-      const ease = 0.07;
-      currentRef.current.x +=
-        (targetRef.current.x - currentRef.current.x) * ease;
-      currentRef.current.y +=
-        (targetRef.current.y - currentRef.current.y) * ease;
-      setRot({ x: currentRef.current.x, y: currentRef.current.y });
-      rafRef.current = requestAnimationFrame(loop);
+    const rafRef = { id: 0 };
+    const loop = (ts: number) => {
+      if (lastTs === null) lastTs = ts;
+      const dt = Math.min(0.05, (ts - lastTs) / 1000);
+      lastTs = ts;
+
+      // Continuous auto-rotation around Y
+      baseY = (baseY + spin * dt) % 360;
+
+      // Ease user offsets toward targets
+      const ease = 0.08;
+      userCurrent.x += (userTarget.x - userCurrent.x) * ease;
+      userCurrent.yOffset += (userTarget.yOffset - userCurrent.yOffset) * ease;
+
+      setRot({
+        x: userCurrent.x,
+        y: baseY + userCurrent.yOffset,
+      });
+      rafRef.id = requestAnimationFrame(loop);
     };
-    rafRef.current = requestAnimationFrame(loop);
+    rafRef.id = requestAnimationFrame(loop);
 
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('touchmove', onTouchMove);
-      window.removeEventListener('touchstart', onTouchStart);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      window.removeEventListener('touchstart', onTouch);
+      window.removeEventListener('touchmove', onTouch);
+      cancelAnimationFrame(rafRef.id);
     };
-  }, []);
+  }, [spin, tiltX]);
 
   const sphereSize = radius * 2;
   const boxSize = Math.round(radius * 2.8);
   const lineHeight = Math.round(fontSize * 1.9);
-  // Arc length per character (in px along the sphere surface).
-  // Gives natural spacing regardless of how long the line is.
-  const arcPerChar = fontSize * 0.58;
-  const degPerChar = (arcPerChar / radius) * (180 / Math.PI);
 
   return (
     <div
       ref={containerRef}
-      className={`relative mx-auto select-none ${className}`}
+      className={`relative mx-auto select-none font-body ${className}`}
       style={{
         width: boxSize,
         height: boxSize,
         perspective: `${radius * 5}px`,
+        fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif",
       }}
       aria-label={text}
       role="img"
@@ -120,7 +152,7 @@ export default function TextSphere({
         }}
       />
 
-      {/* 3D text stage, rotated by the mouse */}
+      {/* 3D text stage */}
       <div
         className="absolute"
         style={{
@@ -129,7 +161,7 @@ export default function TextSphere({
           width: 0,
           height: 0,
           transformStyle: 'preserve-3d',
-          transform: `rotateX(${rot.x}deg) rotateY(${rot.y}deg) rotateZ(-12deg)`,
+          transform: `rotateX(${rot.x}deg) rotateY(${rot.y}deg) rotateZ(${tiltZ}deg)`,
           willChange: 'transform',
         }}
       >
@@ -147,8 +179,9 @@ export default function TextSphere({
               }}
             >
               {line.split('').map((ch, i) => {
-                // Center line at angle 0 so the middle of the text faces the camera.
-                const angle = (i - (n - 1) / 2) * degPerChar;
+                const angle = isSpinning
+                  ? (i / n) * 360
+                  : (i - (n - 1) / 2) * degPerCharStatic;
                 const display = ch === ' ' ? '\u00A0' : ch;
                 return (
                   <span
@@ -158,7 +191,7 @@ export default function TextSphere({
                       left: 0,
                       top: 0,
                       fontSize,
-                      letterSpacing: '0.01em',
+                      letterSpacing: '-0.01em',
                       transformOrigin: '0 0 0',
                       transform: `translate(-50%, -50%) translateY(${y}px) rotateY(${angle}deg) translateZ(${radius}px)`,
                       backfaceVisibility: 'hidden',
