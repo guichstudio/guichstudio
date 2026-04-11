@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useMemo } from 'react';
+import { useRef, useEffect, useState, useMemo, useId } from 'react';
 
 interface TextSphereProps {
   text?: string;
@@ -8,9 +8,13 @@ interface TextSphereProps {
   radius?: number;
   /** Font size on a wide viewport. Automatically scaled down on mobile. */
   fontSize?: number;
-  /** Continuous auto-rotation around Y axis, in degrees per second. 0 disables. */
+  /**
+   * Continuous auto-rotation speed in degrees/second around the Y axis.
+   * Positive values spin the text left-to-right, negative spins right-to-left.
+   * 0 disables the auto-spin entirely.
+   */
   spin?: number;
-  /** Initial X tilt in degrees (locked — user input cannot change this). */
+  /** Fixed X tilt in degrees — not affected by user input. */
   tiltX?: number;
   /** Z rotation of the whole text stage in degrees. */
   tiltZ?: number;
@@ -20,15 +24,18 @@ interface TextSphereProps {
 /**
  * 3D text wrapped around a sphere. Pure CSS 3D transforms — no 3D library.
  *
- * Typography is normalized: every glyph sits in a 1em-tall inline-block box
- * so baselines align, and per-character arc widths come from canvas
- * measurement of the actual loaded Inter font. All lines share a single
- * uniform degrees-per-pixel density derived from the longest line, so the
- * apparent letter spacing stays homogeneous between rings.
+ * Typography: every glyph sits in a 1em-tall inline-block box so baselines
+ * align, and per-character arc widths come from real DOM measurement
+ * (getBoundingClientRect on inline-block spans with the same CSS as the final
+ * render). All lines share a single uniform degrees-per-pixel density derived
+ * from the longest line, so the apparent letter spacing stays homogeneous.
  *
- * Interaction is drag-based (pointer events) with `touch-action: none` on
- * the stage, so dragging a finger rotates the sphere instead of scrolling
- * the page. Auto-spin pauses while the user is dragging.
+ * Interaction: drag-based pointer events with `touch-action: none` on the
+ * stage so dragging a finger rotates the sphere instead of scrolling the
+ * page. Auto-spin pauses while the user is actively dragging.
+ *
+ * Texture: dark volcanic rock look built from two layers of SVG feTurbulence
+ * (fine grain + larger pits) plus a radial highlight and a dark inset shadow.
  */
 export default function TextSphere({
   text = 'Buildlore is a design brand directive studio. Here to get high value content and build the lore you need',
@@ -42,13 +49,11 @@ export default function TextSphere({
 }: TextSphereProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [rotY, setRotY] = useState(0);
-  const [measured, setMeasured] = useState<{
-    angles: number[][];
-  } | null>(null);
+  const [measured, setMeasured] = useState<number[][] | null>(null);
+  const reactId = useId().replace(/[:]/g, '');
 
   // Responsive sizing: scale the sphere down on narrow viewports so the box
-  // always fits on screen and stays centered. Computed on mount and on
-  // resize / orientation change.
+  // always fits on screen and stays centered.
   const BOX_TO_R_RATIO = 2.4;
   const [viewportW, setViewportW] = useState<number>(
     typeof window !== 'undefined' ? window.innerWidth : 1440,
@@ -82,11 +87,10 @@ export default function TextSphere({
     return out;
   }, [text, linesProp]);
 
-  // Measure each character using real DOM inline-block spans with the exact
-  // same CSS as the final render. getBoundingClientRect().width returns the
-  // browser's actual advance width for that glyph in that font — 100%
-  // matching what will be drawn. Canvas.measureText is unreliable on iOS
-  // Safari when the requested font is loaded via a non-blocking <link>.
+  // Measure each character with real DOM inline-block spans that have the
+  // exact same CSS as the final render. getBoundingClientRect().width gives
+  // the browser's true advance width, so measurement and render can never
+  // diverge regardless of which font actually ends up loaded.
   useEffect(() => {
     let cancelled = false;
     const timers: number[] = [];
@@ -128,16 +132,11 @@ export default function TextSphere({
         return spans;
       });
 
-      // Force layout so bounding rects are fresh.
+      // Force layout so rects are fresh.
       void container.offsetHeight;
 
       const widths = perLineSpans.map((spans) =>
-        spans.map((s) => {
-          const w = s.getBoundingClientRect().width;
-          // Safety floor so a 0-width measurement can never collapse all
-          // following chars onto the same angle.
-          return Math.max(1, w);
-        }),
+        spans.map((s) => Math.max(1, s.getBoundingClientRect().width)),
       );
 
       document.body.removeChild(container);
@@ -167,44 +166,31 @@ export default function TextSphere({
         return out;
       });
 
-      if (!cancelled) setMeasured({ angles });
+      if (!cancelled) setMeasured(angles);
     };
 
     const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
     const fontSpec = `800 ${fontSize}px Inter`;
+    const delay = (ms: number) =>
+      new Promise<void>((r) => {
+        const id = window.setTimeout(r, ms);
+        timers.push(id);
+      });
 
     const run = async () => {
-      // Explicitly ask the browser to load Inter at this weight/size, race
-      // with a 2s timeout so we don't hang on a failing network.
       if (fonts && fonts.load) {
         try {
-          await Promise.race([
-            fonts.load(fontSpec),
-            new Promise((r) => {
-              const id = window.setTimeout(r, 2000);
-              timers.push(id);
-            }),
-          ]);
+          await Promise.race([fonts.load(fontSpec), delay(2000)]);
         } catch {
           /* ignore */
         }
       }
-      // Settle delay — iOS Safari sometimes reports the font as loaded
-      // before the glyph metrics are actually applied to the DOM.
-      await new Promise((r) => {
-        const id = window.setTimeout(r, 50);
-        timers.push(id);
-      });
+      // iOS Safari settle delay — the font sometimes isn't fully applied the
+      // instant fonts.load() resolves.
+      await delay(50);
       if (cancelled) return;
       computeAndSet();
-
-      // One retry 500ms later in case the first measurement happened while
-      // the font was still swapping. If the layout is identical, this is a
-      // cheap no-op.
-      await new Promise((r) => {
-        const id = window.setTimeout(r, 500);
-        timers.push(id);
-      });
+      await delay(500);
       if (cancelled) return;
       computeAndSet();
     };
@@ -217,45 +203,39 @@ export default function TextSphere({
     };
   }, [lines, fontSize, radius]);
 
-  // Drag-based interaction — pointer events give us unified mouse / touch
-  // handling, setPointerCapture keeps the drag locked to one pointer, and
-  // touch-action: none on the stage stops the mobile browser from stealing
-  // the gesture for scrolling.
+  // Drag-based interaction. Pointer events unify mouse + touch, pointer
+  // capture locks the drag to the originating pointer, and touch-action:none
+  // on the stage stops the mobile browser from scrolling the page instead.
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
-    let baseY = 0; // accumulated rotation from auto-spin + finished drags
-    let liveY = 0; // live rotation from current drag (before release)
-    let displayY = 0; // smoothed value actually applied
+    let baseY = 0;
+    let liveY = 0;
+    let displayY = 0;
     let dragging = false;
     let pointerId: number | null = null;
     let dragStartX = 0;
-    let dragStartBaseY = 0;
     let lastTs: number | null = null;
 
-    const pxToDeg = 0.5; // how much rotation per px of finger travel
+    const PX_TO_DEG = 0.5;
 
     const onPointerDown = (e: PointerEvent) => {
       if (dragging) return;
       dragging = true;
       pointerId = e.pointerId;
       dragStartX = e.clientX;
-      // freeze the current total rotation into baseY so liveY starts at 0
-      dragStartBaseY = baseY + liveY;
-      baseY = dragStartBaseY;
       liveY = 0;
       try {
         el.setPointerCapture(e.pointerId);
       } catch {
-        /* not all browsers */
+        /* older browser */
       }
     };
 
     const onPointerMove = (e: PointerEvent) => {
       if (!dragging || e.pointerId !== pointerId) return;
-      const dx = e.clientX - dragStartX;
-      liveY = dx * pxToDeg;
+      liveY = (e.clientX - dragStartX) * PX_TO_DEG;
     };
 
     const onPointerUp = (e: PointerEvent) => {
@@ -277,26 +257,23 @@ export default function TextSphere({
     el.addEventListener('pointercancel', onPointerUp);
     el.addEventListener('lostpointercapture', onPointerUp);
 
-    const rafRef = { id: 0 };
+    let rafId = 0;
     const loop = (ts: number) => {
       if (lastTs === null) lastTs = ts;
       const dt = Math.min(0.05, (ts - lastTs) / 1000);
       lastTs = ts;
 
-      // Auto-spin only when idle
-      if (!dragging && spin > 0) {
+      if (!dragging && spin !== 0) {
         baseY = (baseY + spin * dt) % 360;
       }
-
       const target = baseY + liveY;
-      // Smooth so fast drags don't jitter, but stay snappy.
       const ease = dragging ? 0.35 : 0.18;
       displayY += (target - displayY) * ease;
 
       setRotY(displayY);
-      rafRef.id = requestAnimationFrame(loop);
+      rafId = requestAnimationFrame(loop);
     };
-    rafRef.id = requestAnimationFrame(loop);
+    rafId = requestAnimationFrame(loop);
 
     return () => {
       el.removeEventListener('pointerdown', onPointerDown);
@@ -304,18 +281,20 @@ export default function TextSphere({
       el.removeEventListener('pointerup', onPointerUp);
       el.removeEventListener('pointercancel', onPointerUp);
       el.removeEventListener('lostpointercapture', onPointerUp);
-      cancelAnimationFrame(rafRef.id);
+      cancelAnimationFrame(rafId);
     };
   }, [spin]);
 
   const sphereSize = radius * 2;
   const boxSize = Math.round(radius * 2.8);
   // ~20% leading so glyph ascenders/descenders of one line don't bleed
-  // into the next. Still tight but visually clean.
+  // into the next.
   const lineHeight = Math.round(fontSize * 1.2);
-
-  // Uniform fallback step used while fonts load / before canvas measurement.
+  // Uniform fallback step used before DOM measurement has run.
   const fallbackDegPerChar = ((fontSize * 0.42) / radius) * (180 / Math.PI);
+
+  // Unique filter IDs so several TextSphere instances can coexist.
+  const fId = `ts-${reactId}`;
 
   return (
     <div
@@ -332,10 +311,10 @@ export default function TextSphere({
       aria-label={text}
       role="img"
     >
-      {/* The white 3D-looking sphere */}
+      {/* Volcanic-rock sphere */}
       <div
         aria-hidden="true"
-        className="absolute rounded-full pointer-events-none"
+        className="absolute rounded-full pointer-events-none overflow-hidden"
         style={{
           width: sphereSize,
           height: sphereSize,
@@ -343,12 +322,58 @@ export default function TextSphere({
           top: '50%',
           marginLeft: -radius,
           marginTop: -radius,
-          background:
-            'radial-gradient(circle at 35% 28%, #ffffff 0%, #fafafa 35%, #eaeaea 70%, #cfcfcf 100%)',
-          boxShadow:
-            '0 30px 80px rgba(0,0,0,0.18), inset -20px -35px 70px rgba(0,0,0,0.08), inset 15px 20px 40px rgba(255,255,255,0.65)',
+          background: '#0e0e0e',
+          boxShadow: [
+            '0 30px 80px rgba(0,0,0,0.55)',
+            'inset -30px -45px 85px rgba(0,0,0,0.9)',
+            'inset 20px 25px 60px rgba(255,255,255,0.12)',
+          ].join(', '),
         }}
-      />
+      >
+        <svg
+          viewBox="0 0 200 200"
+          preserveAspectRatio="none"
+          width="100%"
+          height="100%"
+          style={{ display: 'block' }}
+        >
+          <defs>
+            <filter id={`${fId}-grain`}>
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="1.4"
+                numOctaves={5}
+                seed={12}
+                stitchTiles="stitch"
+              />
+              <feColorMatrix values="0 0 0 0 0.19  0 0 0 0 0.16  0 0 0 0 0.13  1.6 0 0 0 -0.5" />
+            </filter>
+            <filter id={`${fId}-pits`}>
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.25 0.4"
+                numOctaves={2}
+                seed={4}
+                stitchTiles="stitch"
+              />
+              <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3 0 0 0 -1.6" />
+            </filter>
+            <radialGradient
+              id={`${fId}-hi`}
+              cx="35%"
+              cy="25%"
+              r="65%"
+            >
+              <stop offset="0%" stopColor="rgba(255,255,255,0.22)" />
+              <stop offset="40%" stopColor="rgba(255,255,255,0)" />
+            </radialGradient>
+          </defs>
+          <rect width="200" height="200" fill="#0e0e0e" />
+          <rect width="200" height="200" filter={`url(#${fId}-grain)`} />
+          <rect width="200" height="200" filter={`url(#${fId}-pits)`} />
+          <rect width="200" height="200" fill={`url(#${fId}-hi)`} />
+        </svg>
+      </div>
 
       {/* 3D text stage */}
       <div
@@ -366,7 +391,7 @@ export default function TextSphere({
         {lines.map((line, li) => {
           const n = line.length;
           const y = (li - (lines.length - 1) / 2) * lineHeight;
-          const measuredAngles = measured?.angles[li];
+          const measuredAngles = measured?.[li];
           return (
             <div
               key={li}
@@ -385,7 +410,7 @@ export default function TextSphere({
                 return (
                   <span
                     key={i}
-                    className="absolute font-extrabold text-neutral-900"
+                    className="absolute font-extrabold"
                     style={{
                       left: 0,
                       top: 0,
@@ -396,13 +421,14 @@ export default function TextSphere({
                       padding: 0,
                       margin: 0,
                       letterSpacing: 0,
+                      color: '#ffffff',
+                      textShadow:
+                        '0 1px 2px rgba(0,0,0,0.55), 0 0 1px rgba(0,0,0,0.35)',
                       transformOrigin: '0 0 0',
-                      // translate(-50%, -50%) MUST be at the end of the chain
-                      // so it's applied FIRST — in the glyph's local space
-                      // before rotation. Otherwise the -50% shift happens in
-                      // world space after rotation and each char's actual
-                      // position ends up offset by its own width, creating
-                      // a visible stagger along the curve.
+                      // translate(-50%, -50%) MUST be last in the chain so
+                      // it's applied FIRST — in the glyph's local frame
+                      // before rotation. Any other order offsets each char
+                      // by its own width and creates a visible stagger.
                       transform: `translateY(${y}px) rotateY(${angle}deg) translateZ(${radius}px) translate(-50%, -50%)`,
                       backfaceVisibility: 'hidden',
                       WebkitBackfaceVisibility: 'hidden',

@@ -21,7 +21,7 @@ export default function SphereDemo() {
           lines={MISSION_LINES}
           radius={260}
           fontSize={32}
-          spin={14}
+          spin={-14}
           tiltX={-12}
           tiltZ={-8}
         />

@@ -20,7 +20,7 @@
     /></noscript>
     <style>
       :root {
-        --bg: #f3f3f3;
+        --bg: #dadada;
       }
       * {
         box-sizing: border-box;
@@ -66,18 +66,18 @@
         left: 50%;
         top: 50%;
         border-radius: 50%;
+        overflow: hidden;
         pointer-events: none;
-        background: radial-gradient(
-          circle at 35% 28%,
-          #ffffff 0%,
-          #fafafa 35%,
-          #eaeaea 70%,
-          #cfcfcf 100%
-        );
+        background: #0e0e0e;
         box-shadow:
-          0 30px 80px rgba(0, 0, 0, 0.18),
-          inset -20px -35px 70px rgba(0, 0, 0, 0.08),
-          inset 15px 20px 40px rgba(255, 255, 255, 0.65);
+          0 30px 80px rgba(0, 0, 0, 0.55),
+          inset -30px -45px 85px rgba(0, 0, 0, 0.9),
+          inset 20px 25px 60px rgba(255, 255, 255, 0.12);
+      }
+      .sphere svg {
+        width: 100%;
+        height: 100%;
+        display: block;
       }
       .text-stage {
         position: absolute;
@@ -102,7 +102,10 @@
         display: inline-block;
         font-family: 'Inter', sans-serif;
         font-weight: 800;
-        color: #0a0a0a;
+        color: #ffffff;
+        text-shadow:
+          0 1px 2px rgba(0, 0, 0, 0.55),
+          0 0 1px rgba(0, 0, 0, 0.35);
         line-height: 1;
         height: 1em;
         padding: 0;
@@ -115,7 +118,7 @@
       }
       .hint {
         margin-top: 40px;
-        color: #888;
+        color: #666;
         font-size: 13px;
         font-weight: 500;
         letter-spacing: 0.02em;
@@ -134,7 +137,7 @@
         'From installations and projection mapping to films and creative direction, anywhere in the world.',
       ];
 
-      // Responsive sizing: the sphere always fits on screen and stays
+      // Responsive sizing — the sphere always fits on screen and stays
       // centered. Everything else (font, line-height, box) scales from it.
       const MAX_RADIUS = 260;
       const MAX_FONT_SIZE = 32;
@@ -143,36 +146,59 @@
       const scale = Math.min(1, (viewportW * 0.92) / (MAX_RADIUS * BOX_TO_R));
       const RADIUS = Math.max(80, Math.round(MAX_RADIUS * scale));
       const FONT_SIZE = Math.max(12, Math.round(MAX_FONT_SIZE * scale));
-      const SPIN = 14; // deg / second
+      // Negative = left-to-right scroll of the text around the sphere.
+      const SPIN = -14;
       const TILT_X = -12;
       const TILT_Z = -8;
       const LINE_HEIGHT = Math.round(FONT_SIZE * 1.2);
       const SPHERE_SIZE = RADIUS * 2;
       const BOX_SIZE = Math.round(RADIUS * BOX_TO_R);
-      const ARC_PER_CHAR = FONT_SIZE * 0.42;
-      const DEG_PER_CHAR = (ARC_PER_CHAR / RADIUS) * (180 / Math.PI);
+      const DEG_PER_CHAR_FALLBACK =
+        ((FONT_SIZE * 0.42) / RADIUS) * (180 / Math.PI);
 
       const stage = document.getElementById('stage');
       stage.style.width = BOX_SIZE + 'px';
       stage.style.height = BOX_SIZE + 'px';
       stage.style.perspective = RADIUS * 5 + 'px';
 
+      // Sphere element with inline SVG texture (volcanic rock look).
       const sphere = document.createElement('div');
       sphere.className = 'sphere';
       sphere.style.width = SPHERE_SIZE + 'px';
       sphere.style.height = SPHERE_SIZE + 'px';
       sphere.style.marginLeft = -RADIUS + 'px';
       sphere.style.marginTop = -RADIUS + 'px';
+      sphere.innerHTML =
+        '<svg viewBox="0 0 200 200" preserveAspectRatio="none">' +
+        '<defs>' +
+        '<filter id="grain">' +
+        '<feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="5" seed="12" stitchTiles="stitch"/>' +
+        '<feColorMatrix values="0 0 0 0 0.19  0 0 0 0 0.16  0 0 0 0 0.13  1.6 0 0 0 -0.5"/>' +
+        '</filter>' +
+        '<filter id="pits">' +
+        '<feTurbulence type="fractalNoise" baseFrequency="0.25 0.4" numOctaves="2" seed="4" stitchTiles="stitch"/>' +
+        '<feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3 0 0 0 -1.6"/>' +
+        '</filter>' +
+        '<radialGradient id="hi" cx="35%" cy="25%" r="65%">' +
+        '<stop offset="0%" stop-color="rgba(255,255,255,0.22)"/>' +
+        '<stop offset="40%" stop-color="rgba(255,255,255,0)"/>' +
+        '</radialGradient>' +
+        '</defs>' +
+        '<rect width="200" height="200" fill="#0e0e0e"/>' +
+        '<rect width="200" height="200" filter="url(#grain)"/>' +
+        '<rect width="200" height="200" filter="url(#pits)"/>' +
+        '<rect width="200" height="200" fill="url(#hi)"/>' +
+        '</svg>';
       stage.appendChild(sphere);
 
+      // Text stage
       const textStage = document.createElement('div');
       textStage.className = 'text-stage';
       stage.appendChild(textStage);
 
-      // Measure character widths using real DOM inline-block spans with
-      // the same CSS as the final render. getBoundingClientRect().width
-      // returns the browser's actual advance width — 100% matching the
-      // final render. Canvas.measureText is unreliable on iOS Safari.
+      // DOM-based char width measurement. Hidden inline-block spans with the
+      // exact same CSS as the final render guarantee that getBoundingClientRect
+      // widths match the rendered glyphs, regardless of which font is active.
       function measureDOM() {
         const container = document.createElement('div');
         container.setAttribute('aria-hidden', 'true');
@@ -209,7 +235,6 @@
           return spans;
         });
 
-        // Force reflow so rects are fresh.
         void container.offsetHeight;
 
         const widths = perLineSpans.map((spans) =>
@@ -257,11 +282,10 @@
             span.className = 'char';
             span.textContent = ch;
             span.style.fontSize = FONT_SIZE + 'px';
-            // translate(-50%, -50%) MUST be at the END so it's applied FIRST
-            // (innermost), in the glyph's local frame before rotation. Any
-            // other order makes the -50% shift happen in world space after
-            // rotation, offsetting each char by its own width and creating a
-            // visible stagger along the curve.
+            // translate(-50%, -50%) MUST be last so it's applied FIRST,
+            // in the glyph's local frame before rotation. Any other order
+            // offsets each char by its own width and creates a visible
+            // stagger along the curve.
             span.style.transform =
               'translateY(' +
               y +
@@ -276,23 +300,20 @@
         });
       }
 
-      // Initial render with a rough uniform step in case fonts load slowly.
+      // Initial render with a uniform fallback step so something shows up
+      // immediately, before font has loaded.
       const uniformFallback = MISSION_LINES.map((line) => {
         const n = line.length;
         return Array.from(
           { length: n },
-          (_, i) => (i - (n - 1) / 2) * DEG_PER_CHAR,
+          (_, i) => (i - (n - 1) / 2) * DEG_PER_CHAR_FALLBACK,
         );
       });
       buildText(uniformFallback);
 
-      // Explicitly load Inter with a Promise, settle 50ms so iOS Safari
-      // actually applies the glyph metrics, measure with the DOM, then
-      // rebuild. Retry once 500ms later to catch very late font loads.
+      // Once Inter is loaded, re-measure and rebuild.
       const fontSpec = '800 ' + FONT_SIZE + 'px Inter';
-      const applyMeasured = () => buildText(computeAngles());
       const delay = (ms) => new Promise((r) => setTimeout(r, ms));
-
       (async function () {
         if (document.fonts && document.fonts.load) {
           try {
@@ -300,14 +321,12 @@
           } catch (e) {}
         }
         await delay(50);
-        applyMeasured();
+        buildText(computeAngles());
         await delay(500);
-        applyMeasured();
+        buildText(computeAngles());
       })();
 
-      // Drag-based interaction using pointer events. Pointer capture keeps
-      // the drag locked to the single finger, touch-action: none on the
-      // stage stops the mobile browser from scrolling the page.
+      // Drag-based interaction using pointer events, locked to the stage.
       let baseY = 0;
       let liveY = 0;
       let displayY = 0;
@@ -350,7 +369,7 @@
         const dt = Math.min(0.05, (ts - lastTs) / 1000);
         lastTs = ts;
 
-        if (!dragging) {
+        if (!dragging && SPIN !== 0) {
           baseY = (baseY + SPIN * dt) % 360;
         }
         const target = baseY + liveY;
