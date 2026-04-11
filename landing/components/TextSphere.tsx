@@ -344,7 +344,10 @@ export default function TextSphere({
   }, [spin, tiltX, tiltZ]);
 
   const sphereSize = radius * 2;
-  const boxSize = Math.round(radius * 2.8);
+  // Box uses the SAME ratio as the responsive scale calc above — otherwise
+  // the box ends up wider than the available viewport and the sphere
+  // overflows off-screen on mobile.
+  const boxSize = Math.round(radius * BOX_TO_R_RATIO);
   // ~20% leading so glyph ascenders/descenders of one line don't bleed
   // into the next.
   const lineHeight = Math.round(fontSize * 1.2);
