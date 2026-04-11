@@ -3,11 +3,20 @@ import LogoCarousel from './LogoCarousel';
 import TwitterCarouselScratch from './TwitterCarouselScratch';
 import ServiceCards from './ServiceCards';
 import CTA from './CTA';
+import TextSphere from './TextSphere';
 
 const sectionAnim = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } },
 };
+
+const MISSION_LINES = [
+  'Visual experience studio for brands, founders and product leaders in Web3 and live events.',
+  'We move fast, work with full autonomy, and deliver high-quality brands and products that stay ahead.',
+  'Enhanced by deep Web3 expertise, applied AI, and structured yet flexible processes.',
+  'From installations and projection mapping to films and creative direction, anywhere in the world.',
+];
+const MISSION_TEXT = MISSION_LINES.join(' ');
 
 export default function Hero() {
   return (
@@ -61,7 +70,7 @@ export default function Hero() {
         <ServiceCards />
       </motion.div>
 
-      {/* Mission statement */}
+      {/* Mission statement — rendered as a 3D text sphere */}
       <motion.div
         className="mt-12 lg:mt-16 flex justify-center"
         variants={sectionAnim}
@@ -69,9 +78,17 @@ export default function Hero() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
       >
-        <p className="max-w-3xl lg:max-w-4xl text-black text-center tracking-tighter text-xl lg:text-2xl font-semibold leading-relaxed">
-          Visual experience studio for brands, founders and product leaders in Web3 and live events. We move fast, work with full autonomy, and deliver high-quality brands and products that stay ahead. Enhanced by deep Web3 expertise, applied AI, and structured yet flexible processes. From installations and projection mapping to films and creative direction, anywhere in the world.
-        </p>
+        {/* Accessible/SEO copy of the mission statement */}
+        <p className="sr-only">{MISSION_TEXT}</p>
+        <TextSphere
+          text={MISSION_TEXT}
+          lines={MISSION_LINES}
+          radius={260}
+          fontSize={32}
+          spin={-14}
+          tiltX={-12}
+          tiltZ={-8}
+        />
       </motion.div>
 
       <motion.div
