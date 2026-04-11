@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useMemo, useId } from 'react';
+import { useRef, useEffect, useState, useMemo } from 'react';
 
 interface TextSphereProps {
   text?: string;
@@ -33,9 +33,6 @@ interface TextSphereProps {
  * Interaction: drag-based pointer events with `touch-action: none` on the
  * stage so dragging a finger rotates the sphere instead of scrolling the
  * page. Auto-spin pauses while the user is actively dragging.
- *
- * Texture: dark volcanic rock look built from two layers of SVG feTurbulence
- * (fine grain + larger pits) plus a radial highlight and a dark inset shadow.
  */
 export default function TextSphere({
   text = 'Buildlore is a design brand directive studio. Here to get high value content and build the lore you need',
@@ -50,62 +47,6 @@ export default function TextSphere({
   const containerRef = useRef<HTMLDivElement>(null);
   const [rotY, setRotY] = useState(0);
   const [measured, setMeasured] = useState<number[][] | null>(null);
-  const reactId = useId().replace(/[:]/g, '');
-
-  // Randomized volcanic-rock texture params. Generated client-side on mount
-  // to avoid SSR hydration mismatches, so each page load gets a different
-  // noise seed and crater layout.
-  type Crater = {
-    cx: number;
-    cy: number;
-    r: number;
-    opacity: number;
-    ix: number;
-    iy: number;
-  };
-  const [tex, setTex] = useState<{
-    grainSeed: number;
-    grainFreq: number;
-    warpSeed: number;
-    warpFreq: number;
-    pitsSeed: number;
-    pitsFreq: number;
-    craters: Crater[];
-  }>({
-    grainSeed: 12,
-    grainFreq: 1.6,
-    warpSeed: 7,
-    warpFreq: 0.028,
-    pitsSeed: 4,
-    pitsFreq: 0.18,
-    craters: [],
-  });
-  useEffect(() => {
-    const rand = (min: number, max: number) =>
-      min + Math.random() * (max - min);
-    const randi = (min: number, max: number) => Math.floor(rand(min, max));
-    const craters: Crater[] = [];
-    const n = randi(10, 16);
-    for (let i = 0; i < n; i++) {
-      craters.push({
-        cx: rand(15, 185),
-        cy: rand(15, 185),
-        r: rand(3, 10),
-        opacity: rand(0.75, 1),
-        ix: rand(-1.2, 1.2),
-        iy: rand(-1.2, 1.2),
-      });
-    }
-    setTex({
-      grainSeed: randi(0, 100),
-      grainFreq: rand(1.4, 1.9),
-      warpSeed: randi(0, 100),
-      warpFreq: rand(0.02, 0.035),
-      pitsSeed: randi(0, 100),
-      pitsFreq: rand(0.14, 0.22),
-      craters,
-    });
-  }, []);
 
   // Responsive sizing: scale the sphere down on narrow viewports so the box
   // always fits on screen and stays centered.
@@ -348,9 +289,6 @@ export default function TextSphere({
   // Uniform fallback step used before DOM measurement has run.
   const fallbackDegPerChar = ((fontSize * 0.42) / radius) * (180 / Math.PI);
 
-  // Unique filter IDs so several TextSphere instances can coexist.
-  const fId = `ts-${reactId}`;
-
   return (
     <div
       ref={containerRef}
@@ -366,10 +304,10 @@ export default function TextSphere({
       aria-label={text}
       role="img"
     >
-      {/* Volcanic-rock sphere */}
+      {/* The white 3D-looking sphere */}
       <div
         aria-hidden="true"
-        className="absolute rounded-full pointer-events-none overflow-hidden"
+        className="absolute rounded-full pointer-events-none"
         style={{
           width: sphereSize,
           height: sphereSize,
@@ -377,109 +315,12 @@ export default function TextSphere({
           top: '50%',
           marginLeft: -radius,
           marginTop: -radius,
-          background: '#0e0e0e',
-          boxShadow: [
-            '0 30px 80px rgba(0,0,0,0.55)',
-            'inset -30px -45px 85px rgba(0,0,0,0.9)',
-            'inset 20px 25px 60px rgba(255,255,255,0.12)',
-          ].join(', '),
+          background:
+            'radial-gradient(circle at 35% 28%, #ffffff 0%, #fafafa 35%, #eaeaea 70%, #cfcfcf 100%)',
+          boxShadow:
+            '0 30px 80px rgba(0,0,0,0.18), inset -20px -35px 70px rgba(0,0,0,0.08), inset 15px 20px 40px rgba(255,255,255,0.65)',
         }}
-      >
-        <svg
-          viewBox="0 0 200 200"
-          preserveAspectRatio="none"
-          width="100%"
-          height="100%"
-          style={{ display: 'block' }}
-        >
-          <defs>
-            {/* Warped fine grain — the main rough rock surface. The grain
-                noise is displaced by a very low-frequency warp noise so the
-                result is irregular instead of looking like a uniform tile. */}
-            <filter
-              id={`${fId}-grain`}
-              x="0"
-              y="0"
-              width="100%"
-              height="100%"
-            >
-              <feTurbulence
-                type="fractalNoise"
-                baseFrequency={tex.warpFreq}
-                numOctaves={2}
-                seed={tex.warpSeed}
-                result="warp"
-              />
-              <feTurbulence
-                type="fractalNoise"
-                baseFrequency={tex.grainFreq}
-                numOctaves={5}
-                seed={tex.grainSeed}
-                stitchTiles="stitch"
-                result="grain"
-              />
-              <feDisplacementMap
-                in="grain"
-                in2="warp"
-                scale="14"
-                xChannelSelector="R"
-                yChannelSelector="G"
-                result="displaced"
-              />
-              <feColorMatrix
-                in="displaced"
-                values="0 0 0 0 0.2  0 0 0 0 0.17  0 0 0 0 0.14  1.7 0 0 0 -0.55"
-              />
-            </filter>
-            {/* Medium pits — low frequency noise with amplified alpha so
-                larger darker patches show through. */}
-            <filter id={`${fId}-pits`}>
-              <feTurbulence
-                type="fractalNoise"
-                baseFrequency={tex.pitsFreq}
-                numOctaves={2}
-                seed={tex.pitsSeed}
-                stitchTiles="stitch"
-              />
-              <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  2.8 0 0 0 -1.7" />
-            </filter>
-            {/* Small blur so the crater circles read as soft pits instead
-                of perfect stamped circles. */}
-            <filter id={`${fId}-blur`}>
-              <feGaussianBlur stdDeviation="1.2" />
-            </filter>
-            <radialGradient id={`${fId}-hi`} cx="35%" cy="25%" r="65%">
-              <stop offset="0%" stopColor="rgba(255,255,255,0.22)" />
-              <stop offset="40%" stopColor="rgba(255,255,255,0)" />
-            </radialGradient>
-          </defs>
-          <rect width="200" height="200" fill="#0e0e0e" />
-          <rect width="200" height="200" filter={`url(#${fId}-grain)`} />
-          <rect width="200" height="200" filter={`url(#${fId}-pits)`} />
-          {/* Randomly placed crater circles for sharp dark pits. Each has
-              an outer soft-blurred ring and an inner deeper hole. */}
-          {tex.craters.map((c, i) => (
-            <g key={i}>
-              <circle
-                cx={c.cx}
-                cy={c.cy}
-                r={c.r}
-                fill="#000"
-                opacity={c.opacity}
-                filter={`url(#${fId}-blur)`}
-              />
-              <circle
-                cx={c.cx + c.ix}
-                cy={c.cy + c.iy}
-                r={c.r * 0.55}
-                fill="#000"
-                opacity={0.92}
-              />
-            </g>
-          ))}
-          <rect width="200" height="200" fill={`url(#${fId}-hi)`} />
-        </svg>
-      </div>
+      />
 
       {/* 3D text stage */}
       <div
@@ -516,7 +357,7 @@ export default function TextSphere({
                 return (
                   <span
                     key={i}
-                    className="absolute font-extrabold"
+                    className="absolute font-extrabold text-neutral-900"
                     style={{
                       left: 0,
                       top: 0,
@@ -527,9 +368,6 @@ export default function TextSphere({
                       padding: 0,
                       margin: 0,
                       letterSpacing: 0,
-                      color: '#ffffff',
-                      textShadow:
-                        '0 1px 2px rgba(0,0,0,0.55), 0 0 1px rgba(0,0,0,0.35)',
                       transformOrigin: '0 0 0',
                       // translate(-50%, -50%) MUST be last in the chain so
                       // it's applied FIRST — in the glyph's local frame
