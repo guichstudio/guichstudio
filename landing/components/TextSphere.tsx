@@ -55,26 +55,35 @@ export default function TextSphere({
   const textStageRef = useRef<HTMLDivElement>(null);
   const [measured, setMeasured] = useState<number[][] | null>(null);
 
-  // Responsive sizing: scale the sphere down on narrow viewports so the box
-  // always fits on screen and stays centered. On mobile (<600px wide) the
-  // sphere takes ~60% of viewport width instead of the desktop ~92%, so it
-  // doesn't visually eat the whole screen.
+  // Responsive sizing — the sphere scales down on narrow viewports so the
+  // box always fits on screen and stays centered.
+  //
+  // IMPORTANT: the initial state is a hard-coded 1440, NOT window.innerWidth.
+  // If we read window.innerWidth in the useState initializer the server
+  // renders with 1440 but the client initializer returns e.g. 390 on mobile,
+  // which causes a React 18 hydration mismatch. React 18 then keeps the
+  // server markup (desktop sphere) and never re-renders with the mobile
+  // viewport — the symptom is a desktop-sized sphere on mobile. We instead
+  // start with a server-safe default and force a sync inside useEffect.
   const BOX_TO_R_RATIO = 2.4;
-  const [viewportW, setViewportW] = useState<number>(
-    typeof window !== 'undefined' ? window.innerWidth : 1440,
-  );
+  const [viewportW, setViewportW] = useState<number>(1440);
   useEffect(() => {
-    const onResize = () => setViewportW(window.innerWidth);
-    window.addEventListener('resize', onResize);
-    window.addEventListener('orientationchange', onResize);
+    const sync = () => setViewportW(window.innerWidth);
+    sync(); // initial post-hydration sync
+    window.addEventListener('resize', sync);
+    window.addEventListener('orientationchange', sync);
     return () => {
-      window.removeEventListener('resize', onResize);
-      window.removeEventListener('orientationchange', onResize);
+      window.removeEventListener('resize', sync);
+      window.removeEventListener('orientationchange', sync);
     };
   }, []);
-  // Mobile: sphere fills ~70% of viewport (≈ the user's red-circle target).
-  // Desktop: sphere fills up to 92% of viewport (unchanged).
-  const fillRatio = viewportW < 600 ? 0.7 : 0.92;
+
+  // "Narrow" = anything smaller than a desktop window. Threshold 900 covers
+  // iPad portrait (768-834) so it also gets the smaller-sphere layout.
+  const isNarrow = viewportW < 900;
+  // Narrow: sphere fills ~70% of viewport (≈ the user's red-circle target).
+  // Wide: sphere fills up to 92% of viewport.
+  const fillRatio = isNarrow ? 0.7 : 0.92;
   const scale = Math.min(
     1,
     (viewportW * fillRatio) / (maxRadius * BOX_TO_R_RATIO),
