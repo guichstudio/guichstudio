@@ -67,13 +67,17 @@
         top: 50%;
         border-radius: 50%;
         pointer-events: none;
-        background-image: url('https://raw.githubusercontent.com/guichstudio/guichstudio/claude/3d-text-sphere-yWKJ9/landing/public/sphere-texture.jpg');
-        /* Zoom past the dark falloff at the edge of the photo so the
-           circular clip doesn't read as a stroke. */
-        background-size: 118% 118%;
-        background-position: center;
-        background-color: #1a1a1a;
-        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+        background: radial-gradient(
+          circle at 35% 28%,
+          #ffffff 0%,
+          #fafafa 35%,
+          #eaeaea 70%,
+          #cfcfcf 100%
+        );
+        box-shadow:
+          0 30px 80px rgba(0, 0, 0, 0.18),
+          inset -20px -35px 70px rgba(0, 0, 0, 0.08),
+          inset 15px 20px 40px rgba(255, 255, 255, 0.65);
       }
       .text-stage {
         position: absolute;
@@ -98,7 +102,7 @@
         display: inline-block;
         font-family: 'Inter', sans-serif;
         font-weight: 800;
-        color: #ffffff;
+        color: #0a0a0a;
         line-height: 1;
         height: 1em;
         padding: 0;
