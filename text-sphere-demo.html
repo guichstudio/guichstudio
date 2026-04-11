@@ -133,14 +133,22 @@
         'Enhanced by deep Web3 expertise, applied AI, and structured yet flexible processes.',
         'From installations and projection mapping to films and creative direction, anywhere in the world.',
       ];
-      const RADIUS = 260;
-      const FONT_SIZE = 32;
+
+      // Responsive sizing: the sphere always fits on screen and stays
+      // centered. Everything else (font, line-height, box) scales from it.
+      const MAX_RADIUS = 260;
+      const MAX_FONT_SIZE = 32;
+      const BOX_TO_R = 2.4;
+      const viewportW = window.innerWidth;
+      const scale = Math.min(1, (viewportW * 0.92) / (MAX_RADIUS * BOX_TO_R));
+      const RADIUS = Math.max(80, Math.round(MAX_RADIUS * scale));
+      const FONT_SIZE = Math.max(12, Math.round(MAX_FONT_SIZE * scale));
       const SPIN = 14; // deg / second
       const TILT_X = -12;
       const TILT_Z = -8;
       const LINE_HEIGHT = Math.round(FONT_SIZE * 1.05);
       const SPHERE_SIZE = RADIUS * 2;
-      const BOX_SIZE = Math.round(RADIUS * 2.8);
+      const BOX_SIZE = Math.round(RADIUS * BOX_TO_R);
       const ARC_PER_CHAR = FONT_SIZE * 0.42;
       const DEG_PER_CHAR = (ARC_PER_CHAR / RADIUS) * (180 / Math.PI);
 
@@ -237,13 +245,33 @@
       });
       buildText(uniformFallback);
 
-      // Re-measure once Inter is actually loaded.
+      // Poll document.fonts.check() until Inter is actually loaded, then
+      // re-measure and rebuild. `document.fonts.ready` resolves too early
+      // on some mobile browsers when the font is declared via a non-blocking
+      // <link>, so we explicitly check and retry.
+      const fontSpec = "800 " + FONT_SIZE + "px 'Inter'";
       const applyMeasured = () => buildText(computeAngles());
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(applyMeasured).catch(applyMeasured);
-      } else {
-        applyMeasured();
+      if (document.fonts) {
+        try {
+          document.fonts.load(fontSpec);
+        } catch (e) {}
       }
+      let attempts = 0;
+      const maxAttempts = 30; // ~3 seconds total
+      function tryMeasure() {
+        const ready =
+          !document.fonts ||
+          !document.fonts.check ||
+          document.fonts.check(fontSpec) ||
+          attempts >= maxAttempts;
+        if (ready) {
+          applyMeasured();
+          return;
+        }
+        attempts += 1;
+        setTimeout(tryMeasure, 100);
+      }
+      tryMeasure();
 
       // Drag-based interaction using pointer events. Pointer capture keeps
       // the drag locked to the single finger, touch-action: none on the

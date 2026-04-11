@@ -4,7 +4,9 @@ interface TextSphereProps {
   text?: string;
   /** Number of lines (auto-split by word count) or explicit array of lines. */
   lines?: number | string[];
+  /** Target radius on a wide viewport. Automatically scaled down on mobile. */
   radius?: number;
+  /** Font size on a wide viewport. Automatically scaled down on mobile. */
   fontSize?: number;
   /** Continuous auto-rotation around Y axis, in degrees per second. 0 disables. */
   spin?: number;
@@ -31,8 +33,8 @@ interface TextSphereProps {
 export default function TextSphere({
   text = 'Buildlore is a design brand directive studio. Here to get high value content and build the lore you need',
   lines: linesProp = 3,
-  radius = 200,
-  fontSize = 22,
+  radius: maxRadius = 260,
+  fontSize: maxFontSize = 32,
   spin = 0,
   tiltX = -8,
   tiltZ = -12,
@@ -43,6 +45,26 @@ export default function TextSphere({
   const [measured, setMeasured] = useState<{
     angles: number[][];
   } | null>(null);
+
+  // Responsive sizing: scale the sphere down on narrow viewports so the box
+  // always fits on screen and stays centered. Computed on mount and on
+  // resize / orientation change.
+  const BOX_TO_R_RATIO = 2.4;
+  const [viewportW, setViewportW] = useState<number>(
+    typeof window !== 'undefined' ? window.innerWidth : 1440,
+  );
+  useEffect(() => {
+    const onResize = () => setViewportW(window.innerWidth);
+    window.addEventListener('resize', onResize);
+    window.addEventListener('orientationchange', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('orientationchange', onResize);
+    };
+  }, []);
+  const scale = Math.min(1, (viewportW * 0.92) / (maxRadius * BOX_TO_R_RATIO));
+  const radius = Math.max(80, Math.round(maxRadius * scale));
+  const fontSize = Math.max(12, Math.round(maxFontSize * scale));
 
   // Split the text into lines. Caller may pass an explicit array.
   const lines = useMemo(() => {
@@ -60,14 +82,16 @@ export default function TextSphere({
     return out;
   }, [text, linesProp]);
 
-  // Measure each character with the same font settings used in CSS. Then
-  // pick a single uniform degPerPx density (based on the longest line) so
-  // every line has the same apparent letter spacing; the longest line fills
-  // exactly 360°, shorter lines cover slightly less but at the same density.
+  // Measure each character with the same font used in CSS. Widths only
+  // match rendered glyphs once Inter is actually loaded, so we poll
+  // document.fonts.check() before measuring. Pick a single uniform
+  // degPerPx density (based on the longest line) so every ring has the
+  // same apparent letter spacing.
   useEffect(() => {
     let cancelled = false;
-    const run = () => {
-      if (cancelled) return;
+    let timer: number | null = null;
+
+    const compute = () => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
@@ -102,13 +126,34 @@ export default function TextSphere({
     };
 
     const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
-    if (fonts && fonts.ready) {
-      fonts.ready.then(run).catch(run);
-    } else {
-      run();
+    const fontSpec = `800 ${fontSize}px 'Inter'`;
+
+    let attempts = 0;
+    const maxAttempts = 30; // ~3s max
+    const tryMeasure = () => {
+      if (cancelled) return;
+      const ready =
+        !fonts ||
+        !fonts.check ||
+        fonts.check(fontSpec) ||
+        attempts >= maxAttempts;
+      if (ready) {
+        compute();
+        return;
+      }
+      attempts += 1;
+      timer = window.setTimeout(tryMeasure, 100);
+    };
+
+    // Ask the browser to load the font if it's declared, then poll.
+    if (fonts && fonts.load) {
+      fonts.load(fontSpec).catch(() => {});
     }
+    tryMeasure();
+
     return () => {
       cancelled = true;
+      if (timer !== null) clearTimeout(timer);
     };
   }, [lines, fontSize, radius]);
 
