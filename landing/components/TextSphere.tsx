@@ -38,19 +38,30 @@ export default function TextSphere({
   }, [text, numLines]);
 
   useEffect(() => {
-    const onMove = (e: MouseEvent) => {
+    const updateTarget = (clientX: number, clientY: number) => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
       const cy = rect.top + rect.height / 2;
-      const dx = (e.clientX - cx) / (window.innerWidth / 2);
-      const dy = (e.clientY - cy) / (window.innerHeight / 2);
+      const dx = (clientX - cx) / (window.innerWidth / 2);
+      const dy = (clientY - cy) / (window.innerHeight / 2);
       targetRef.current = {
         x: -8 - dy * 25,
         y: dx * 70,
       };
     };
-    window.addEventListener('mousemove', onMove);
+
+    const onMouseMove = (e: MouseEvent) => updateTarget(e.clientX, e.clientY);
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 0) return;
+      const t = e.touches[0];
+      updateTarget(t.clientX, t.clientY);
+    };
+    const onTouchStart = onTouchMove;
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
 
     const loop = () => {
       const ease = 0.07;
@@ -64,7 +75,9 @@ export default function TextSphere({
     rafRef.current = requestAnimationFrame(loop);
 
     return () => {
-      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchstart', onTouchStart);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);

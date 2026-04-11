@@ -91,7 +91,7 @@
   </head>
   <body>
     <div id="stage" class="stage" role="img" aria-label="Text sphere"></div>
-    <p class="hint">Move your cursor to rotate the sphere.</p>
+    <p class="hint">Move your cursor or drag your finger to rotate the sphere.</p>
 
     <script>
       const TEXT =
@@ -158,24 +158,54 @@
         textStage.appendChild(lineEl);
       });
 
-      // Cursor-driven rotation with easing
+      // Cursor / touch-driven rotation with easing
       let targetX = -8,
         targetY = 0;
       let curX = -8,
         curY = 0;
 
-      window.addEventListener('mousemove', (e) => {
+      function updateTarget(clientX, clientY) {
         const rect = stage.getBoundingClientRect();
         const cx = rect.left + rect.width / 2;
         const cy = rect.top + rect.height / 2;
-        const dx = (e.clientX - cx) / (window.innerWidth / 2);
-        const dy = (e.clientY - cy) / (window.innerHeight / 2);
+        const dx = (clientX - cx) / (window.innerWidth / 2);
+        const dy = (clientY - cy) / (window.innerHeight / 2);
         targetX = -8 - dy * 25;
         targetY = dx * 70;
-      });
+      }
+
+      window.addEventListener('mousemove', (e) =>
+        updateTarget(e.clientX, e.clientY),
+      );
+      const onTouch = (e) => {
+        if (!e.touches || e.touches.length === 0) return;
+        updateTarget(e.touches[0].clientX, e.touches[0].clientY);
+      };
+      window.addEventListener('touchstart', onTouch, { passive: true });
+      window.addEventListener('touchmove', onTouch, { passive: true });
+
+      // Gentle idle auto-rotation so mobile users see it move even without touch
+      let idleT = 0;
+      let lastInput = 0;
+      ['mousemove', 'touchstart', 'touchmove'].forEach((ev) =>
+        window.addEventListener(
+          ev,
+          () => {
+            lastInput = performance.now();
+          },
+          { passive: true },
+        ),
+      );
 
       function loop() {
         const ease = 0.07;
+        // After 1.5s of no input, gently drift around so the effect is visible
+        // even on mobile when the finger isn't on the screen.
+        if (performance.now() - lastInput > 1500) {
+          idleT += 0.008;
+          targetX = -8 + Math.sin(idleT * 0.7) * 6;
+          targetY = Math.sin(idleT) * 35;
+        }
         curX += (targetX - curX) * ease;
         curY += (targetY - curY) * ease;
         textStage.style.transform =
