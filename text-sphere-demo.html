@@ -149,32 +149,81 @@
       textStage.className = 'text-stage';
       stage.appendChild(textStage);
 
-      // Build each line with tight natural letter spacing, centered at
-      // angle 0. The whole text stage is then auto-rotated by SPIN deg/s.
-      MISSION_LINES.forEach((line, li) => {
-        const lineEl = document.createElement('div');
-        lineEl.className = 'line';
-        const y = (li - (MISSION_LINES.length - 1) / 2) * LINE_HEIGHT;
+      // Measure each character with canvas so spacing is proportional to
+      // the glyph's natural width instead of a uniform angular step. This
+      // kills the visible gaps that appear around narrow letters.
+      function measureChars() {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.font =
+          "800 " +
+          FONT_SIZE +
+          "px 'Inter', ui-sans-serif, system-ui, sans-serif";
+        const tightness = 0.93;
+        const radToDeg = 180 / Math.PI;
+        return MISSION_LINES.map((line) => {
+          const chars = line.split('');
+          const widths = chars.map((c) =>
+            ctx.measureText(c === '\u00A0' ? ' ' : c).width,
+          );
+          const total = widths.reduce((a, b) => a + b, 0);
+          const out = [];
+          let cursor = -total / 2;
+          for (let i = 0; i < chars.length; i++) {
+            const centerPx = cursor + widths[i] / 2;
+            cursor += widths[i];
+            out.push(((centerPx * tightness) / RADIUS) * radToDeg);
+          }
+          return out;
+        });
+      }
+
+      function buildText(charAngles) {
+        // Clear any previous text rings.
+        while (textStage.firstChild) textStage.removeChild(textStage.firstChild);
+        MISSION_LINES.forEach((line, li) => {
+          const lineEl = document.createElement('div');
+          lineEl.className = 'line';
+          const y = (li - (MISSION_LINES.length - 1) / 2) * LINE_HEIGHT;
+          const angles = charAngles[li];
+          for (let i = 0; i < line.length; i++) {
+            const angle = angles[i];
+            const ch = line[i] === ' ' ? '\u00A0' : line[i];
+            const span = document.createElement('span');
+            span.className = 'char';
+            span.textContent = ch;
+            span.style.fontSize = FONT_SIZE + 'px';
+            span.style.transform =
+              'translate(-50%, -50%) translateY(' +
+              y +
+              'px) rotateY(' +
+              angle +
+              'deg) translateZ(' +
+              RADIUS +
+              'px)';
+            lineEl.appendChild(span);
+          }
+          textStage.appendChild(lineEl);
+        });
+      }
+
+      // Initial render with a rough uniform step in case fonts load slowly.
+      const uniformFallback = MISSION_LINES.map((line) => {
         const n = line.length;
-        for (let i = 0; i < n; i++) {
-          const angle = (i - (n - 1) / 2) * DEG_PER_CHAR;
-          const ch = line[i] === ' ' ? '\u00A0' : line[i];
-          const span = document.createElement('span');
-          span.className = 'char';
-          span.textContent = ch;
-          span.style.fontSize = FONT_SIZE + 'px';
-          span.style.transform =
-            'translate(-50%, -50%) translateY(' +
-            y +
-            'px) rotateY(' +
-            angle +
-            'deg) translateZ(' +
-            RADIUS +
-            'px)';
-          lineEl.appendChild(span);
-        }
-        textStage.appendChild(lineEl);
+        return Array.from(
+          { length: n },
+          (_, i) => (i - (n - 1) / 2) * DEG_PER_CHAR,
+        );
       });
+      buildText(uniformFallback);
+
+      // Re-measure once Inter is actually loaded so widths are correct.
+      const applyMeasured = () => buildText(measureChars());
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(applyMeasured).catch(applyMeasured);
+      } else {
+        applyMeasured();
+      }
 
       // Input: mouse + touch → user offsets layered over the auto-spin.
       let userTargetX = TILT_X_BASE;

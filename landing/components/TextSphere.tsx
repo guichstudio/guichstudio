@@ -34,6 +34,7 @@ export default function TextSphere({
 }: TextSphereProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [rot, setRot] = useState({ x: tiltX, y: 0 });
+  const [charAngles, setCharAngles] = useState<number[][] | null>(null);
 
   // Split the text into lines. Caller may pass an explicit array.
   const lines = useMemo(() => {
@@ -51,11 +52,55 @@ export default function TextSphere({
     return out;
   }, [text, linesProp]);
 
-  // Natural per-char arc length so letters stay tight and line-length-
-  // independent. The spin rotation is applied at the stage level, so this
-  // band rotates around the sphere as a whole.
-  const arcPerChar = fontSize * 0.42;
-  const degPerChar = (arcPerChar / radius) * (180 / Math.PI);
+  // Uniform fallback step used while fonts load / before canvas measurement.
+  const fallbackDegPerChar = ((fontSize * 0.42) / radius) * (180 / Math.PI);
+
+  // Measure each character's natural width with a canvas and convert to
+  // angles along the sphere equator. This gives proportional, typographically
+  // correct letter spacing (narrow chars take less arc, wide chars more).
+  useEffect(() => {
+    let cancelled = false;
+    const measure = () => {
+      if (cancelled) return;
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      ctx.font = `800 ${fontSize}px 'Inter', ui-sans-serif, system-ui, sans-serif`;
+      // Tightness < 1 packs characters slightly closer than their natural
+      // width. 0.93 feels tight but still readable.
+      const tightness = 0.93;
+      const radToDeg = 180 / Math.PI;
+
+      const result = lines.map((line) => {
+        const chars = line.split('');
+        const widths = chars.map((ch) =>
+          ctx.measureText(ch === '\u00A0' ? ' ' : ch).width,
+        );
+        const total = widths.reduce((a, b) => a + b, 0);
+        const angles: number[] = [];
+        let cursor = -total / 2;
+        for (let i = 0; i < chars.length; i++) {
+          const centerPx = cursor + widths[i] / 2;
+          cursor += widths[i];
+          const angleRad = (centerPx * tightness) / radius;
+          angles.push(angleRad * radToDeg);
+        }
+        return angles;
+      });
+      if (!cancelled) setCharAngles(result);
+    };
+
+    // Wait for fonts to be ready so measurement matches rendered widths.
+    const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
+    if (fonts && fonts.ready) {
+      fonts.ready.then(measure).catch(measure);
+    } else {
+      measure();
+    }
+    return () => {
+      cancelled = true;
+    };
+  }, [lines, fontSize, radius]);
 
   useEffect(() => {
     // User-driven offsets (tilt in X, Y-shift on top of auto-rotation)
@@ -168,6 +213,7 @@ export default function TextSphere({
         {lines.map((line, li) => {
           const n = line.length;
           const y = (li - (lines.length - 1) / 2) * lineHeight;
+          const measuredAngles = charAngles?.[li];
           return (
             <div
               key={li}
@@ -179,10 +225,11 @@ export default function TextSphere({
               }}
             >
               {line.split('').map((ch, i) => {
-                // Tight natural spacing, centered at angle 0 (middle of line
-                // faces camera at rest). Spin rotation is applied at the
-                // stage level, so this band rotates around the sphere.
-                const angle = (i - (n - 1) / 2) * degPerChar;
+                // Proportional spacing once canvas has measured; uniform
+                // fallback before fonts are ready.
+                const angle = measuredAngles
+                  ? measuredAngles[i]
+                  : (i - (n - 1) / 2) * fallbackDegPerChar;
                 const display = ch === ' ' ? '\u00A0' : ch;
                 return (
                   <span
