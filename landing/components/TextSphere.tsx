@@ -371,8 +371,6 @@ export default function TextSphere({
                       margin: 0,
                       letterSpacing: 0,
                       color: '#ffffff',
-                      textShadow:
-                        '0 1px 3px rgba(0,0,0,0.75), 0 0 4px rgba(0,0,0,0.55)',
                       transformOrigin: '0 0 0',
                       // translate(-50%, -50%) MUST be last in the chain so
                       // it's applied FIRST — in the glyph's local frame
