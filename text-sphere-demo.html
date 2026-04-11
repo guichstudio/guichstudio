@@ -257,14 +257,19 @@
             span.className = 'char';
             span.textContent = ch;
             span.style.fontSize = FONT_SIZE + 'px';
+            // translate(-50%, -50%) MUST be at the END so it's applied FIRST
+            // (innermost), in the glyph's local frame before rotation. Any
+            // other order makes the -50% shift happen in world space after
+            // rotation, offsetting each char by its own width and creating a
+            // visible stagger along the curve.
             span.style.transform =
-              'translate(-50%, -50%) translateY(' +
+              'translateY(' +
               y +
               'px) rotateY(' +
               angle +
               'deg) translateZ(' +
               RADIUS +
-              'px)';
+              'px) translate(-50%, -50%)';
             lineEl.appendChild(span);
           }
           textStage.appendChild(lineEl);

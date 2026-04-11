@@ -397,7 +397,13 @@ export default function TextSphere({
                       margin: 0,
                       letterSpacing: 0,
                       transformOrigin: '0 0 0',
-                      transform: `translate(-50%, -50%) translateY(${y}px) rotateY(${angle}deg) translateZ(${radius}px)`,
+                      // translate(-50%, -50%) MUST be at the end of the chain
+                      // so it's applied FIRST — in the glyph's local space
+                      // before rotation. Otherwise the -50% shift happens in
+                      // world space after rotation and each char's actual
+                      // position ends up offset by its own width, creating
+                      // a visible stagger along the curve.
+                      transform: `translateY(${y}px) rotateY(${angle}deg) translateZ(${radius}px) translate(-50%, -50%)`,
                       backfaceVisibility: 'hidden',
                       WebkitBackfaceVisibility: 'hidden',
                       whiteSpace: 'pre',
