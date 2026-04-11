@@ -55,9 +55,10 @@ export default function TextSphere({
   // Uniform fallback step used while fonts load / before canvas measurement.
   const fallbackDegPerChar = ((fontSize * 0.42) / radius) * (180 / Math.PI);
 
-  // Measure each character's natural width with a canvas and convert to
-  // angles along the sphere equator. This gives proportional, typographically
-  // correct letter spacing (narrow chars take less arc, wide chars more).
+  // Measure each character's natural width with a canvas, then force the
+  // whole line to wrap exactly 360° around the sphere with each glyph taking
+  // an arc proportional to its measured width. Guarantees no gaps, no
+  // uniform-step artefacts, and text visible at every rotation angle.
   useEffect(() => {
     let cancelled = false;
     const measure = () => {
@@ -66,24 +67,21 @@ export default function TextSphere({
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
       ctx.font = `800 ${fontSize}px 'Inter', ui-sans-serif, system-ui, sans-serif`;
-      // Tightness < 1 packs characters slightly closer than their natural
-      // width. 0.93 feels tight but still readable.
-      const tightness = 0.93;
-      const radToDeg = 180 / Math.PI;
 
       const result = lines.map((line) => {
         const chars = line.split('');
         const widths = chars.map((ch) =>
           ctx.measureText(ch === '\u00A0' ? ' ' : ch).width,
         );
-        const total = widths.reduce((a, b) => a + b, 0);
+        const total = widths.reduce((a, b) => a + b, 0) || 1;
         const angles: number[] = [];
-        let cursor = -total / 2;
+        let cursor = 0;
         for (let i = 0; i < chars.length; i++) {
           const centerPx = cursor + widths[i] / 2;
           cursor += widths[i];
-          const angleRad = (centerPx * tightness) / radius;
-          angles.push(angleRad * radToDeg);
+          // Proportional 0..360° wrap, centered so the middle of the line
+          // faces the camera at rest.
+          angles.push((centerPx / total) * 360 - 180);
         }
         return angles;
       });
@@ -103,28 +101,25 @@ export default function TextSphere({
   }, [lines, fontSize, radius]);
 
   useEffect(() => {
-    // User-driven offsets (tilt in X, Y-shift on top of auto-rotation)
-    const userTarget = { x: tiltX, yOffset: 0 };
-    const userCurrent = { x: tiltX, yOffset: 0 };
+    // Only horizontal (Y) rotation is user-controlled. X tilt is locked at
+    // the base tiltX value so the sphere never nods up or down.
+    let userTargetYOff = 0;
+    let userCurrentYOff = 0;
     let baseY = 0;
     let lastTs: number | null = null;
 
-    const updateTarget = (clientX: number, clientY: number) => {
+    const updateTarget = (clientX: number) => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
       const dx = (clientX - cx) / (window.innerWidth / 2);
-      const dy = (clientY - cy) / (window.innerHeight / 2);
-      userTarget.x = tiltX - dy * 25;
-      userTarget.yOffset = dx * 50;
+      userTargetYOff = dx * 90;
     };
 
-    const onMouseMove = (e: MouseEvent) => updateTarget(e.clientX, e.clientY);
+    const onMouseMove = (e: MouseEvent) => updateTarget(e.clientX);
     const onTouch = (e: TouchEvent) => {
       if (e.touches.length === 0) return;
-      const t = e.touches[0];
-      updateTarget(t.clientX, t.clientY);
+      updateTarget(e.touches[0].clientX);
     };
 
     window.addEventListener('mousemove', onMouseMove);
@@ -140,14 +135,13 @@ export default function TextSphere({
       // Continuous auto-rotation around Y
       baseY = (baseY + spin * dt) % 360;
 
-      // Ease user offsets toward targets
+      // Ease user horizontal offset toward the target
       const ease = 0.08;
-      userCurrent.x += (userTarget.x - userCurrent.x) * ease;
-      userCurrent.yOffset += (userTarget.yOffset - userCurrent.yOffset) * ease;
+      userCurrentYOff += (userTargetYOff - userCurrentYOff) * ease;
 
       setRot({
-        x: userCurrent.x,
-        y: baseY + userCurrent.yOffset,
+        x: tiltX,
+        y: baseY + userCurrentYOff,
       });
       rafRef.id = requestAnimationFrame(loop);
     };
@@ -163,8 +157,7 @@ export default function TextSphere({
 
   const sphereSize = radius * 2;
   const boxSize = Math.round(radius * 2.8);
-  // Line-height multiplier — ~42% tighter than the previous 1.9.
-  const lineHeight = Math.round(fontSize * 1.1);
+  const lineHeight = Math.round(fontSize * 1.0);
 
   return (
     <div

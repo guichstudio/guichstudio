@@ -20,11 +20,13 @@ export default function SphereDemo() {
           text={MISSION_LINES.join(' ')}
           lines={MISSION_LINES}
           radius={260}
-          fontSize={18}
-          spin={18}
+          fontSize={32}
+          spin={14}
+          tiltX={-12}
+          tiltZ={-8}
         />
         <p className="mt-10 text-neutral-500 text-sm tracking-wide">
-          Move your cursor or drag your finger to tilt the sphere.
+          Move left / right to scroll the text around the sphere.
         </p>
       </main>
     </>

@@ -110,7 +110,7 @@
   </head>
   <body>
     <div id="stage" class="stage" role="img" aria-label="Rotating text sphere"></div>
-    <p class="hint">Drag your finger or move your cursor to tilt.</p>
+    <p class="hint">Move left / right to scroll the text around the sphere.</p>
 
     <script>
       const MISSION_LINES = [
@@ -120,11 +120,11 @@
         'From installations and projection mapping to films and creative direction, anywhere in the world.',
       ];
       const RADIUS = 260;
-      const FONT_SIZE = 18;
-      const SPIN = 18; // deg / second
-      const TILT_X_BASE = -8;
-      const TILT_Z = -12;
-      const LINE_HEIGHT = Math.round(FONT_SIZE * 1.1);
+      const FONT_SIZE = 32;
+      const SPIN = 14; // deg / second
+      const TILT_X = -12;
+      const TILT_Z = -8;
+      const LINE_HEIGHT = Math.round(FONT_SIZE * 1.0);
       const SPHERE_SIZE = RADIUS * 2;
       const BOX_SIZE = Math.round(RADIUS * 2.8);
       const ARC_PER_CHAR = FONT_SIZE * 0.42;
@@ -149,9 +149,10 @@
       textStage.className = 'text-stage';
       stage.appendChild(textStage);
 
-      // Measure each character with canvas so spacing is proportional to
-      // the glyph's natural width instead of a uniform angular step. This
-      // kills the visible gaps that appear around narrow letters.
+      // Measure each character with canvas and lay them out so the line
+      // wraps exactly 360° around the sphere, with each glyph taking an arc
+      // proportional to its measured width. No gaps, no uniform artefacts,
+      // and the text is visible no matter the rotation.
       function measureChars() {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
@@ -159,20 +160,20 @@
           "800 " +
           FONT_SIZE +
           "px 'Inter', ui-sans-serif, system-ui, sans-serif";
-        const tightness = 0.93;
-        const radToDeg = 180 / Math.PI;
         return MISSION_LINES.map((line) => {
           const chars = line.split('');
           const widths = chars.map((c) =>
             ctx.measureText(c === '\u00A0' ? ' ' : c).width,
           );
-          const total = widths.reduce((a, b) => a + b, 0);
+          const total = widths.reduce((a, b) => a + b, 0) || 1;
           const out = [];
-          let cursor = -total / 2;
+          let cursor = 0;
           for (let i = 0; i < chars.length; i++) {
             const centerPx = cursor + widths[i] / 2;
             cursor += widths[i];
-            out.push(((centerPx * tightness) / RADIUS) * radToDeg);
+            // Proportional 0..360° wrap, centered so the middle of the line
+            // faces the camera at rest.
+            out.push((centerPx / total) * 360 - 180);
           }
           return out;
         });
@@ -225,30 +226,24 @@
         applyMeasured();
       }
 
-      // Input: mouse + touch → user offsets layered over the auto-spin.
-      let userTargetX = TILT_X_BASE;
+      // Input: only horizontal scroll moves the sphere around its Y axis.
+      // Vertical pointer motion is ignored — the sphere never tilts up/down.
       let userTargetYOff = 0;
-      let userCurX = TILT_X_BASE;
       let userCurYOff = 0;
       let baseY = 0;
       let lastTs = null;
 
-      function updateTarget(clientX, clientY) {
+      function updateTarget(clientX) {
         const rect = stage.getBoundingClientRect();
         const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
         const dx = (clientX - cx) / (window.innerWidth / 2);
-        const dy = (clientY - cy) / (window.innerHeight / 2);
-        userTargetX = TILT_X_BASE - dy * 25;
-        userTargetYOff = dx * 50;
+        userTargetYOff = dx * 90;
       }
 
-      window.addEventListener('mousemove', (e) =>
-        updateTarget(e.clientX, e.clientY),
-      );
+      window.addEventListener('mousemove', (e) => updateTarget(e.clientX));
       const onTouch = (e) => {
         if (!e.touches || e.touches.length === 0) return;
-        updateTarget(e.touches[0].clientX, e.touches[0].clientY);
+        updateTarget(e.touches[0].clientX);
       };
       window.addEventListener('touchstart', onTouch, { passive: true });
       window.addEventListener('touchmove', onTouch, { passive: true });
@@ -261,12 +256,11 @@
         baseY = (baseY + SPIN * dt) % 360;
 
         const ease = 0.08;
-        userCurX += (userTargetX - userCurX) * ease;
         userCurYOff += (userTargetYOff - userCurYOff) * ease;
 
         textStage.style.transform =
           'rotateX(' +
-          userCurX +
+          TILT_X +
           'deg) rotateY(' +
           (baseY + userCurYOff) +
           'deg) rotateZ(' +
