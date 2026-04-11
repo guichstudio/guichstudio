@@ -79,7 +79,7 @@ export default function Hero() {
           text={MISSION_TEXT}
           lines={6}
           radius={260}
-          fontSize={45}
+          fontSize={33}
           spin={-14}
           tiltX={-12}
           tiltZ={-8}
