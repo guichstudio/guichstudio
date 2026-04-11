@@ -51,12 +51,11 @@ export default function TextSphere({
     return out;
   }, [text, linesProp]);
 
-  // Wrap mode: when spinning, force each line to span 360° so it becomes a
-  // continuous ring. When static, use natural per-char arc length so the
-  // text stays readable on the front.
-  const isSpinning = spin > 0;
-  const arcPerChar = fontSize * 0.58;
-  const degPerCharStatic = (arcPerChar / radius) * (180 / Math.PI);
+  // Natural per-char arc length so letters stay tight and line-length-
+  // independent. The spin rotation is applied at the stage level, so this
+  // band rotates around the sphere as a whole.
+  const arcPerChar = fontSize * 0.42;
+  const degPerChar = (arcPerChar / radius) * (180 / Math.PI);
 
   useEffect(() => {
     // User-driven offsets (tilt in X, Y-shift on top of auto-rotation)
@@ -119,7 +118,8 @@ export default function TextSphere({
 
   const sphereSize = radius * 2;
   const boxSize = Math.round(radius * 2.8);
-  const lineHeight = Math.round(fontSize * 1.9);
+  // Line-height multiplier — ~42% tighter than the previous 1.9.
+  const lineHeight = Math.round(fontSize * 1.1);
 
   return (
     <div
@@ -179,9 +179,10 @@ export default function TextSphere({
               }}
             >
               {line.split('').map((ch, i) => {
-                const angle = isSpinning
-                  ? (i / n) * 360
-                  : (i - (n - 1) / 2) * degPerCharStatic;
+                // Tight natural spacing, centered at angle 0 (middle of line
+                // faces camera at rest). Spin rotation is applied at the
+                // stage level, so this band rotates around the sphere.
+                const angle = (i - (n - 1) / 2) * degPerChar;
                 const display = ch === ' ' ? '\u00A0' : ch;
                 return (
                   <span
@@ -191,7 +192,7 @@ export default function TextSphere({
                       left: 0,
                       top: 0,
                       fontSize,
-                      letterSpacing: '-0.01em',
+                      letterSpacing: '-0.04em',
                       transformOrigin: '0 0 0',
                       transform: `translate(-50%, -50%) translateY(${y}px) rotateY(${angle}deg) translateZ(${radius}px)`,
                       backfaceVisibility: 'hidden',

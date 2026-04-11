@@ -93,7 +93,7 @@
         font-family: 'Inter', sans-serif;
         font-weight: 800;
         color: #0a0a0a;
-        letter-spacing: -0.01em;
+        letter-spacing: -0.04em;
         transform-origin: 0 0 0;
         backface-visibility: hidden;
         -webkit-backface-visibility: hidden;
@@ -124,9 +124,11 @@
       const SPIN = 18; // deg / second
       const TILT_X_BASE = -8;
       const TILT_Z = -12;
-      const LINE_HEIGHT = Math.round(FONT_SIZE * 1.9);
+      const LINE_HEIGHT = Math.round(FONT_SIZE * 1.1);
       const SPHERE_SIZE = RADIUS * 2;
       const BOX_SIZE = Math.round(RADIUS * 2.8);
+      const ARC_PER_CHAR = FONT_SIZE * 0.42;
+      const DEG_PER_CHAR = (ARC_PER_CHAR / RADIUS) * (180 / Math.PI);
 
       const stage = document.getElementById('stage');
       stage.style.width = BOX_SIZE + 'px';
@@ -147,15 +149,15 @@
       textStage.className = 'text-stage';
       stage.appendChild(textStage);
 
-      // Build each line — each wraps a full 360° so it becomes a continuous
-      // marquee as the sphere rotates.
+      // Build each line with tight natural letter spacing, centered at
+      // angle 0. The whole text stage is then auto-rotated by SPIN deg/s.
       MISSION_LINES.forEach((line, li) => {
         const lineEl = document.createElement('div');
         lineEl.className = 'line';
         const y = (li - (MISSION_LINES.length - 1) / 2) * LINE_HEIGHT;
         const n = line.length;
         for (let i = 0; i < n; i++) {
-          const angle = (i / n) * 360;
+          const angle = (i - (n - 1) / 2) * DEG_PER_CHAR;
           const ch = line[i] === ' ' ? '\u00A0' : line[i];
           const span = document.createElement('span');
           span.className = 'char';
