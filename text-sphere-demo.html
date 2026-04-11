@@ -134,7 +134,7 @@
       // same algorithm as the React component. 6 lines → ~62 chars each,
       // which fits nicely on a sphere of circumference 2πR without any
       // character compression.
-      const NUM_LINES = 6;
+      const NUM_LINES = 8;
       function wrapLines(text, n) {
         const words = text.trim().split(/\s+/);
         const per = Math.ceil(words.length / n);
@@ -148,19 +148,20 @@
       const MISSION_LINES = wrapLines(MISSION_TEXT, NUM_LINES);
 
       // Responsive sizing — the sphere always fits on screen and stays
-      // centered. On narrow viewports (<600px) the sphere only takes ~60%
-      // of the viewport so it doesn't eat the whole screen on mobile.
+      // centered. On narrow viewports (<600px) the sphere takes ~70% of
+      // the viewport (matching the user's red-circle target). FONT_SIZE
+      // is clamped to 14 minimum so mobile text stays readable.
       const MAX_RADIUS = 260;
       const MAX_FONT_SIZE = 32;
       const BOX_TO_R = 2.4;
       const viewportW = window.innerWidth;
-      const fillRatio = viewportW < 600 ? 0.6 : 0.92;
+      const fillRatio = viewportW < 600 ? 0.7 : 0.92;
       const scale = Math.min(
         1,
         (viewportW * fillRatio) / (MAX_RADIUS * BOX_TO_R),
       );
       const RADIUS = Math.max(80, Math.round(MAX_RADIUS * scale));
-      const FONT_SIZE = Math.max(12, Math.round(MAX_FONT_SIZE * scale));
+      const FONT_SIZE = Math.max(14, Math.round(MAX_FONT_SIZE * scale));
       // Negative = left-to-right scroll of the text around the sphere.
       const SPIN = -14;
       const TILT_X = -12;

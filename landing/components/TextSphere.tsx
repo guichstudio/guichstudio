@@ -72,13 +72,17 @@ export default function TextSphere({
       window.removeEventListener('orientationchange', onResize);
     };
   }, []);
-  const fillRatio = viewportW < 600 ? 0.6 : 0.92;
+  // Mobile: sphere fills ~70% of viewport (≈ the user's red-circle target).
+  // Desktop: sphere fills up to 92% of viewport (unchanged).
+  const fillRatio = viewportW < 600 ? 0.7 : 0.92;
   const scale = Math.min(
     1,
     (viewportW * fillRatio) / (maxRadius * BOX_TO_R_RATIO),
   );
   const radius = Math.max(80, Math.round(maxRadius * scale));
-  const fontSize = Math.max(12, Math.round(maxFontSize * scale));
+  // Clamp fontSize to 14 minimum — below that the text is unreadable on
+  // mobile even though it still fits the circumference geometrically.
+  const fontSize = Math.max(14, Math.round(maxFontSize * scale));
 
   // Split the text into lines. Caller may pass an explicit array.
   const lines = useMemo(() => {
