@@ -66,15 +66,18 @@
         left: 50%;
         top: 50%;
         border-radius: 50%;
-        overflow: hidden;
         pointer-events: none;
-        background: #222;
-        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
-      }
-      .sphere svg {
-        width: 100%;
-        height: 100%;
-        display: block;
+        background: radial-gradient(
+          circle at 35% 28%,
+          #ffffff 0%,
+          #fafafa 35%,
+          #eaeaea 70%,
+          #cfcfcf 100%
+        );
+        box-shadow:
+          0 30px 80px rgba(0, 0, 0, 0.18),
+          inset -20px -35px 70px rgba(0, 0, 0, 0.08),
+          inset 15px 20px 40px rgba(255, 255, 255, 0.65);
       }
       .text-stage {
         position: absolute;
@@ -100,9 +103,6 @@
         font-family: 'Inter', sans-serif;
         font-weight: 800;
         color: #0a0a0a;
-        text-shadow:
-          0 1px 2px rgba(255, 255, 255, 0.45),
-          0 0 3px rgba(255, 255, 255, 0.25);
         line-height: 1;
         height: 1em;
         padding: 0;
@@ -158,98 +158,13 @@
       stage.style.height = BOX_SIZE + 'px';
       stage.style.perspective = RADIUS * 5 + 'px';
 
-      // Polished-metal sphere — inline SVG texture with a bright spec,
-      // soft patina variation, fine surface noise, and a sprinkle of
-      // random curved scratches. Everything random is rolled each load.
+      // White sphere — pure CSS radial-gradient, no SVG texture.
       const sphere = document.createElement('div');
       sphere.className = 'sphere';
       sphere.style.width = SPHERE_SIZE + 'px';
       sphere.style.height = SPHERE_SIZE + 'px';
       sphere.style.marginLeft = -RADIUS + 'px';
       sphere.style.marginTop = -RADIUS + 'px';
-
-      (function buildMetalTexture() {
-        const rand = (a, b) => a + Math.random() * (b - a);
-        const randi = (a, b) => Math.floor(rand(a, b));
-        const microSeed = randi(0, 100);
-        const varSeed = randi(0, 100);
-        const numScratches = randi(80, 110);
-        let scratchSvg = '';
-        for (let i = 0; i < numScratches; i++) {
-          const x1 = rand(0, 200);
-          const y1 = rand(0, 200);
-          const len = rand(10, 85);
-          const ang = rand(0, Math.PI * 2);
-          const x2 = x1 + Math.cos(ang) * len;
-          const y2 = y1 + Math.sin(ang) * len;
-          const cx = (x1 + x2) / 2 + rand(-8, 8);
-          const cy = (y1 + y2) / 2 + rand(-8, 8);
-          const op = rand(0.08, 0.28);
-          const w = rand(0.12, 0.5);
-          const col = Math.random() > 0.3 ? '#ffffff' : '#000';
-          scratchSvg +=
-            '<path d="M' +
-            x1 +
-            ' ' +
-            y1 +
-            ' Q' +
-            cx +
-            ' ' +
-            cy +
-            ' ' +
-            x2 +
-            ' ' +
-            y2 +
-            '" stroke="' +
-            col +
-            '" stroke-opacity="' +
-            op +
-            '" stroke-width="' +
-            w +
-            '" stroke-linecap="round" fill="none"/>';
-        }
-
-        sphere.innerHTML =
-          '<svg viewBox="0 0 200 200" preserveAspectRatio="none">' +
-          '<defs>' +
-          '<radialGradient id="metal" cx="35%" cy="25%" r="82%">' +
-          '<stop offset="0%" stop-color="#f5f5f5"/>' +
-          '<stop offset="15%" stop-color="#d5d5d5"/>' +
-          '<stop offset="42%" stop-color="#8c8c8c"/>' +
-          '<stop offset="75%" stop-color="#333"/>' +
-          '<stop offset="100%" stop-color="#0c0c0c"/>' +
-          '</radialGradient>' +
-          '<radialGradient id="spec" cx="30%" cy="20%" r="25%">' +
-          '<stop offset="0%" stop-color="rgba(255,255,255,1)"/>' +
-          '<stop offset="15%" stop-color="rgba(255,255,255,0.9)"/>' +
-          '<stop offset="40%" stop-color="rgba(255,255,255,0.4)"/>' +
-          '<stop offset="75%" stop-color="rgba(255,255,255,0.1)"/>' +
-          '<stop offset="100%" stop-color="rgba(255,255,255,0)"/>' +
-          '</radialGradient>' +
-          '<filter id="micro">' +
-          '<feTurbulence type="fractalNoise" baseFrequency="2.5" numOctaves="3" seed="' +
-          microSeed +
-          '"/>' +
-          '<feColorMatrix values="0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0.3 0 0 0 -0.15"/>' +
-          '</filter>' +
-          '<filter id="vari">' +
-          '<feTurbulence type="fractalNoise" baseFrequency="0.3" numOctaves="2" seed="' +
-          varSeed +
-          '"/>' +
-          '<feColorMatrix values="0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0.4 0 0 0 -0.2"/>' +
-          '</filter>' +
-          '<filter id="blur"><feGaussianBlur stdDeviation="0.2"/></filter>' +
-          '</defs>' +
-          '<rect width="200" height="200" fill="url(#metal)"/>' +
-          '<rect width="200" height="200" filter="url(#vari)" style="mix-blend-mode:overlay;opacity:0.55"/>' +
-          '<rect width="200" height="200" filter="url(#micro)" style="mix-blend-mode:overlay;opacity:0.5"/>' +
-          '<g filter="url(#blur)">' +
-          scratchSvg +
-          '</g>' +
-          '<rect width="200" height="200" fill="url(#spec)"/>' +
-          '</svg>';
-      })();
-
       stage.appendChild(sphere);
 
       // Text stage

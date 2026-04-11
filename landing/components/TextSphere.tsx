@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useMemo, useId } from 'react';
+import { useRef, useEffect, useState, useMemo } from 'react';
 
 interface TextSphereProps {
   text?: string;
@@ -47,57 +47,6 @@ export default function TextSphere({
   const containerRef = useRef<HTMLDivElement>(null);
   const [rotY, setRotY] = useState(0);
   const [measured, setMeasured] = useState<number[][] | null>(null);
-  const reactId = useId().replace(/[:]/g, '');
-  const fId = `ts-${reactId}`;
-
-  // Polished-metal texture params — randomized client-side so each load gets
-  // a fresh surface variation pattern and a different set of fine scratches.
-  type Scratch = {
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-    cx: number;
-    cy: number;
-    op: number;
-    w: number;
-    bright: boolean;
-  };
-  const [tex, setTex] = useState<{
-    microSeed: number;
-    varSeed: number;
-    scratches: Scratch[];
-  }>({ microSeed: 12, varSeed: 7, scratches: [] });
-  useEffect(() => {
-    const rand = (a: number, b: number) => a + Math.random() * (b - a);
-    const randi = (a: number, b: number) => Math.floor(rand(a, b));
-    const scratches: Scratch[] = [];
-    const n = randi(80, 110);
-    for (let i = 0; i < n; i++) {
-      const x1 = rand(0, 200);
-      const y1 = rand(0, 200);
-      const len = rand(10, 85);
-      const ang = rand(0, Math.PI * 2);
-      const x2 = x1 + Math.cos(ang) * len;
-      const y2 = y1 + Math.sin(ang) * len;
-      scratches.push({
-        x1,
-        y1,
-        x2,
-        y2,
-        cx: (x1 + x2) / 2 + rand(-8, 8),
-        cy: (y1 + y2) / 2 + rand(-8, 8),
-        op: rand(0.08, 0.28),
-        w: rand(0.12, 0.5),
-        bright: Math.random() > 0.3,
-      });
-    }
-    setTex({
-      microSeed: randi(0, 100),
-      varSeed: randi(0, 100),
-      scratches,
-    });
-  }, []);
 
   // Responsive sizing: scale the sphere down on narrow viewports so the box
   // always fits on screen and stays centered.
@@ -354,10 +303,10 @@ export default function TextSphere({
       aria-label={text}
       role="img"
     >
-      {/* Polished-metal sphere (SVG texture inside a round clip) */}
+      {/* The white 3D-looking sphere */}
       <div
         aria-hidden="true"
-        className="absolute rounded-full pointer-events-none overflow-hidden"
+        className="absolute rounded-full pointer-events-none"
         style={{
           width: sphereSize,
           height: sphereSize,
@@ -365,99 +314,12 @@ export default function TextSphere({
           top: '50%',
           marginLeft: -radius,
           marginTop: -radius,
-          background: '#222',
-          boxShadow: '0 30px 80px rgba(0,0,0,0.45)',
+          background:
+            'radial-gradient(circle at 35% 28%, #ffffff 0%, #fafafa 35%, #eaeaea 70%, #cfcfcf 100%)',
+          boxShadow:
+            '0 30px 80px rgba(0,0,0,0.18), inset -20px -35px 70px rgba(0,0,0,0.08), inset 15px 20px 40px rgba(255,255,255,0.65)',
         }}
-      >
-        <svg
-          viewBox="0 0 200 200"
-          preserveAspectRatio="none"
-          width="100%"
-          height="100%"
-          style={{ display: 'block' }}
-        >
-          <defs>
-            {/* Metallic gradient from bright at top-left to dark at rim */}
-            <radialGradient
-              id={`${fId}-metal`}
-              cx="35%"
-              cy="25%"
-              r="82%"
-            >
-              <stop offset="0%" stopColor="#f5f5f5" />
-              <stop offset="15%" stopColor="#d5d5d5" />
-              <stop offset="42%" stopColor="#8c8c8c" />
-              <stop offset="75%" stopColor="#333" />
-              <stop offset="100%" stopColor="#0c0c0c" />
-            </radialGradient>
-            {/* Bright specular highlight */}
-            <radialGradient
-              id={`${fId}-spec`}
-              cx="30%"
-              cy="20%"
-              r="25%"
-            >
-              <stop offset="0%" stopColor="rgba(255,255,255,1)" />
-              <stop offset="15%" stopColor="rgba(255,255,255,0.9)" />
-              <stop offset="40%" stopColor="rgba(255,255,255,0.4)" />
-              <stop offset="75%" stopColor="rgba(255,255,255,0.1)" />
-              <stop offset="100%" stopColor="rgba(255,255,255,0)" />
-            </radialGradient>
-            {/* Fine "micro" surface noise */}
-            <filter id={`${fId}-micro`}>
-              <feTurbulence
-                type="fractalNoise"
-                baseFrequency="2.5"
-                numOctaves={3}
-                seed={tex.microSeed}
-              />
-              <feColorMatrix values="0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0.3 0 0 0 -0.15" />
-            </filter>
-            {/* Larger soft patina variation */}
-            <filter id={`${fId}-var`}>
-              <feTurbulence
-                type="fractalNoise"
-                baseFrequency="0.3"
-                numOctaves={2}
-                seed={tex.varSeed}
-              />
-              <feColorMatrix values="0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0.4 0 0 0 -0.2" />
-            </filter>
-            {/* Small blur for the scratch strokes */}
-            <filter id={`${fId}-blur`}>
-              <feGaussianBlur stdDeviation="0.2" />
-            </filter>
-          </defs>
-          <rect width="200" height="200" fill={`url(#${fId}-metal)`} />
-          <rect
-            width="200"
-            height="200"
-            filter={`url(#${fId}-var)`}
-            style={{ mixBlendMode: 'overlay', opacity: 0.55 }}
-          />
-          <rect
-            width="200"
-            height="200"
-            filter={`url(#${fId}-micro)`}
-            style={{ mixBlendMode: 'overlay', opacity: 0.5 }}
-          />
-          {/* Fine random scratches */}
-          <g filter={`url(#${fId}-blur)`}>
-            {tex.scratches.map((s, i) => (
-              <path
-                key={i}
-                d={`M${s.x1} ${s.y1} Q${s.cx} ${s.cy} ${s.x2} ${s.y2}`}
-                stroke={s.bright ? '#ffffff' : '#000000'}
-                strokeOpacity={s.op}
-                strokeWidth={s.w}
-                strokeLinecap="round"
-                fill="none"
-              />
-            ))}
-          </g>
-          <rect width="200" height="200" fill={`url(#${fId}-spec)`} />
-        </svg>
-      </div>
+      />
 
       {/* 3D text stage */}
       <div
@@ -494,7 +356,7 @@ export default function TextSphere({
                 return (
                   <span
                     key={i}
-                    className="absolute font-extrabold"
+                    className="absolute font-extrabold text-neutral-900"
                     style={{
                       left: 0,
                       top: 0,
@@ -505,9 +367,6 @@ export default function TextSphere({
                       padding: 0,
                       margin: 0,
                       letterSpacing: 0,
-                      color: '#0a0a0a',
-                      textShadow:
-                        '0 1px 2px rgba(255,255,255,0.45), 0 0 3px rgba(255,255,255,0.25)',
                       transformOrigin: '0 0 0',
                       // translate(-50%, -50%) MUST be last in the chain so
                       // it's applied FIRST — in the glyph's local frame
