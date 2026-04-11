@@ -69,15 +69,15 @@
         pointer-events: none;
         background: radial-gradient(
           circle at 35% 28%,
-          #ffffff 0%,
-          #fafafa 35%,
-          #eaeaea 70%,
-          #cfcfcf 100%
+          #fafafa 0%,
+          #ededed 35%,
+          #d0d0d0 70%,
+          #a8a8a8 100%
         );
         box-shadow:
-          0 30px 80px rgba(0, 0, 0, 0.18),
-          inset -20px -35px 70px rgba(0, 0, 0, 0.08),
-          inset 15px 20px 40px rgba(255, 255, 255, 0.65);
+          0 30px 80px rgba(0, 0, 0, 0.28),
+          inset -25px -40px 80px rgba(0, 0, 0, 0.18),
+          inset 15px 20px 40px rgba(255, 255, 255, 0.55);
       }
       .text-stage {
         position: absolute;
@@ -213,8 +213,13 @@
 
         void container.offsetHeight;
 
+        // Extra 2px per glyph — becomes breathing room after 360° scaling.
+        const SPACING_PX = 2;
         const widths = perLineSpans.map((spans) =>
-          spans.map((s) => Math.max(1, s.getBoundingClientRect().width)),
+          spans.map(
+            (s) =>
+              Math.max(1, s.getBoundingClientRect().width) + SPACING_PX,
+          ),
         );
 
         document.body.removeChild(container);
