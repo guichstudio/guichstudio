@@ -20,88 +20,51 @@
       min-height:82vh;
       padding:40px 20px;
       overflow:hidden;
+      /* THE KEY: perspective centered on the heading text = vanishing point */
+      perspective:1200px;
+      perspective-origin:50% 45%;
     }
     .hero h1{
-      position:relative;z-index:20;
+      position:relative;z-index:30;
       font-weight:900;
       font-size:clamp(3rem,7.5vw,7.5rem);
       letter-spacing:-0.045em;line-height:0.95;
       text-align:center;color:#000;
     }
     .hero .sub{
-      position:relative;z-index:20;
+      position:relative;z-index:30;
       margin-top:24px;font-size:16px;font-weight:400;
       color:#555;text-align:center;
     }
 
-    /* ---- Card stacks at each edge ---- */
-    .stack{
+    .card{
       position:absolute;
-      top:50%;
-      transform:translateY(-50%);
-      display:flex;
-      align-items:center;
-      z-index:5;
-    }
-    .stack.left{left:0}
-    .stack.right{right:0}
-
-    .stack .card{
-      position:absolute;
-      width:70px;
-      height:360px;
-      border-radius:3px;
-      overflow:hidden;
-      cursor:pointer;
+      width:380px;height:270px;
+      border-radius:6px;
+      overflow:hidden;cursor:pointer;
       transition:filter .3s;
+      backface-visibility:hidden;
     }
-    .stack .card:hover{filter:brightness(1.15)}
-    .stack .card video{
-      width:100%;height:100%;
-      object-fit:cover;display:block;
-      pointer-events:none;
-    }
+    .card:hover{filter:brightness(1.12)}
+    .card video{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
 
-    /* ---- Beam / triangle gradient from stack toward center ---- */
-    .beam{
-      position:absolute;
-      top:50%;
-      z-index:2;
-      pointer-events:none;
+    /* White fade overlays on inner edges so cards blend to white near text */
+    .fade-left,.fade-right{
+      position:absolute;top:0;bottom:0;
+      width:45%;z-index:25;pointer-events:none;
     }
-    .beam.left{
-      left:0;
-      width:52%;
-      height:400px;
-      transform:translateY(-50%);
-      /* Triangle pointing right — wide at left, converges to a point at right */
-      clip-path:polygon(0% 5%, 0% 95%, 100% 48%);
-      background:linear-gradient(to right, #bbb 0%, #ddd 30%, rgba(255,255,255,0) 100%);
-    }
-    .beam.right{
-      right:0;
-      width:52%;
-      height:400px;
-      transform:translateY(-50%);
-      clip-path:polygon(100% 5%, 100% 95%, 0% 48%);
-      background:linear-gradient(to left, #bbb 0%, #ddd 30%, rgba(255,255,255,0) 100%);
-    }
+    .fade-left{left:0;background:linear-gradient(to left,rgba(255,255,255,.95) 0%,transparent 65%)}
+    .fade-right{right:0;background:linear-gradient(to right,rgba(255,255,255,.95) 0%,transparent 65%)}
 
-    @media(max-width:900px){
-      .stack,.beam{display:none}
-    }
+    @media(max-width:900px){.card,.fade-left,.fade-right{display:none}}
   </style>
 </head>
 <body>
   <nav class="nav"><span>BuildLore</span><a href="#">Work</a></nav>
-  <section class="hero">
-    <!-- Gradient beams (behind everything) -->
-    <div class="beam left"></div>
-    <div class="beam right"></div>
-
-    <!-- Card stacks at edges -->
-    <div class="stack left" id="stack-left"></div>
-    <div class="stack right" id="stack-right"></div>
+  <section class="hero" id="hero">
+    <!-- White fades near the text -->
+    <div class="fade-left"></div>
+    <div class="fade-right"></div>
 
     <h1>Retain attention.<br>Build brand.</h1>
     <p class="sub">Narrative-led branding, video production, and content for tech & Web3.</p>
@@ -121,49 +84,62 @@
       'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-3.mp4',
     ];
 
-    // Build a tight stack of 5 cards at one edge.
-    // Cards are offset by ~14px horizontally, darkest at the outside edge.
-    function buildStack(el, side, vids) {
-      var n = vids.length;
-      var offset = 14; // px between each card's left edge
-      var shades = [40, 80, 120, 165, 210]; // dark → light toward center
+    var hero = document.getElementById('hero');
+    var vw = window.innerWidth;
+    var heroH = hero.offsetHeight;
+    var centerY = heroH * 0.45; // match perspective-origin Y
 
-      for (var i = 0; i < n; i++) {
-        var c = document.createElement('div');
-        c.className = 'card';
+    // LEFT cards: positioned left of center, rotateY positive (face right toward center)
+    // transform-origin: right center so the right edge (inner) is the pivot
+    // Card 0 = outermost (most rotated, at viewport left edge)
+    // Card 4 = innermost (least rotated, closest to text)
+    var leftConf = [
+      { x: -180, ry: 78, z: 1 },
+      { x: -90,  ry: 68, z: 2 },
+      { x: 10,   ry: 55, z: 3 },
+      { x: 110,  ry: 40, z: 4 },
+      { x: 220,  ry: 22, z: 5 },
+    ];
 
-        // Position: outermost card at edge, each next one offset inward
-        if (side === 'left') {
-          c.style.left = (i * offset) + 'px';
-        } else {
-          c.style.right = (i * offset) + 'px';
-        }
+    // RIGHT cards: mirror — rotateY negative, transform-origin: left center
+    var rightConf = [
+      { x: vw - 200, ry: -78, z: 1 },
+      { x: vw - 290, ry: -68, z: 2 },
+      { x: vw - 390, ry: -55, z: 3 },
+      { x: vw - 490, ry: -40, z: 4 },
+      { x: vw - 600, ry: -22, z: 5 },
+    ];
 
-        // Z-index: outermost on top (visually in front)
-        // Actually inner cards should be in front (they overlap the outer ones)
-        // In the ref: inner (lighter) cards are IN FRONT of outer (darker) cards
-        c.style.zIndex = i + 1;
+    function makeCard(src, x, ry, z, originSide, delay) {
+      var c = document.createElement('div');
+      c.className = 'card';
+      c.style.left = x + 'px';
+      c.style.top = (centerY - 135) + 'px'; // vertically centered on vanishing point
+      c.style.transform = 'rotateY(' + ry + 'deg)';
+      c.style.transformOrigin = originSide + ' center';
+      c.style.zIndex = z;
 
-        // Fallback bg color (shown until video loads)
-        var s = shades[i];
-        c.style.background = 'rgb('+s+','+s+','+s+')';
+      var v = document.createElement('video');
+      v.src = src; v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
+      v.setAttribute('playsinline','');
+      c.appendChild(v);
 
-        var v = document.createElement('video');
-        v.src = vids[i];
-        v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
-        v.setAttribute('playsinline','');
-        c.appendChild(v);
+      c.style.opacity = '0';
+      setTimeout(function(){ c.style.transition='opacity .5s'; c.style.opacity='1'; }, delay);
 
-        // Stagger entrance
-        c.style.opacity = '0';
-        (function(el,d){setTimeout(function(){el.style.transition='opacity .4s';el.style.opacity='1'},d)})(c,80+i*60);
-
-        el.appendChild(c);
-      }
+      hero.appendChild(c);
     }
 
-    buildStack(document.getElementById('stack-left'), 'left', V.slice(0,5));
-    buildStack(document.getElementById('stack-right'), 'right', V.slice(5,10));
+    // Build left fan
+    for (var i = 0; i < 5; i++) {
+      var lc = leftConf[i];
+      makeCard(V[i], lc.x, lc.ry, lc.z, 'right', 100 + i * 80);
+    }
+    // Build right fan
+    for (var i = 0; i < 5; i++) {
+      var rc = rightConf[i];
+      makeCard(V[5+i], rc.x, rc.ry, rc.z, 'left', 100 + i * 80);
+    }
   </script>
 </body>
 </html>
