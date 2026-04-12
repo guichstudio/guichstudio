@@ -12,9 +12,9 @@ const sectionAnim = {
 
 const MISSION_LINES = [
   'Visual experience studio for brands, founders and product leaders in Web3 and live events.',
-  'We move fast, delivering high-quality brands and products that consistently stay ahead globally.',
-  'Enhanced by Web3 expertise, applied AI, and structured yet flexible processes for scalable execution.',
-  'From installations and projection mapping to films and creative direction, anywhere in the world.',
+  'We move fast, delivering high-quality brands and products that consistently stay ahead.',
+  'Shaped by Web3 expertise, AI, and Branding yet flexible processes for scalable execution.',
+  'From live installations and mapping to films and creative direction, anywhere in the world.',
 ];
 const MISSION_TEXT = MISSION_LINES.join(' ');
 

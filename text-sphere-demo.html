@@ -129,9 +129,9 @@
     <script>
       const MISSION_LINES = [
         'Visual experience studio for brands, founders and product leaders in Web3 and live events.',
-        'We move fast, delivering high-quality brands and products that consistently stay ahead globally.',
-        'Enhanced by Web3 expertise, applied AI, and structured yet flexible processes for scalable execution.',
-        'From installations and projection mapping to films and creative direction, anywhere in the world.',
+        'We move fast, delivering high-quality brands and products that consistently stay ahead.',
+        'Shaped by Web3 expertise, AI, and Branding yet flexible processes for scalable execution.',
+        'From live installations and mapping to films and creative direction, anywhere in the world.',
       ];
 
       // Responsive sizing — the sphere always fits on screen and stays
@@ -220,13 +220,16 @@
 
         void container.offsetHeight;
 
-        // Extra 2px per glyph — becomes breathing room after 360° scaling.
-        const SPACING_PX = 0;
-        const widths = perLineSpans.map((spans) =>
-          spans.map(
-            (s) =>
-              Math.max(1, s.getBoundingClientRect().width) + SPACING_PX,
-          ),
+        // Tighten letters: subtract 3px from non-space glyphs. When the
+        // line is scaled to fill 360°, the slack goes into word spaces.
+        const LETTER_TIGHTEN = 3;
+        const widths = perLineSpans.map((spans, li) =>
+          spans.map((s, ci) => {
+            const w = Math.max(1, s.getBoundingClientRect().width);
+            const ch = MISSION_LINES[li]?.[ci] ?? '';
+            const isSpace = ch === ' ' || ch === '\u00A0';
+            return isSpace ? w : Math.max(1, w - LETTER_TIGHTEN);
+          }),
         );
 
         document.body.removeChild(container);
