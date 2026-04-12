@@ -33,49 +33,43 @@
         color:#555;text-align:center;
       }
 
-      /* Fan wrapper — holds the 5 cards on each side, applies the
-         gradient mask so cards blend to white at both ends. */
+      /* Fan wrapper — perspective corridor converging toward the text */
       .fan-wrap{
         position:absolute;
         top:50%;
-        height:420px;
         transform:translateY(-50%);
         pointer-events:none;
-        perspective:1200px;
       }
       .fan-wrap.left{
         left:0;
-        /* fade: left edge (outer) → solid → right edge (near text) */
-        -webkit-mask-image:linear-gradient(to right,transparent 0%,black 12%,black 55%,transparent 100%);
-        mask-image:linear-gradient(to right,transparent 0%,black 12%,black 55%,transparent 100%);
+        /* Vanishing point at the right edge (toward text) */
+        perspective:700px;
+        perspective-origin:100% 50%;
+        /* Blend: fade at outer edge + fade toward text */
+        -webkit-mask-image:linear-gradient(to right,transparent 0%,black 8%,black 50%,transparent 100%);
+        mask-image:linear-gradient(to right,transparent 0%,black 8%,black 50%,transparent 100%);
       }
       .fan-wrap.right{
         right:0;
-        -webkit-mask-image:linear-gradient(to left,transparent 0%,black 12%,black 55%,transparent 100%);
-        mask-image:linear-gradient(to left,transparent 0%,black 12%,black 55%,transparent 100%);
+        perspective:700px;
+        perspective-origin:0% 50%;
+        -webkit-mask-image:linear-gradient(to left,transparent 0%,black 8%,black 50%,transparent 100%);
+        mask-image:linear-gradient(to left,transparent 0%,black 8%,black 50%,transparent 100%);
       }
 
       .card{
         position:absolute;
-        border-radius:5px;
         overflow:hidden;
         cursor:pointer;
         pointer-events:auto;
         transform-style:preserve-3d;
-        transition:box-shadow .3s,filter .3s;
+        transition:filter .3s;
       }
-      .card:hover{
-        box-shadow:0 20px 60px rgba(0,0,0,.3)!important;
-        filter:brightness(1.08);
-      }
+      .card:hover{filter:brightness(1.1)}
       .card video{
         width:100%;height:100%;
         object-fit:cover;display:block;
         pointer-events:none;
-      }
-      .card .ov{
-        position:absolute;inset:0;
-        pointer-events:none;border-radius:5px;
       }
 
       @media(max-width:1024px){.fan-wrap{display:none}}
@@ -105,41 +99,47 @@
       ];
 
       var vw = window.innerWidth;
-      // Fan wrapper width: from viewport edge to ~40% from center
+      // Fan wrapper width: ~42% of viewport
       var fanW = Math.round(vw * 0.42);
       document.getElementById('fan-left').style.width = fanW + 'px';
       document.getElementById('fan-right').style.width = fanW + 'px';
+      document.getElementById('fan-left').style.height = '480px';
+      document.getElementById('fan-right').style.height = '480px';
 
       function buildFan(container, side, videos) {
         var count = videos.length;
-        var flip = side === 'right' ? -1 : 1;
-        var wrapW = container.offsetWidth || fanW;
-        var wrapH = 420;
+
+        // All cards same 3D size (tall portrait like the ref)
+        var cardW = 170;
+        var cardH = 380;
+
+        // Cards packed tightly from the outer edge toward center.
+        // Card 0 = at the outer edge (closest to camera, biggest visually)
+        // Card 4 = near center (farthest from camera, smallest visually)
+        // The container's perspective makes further cards (higher translateZ magnitude)
+        // appear smaller — creating the corridor/tunnel convergence effect.
+
+        var gap = 18; // tight horizontal gap between cards
 
         for (var i = 0; i < count; i++) {
-          var t = i / (count - 1 || 1); // 0 → 1
+          var t = i / (count - 1 || 1); // 0 = edge, 1 = center
 
-          // 16:9 cards — largest closest to center, smallest at edge
-          var cardW = Math.round(320 - t * 160);  // 320 → 160
-          var cardH = Math.round(cardW * 9 / 16);  // 16:9
-
-          // Position inside wrapper: card 0 at inner edge, card 4 at outer edge
-          // For left: inner = right side of wrapper, outer = left side
-          var spacing = (wrapW - cardW * 0.3) / (count - 1); // tight overlap
+          // Horizontal position: card 0 at outer edge, card 4 near inner edge
           var x;
           if (side === 'left') {
-            // Card 0 at right of wrapper (near center), card 4 at left (edge)
-            x = wrapW - cardW - i * spacing;
+            x = i * (cardW * 0.28 + gap); // tight overlap
           } else {
-            x = i * spacing;
+            x = fanW - cardW - i * (cardW * 0.28 + gap);
           }
-          var y = (wrapH - cardH) / 2 + t * 15; // slight vertical drift
 
-          // Rotation: more at the edges
-          var ry = (5 + t * 55) * flip;
+          // Z depth: card 0 at z=0 (camera), card 4 pushed deep into screen
+          var z = -i * 120;
 
-          // Dark overlay increases toward edges
-          var dark = t * 0.5;
+          // Vertical center
+          var y = (480 - cardH) / 2;
+
+          // Shading: edge (i=0) = darkest, center (i=4) = lightest
+          var shade = Math.round(60 + t * 160); // rgb 60 → 220
 
           var card = document.createElement('div');
           card.className = 'card';
@@ -147,31 +147,25 @@
           card.style.height = cardH + 'px';
           card.style.left = x + 'px';
           card.style.top = y + 'px';
-          card.style.transform = 'rotateY(' + ry + 'deg)';
-          card.style.transformOrigin = side === 'left' ? 'right center' : 'left center';
+          card.style.transform = 'translateZ(' + z + 'px)';
           card.style.zIndex = count - i;
-          card.style.boxShadow = '0 8px 30px rgba(0,0,0,' + (0.06 + t * 0.15) + ')';
+          card.style.background = 'rgb(' + shade + ',' + shade + ',' + shade + ')';
 
           var vid = document.createElement('video');
           vid.src = videos[i];
           vid.muted = true; vid.loop = true; vid.playsInline = true; vid.autoplay = true;
           vid.setAttribute('playsinline', '');
+          vid.style.opacity = '0';
+          vid.addEventListener('loadeddata', function() { this.style.opacity = '1'; this.style.transition = 'opacity .5s'; });
           card.appendChild(vid);
-
-          if (dark > 0.02) {
-            var ov = document.createElement('div');
-            ov.className = 'ov';
-            ov.style.background = 'rgba(0,0,0,' + dark + ')';
-            card.appendChild(ov);
-          }
 
           card.style.opacity = '0';
           (function(c, d) {
             setTimeout(function() {
-              c.style.transition = 'opacity .6s ease';
+              c.style.transition = 'opacity .5s ease';
               c.style.opacity = '1';
             }, d);
-          })(card, 200 + i * 100);
+          })(card, 150 + i * 80);
 
           container.appendChild(card);
         }
