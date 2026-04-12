@@ -188,18 +188,41 @@ export default function TextSphere({
       const widths = measureDOM();
       if (!widths) return;
 
-      // Each line is scaled to fill exactly 360° of arc so there is never
-      // a visible gap at the line's seam. Letter spacing is adjusted
-      // per-line: a shorter line stretches, a longer line compresses. The
-      // first and last chars then meet exactly at the back of the sphere.
-      const angles = widths.map((lineWidths) => {
-        const total = lineWidths.reduce((a, b) => a + b, 0) || 1;
+      // Every line EXCEPT the last fills exactly 360°. The last line
+      // uses the same letter density as the longest previous line so it
+      // doesn't get stretched when it has fewer characters — it just
+      // covers a shorter arc with a gap at the back of the sphere.
+      const totals = widths.map((w) => w.reduce((a, b) => a + b, 0) || 1);
+      const longestTotal =
+        widths.length > 1
+          ? Math.max(...totals.slice(0, -1))
+          : totals[0];
+
+      const angles = widths.map((lineWidths, li) => {
+        const total = totals[li];
+        const isLast = li === widths.length - 1 && widths.length > 1;
+
+        if (isLast) {
+          // Same density as the longest previous line → no stretch.
+          const degPerPx = 360 / longestTotal;
+          const lineArc = total * degPerPx;
+          const start = -lineArc / 2;
+          const out: number[] = [];
+          let cursor = 0;
+          for (let i = 0; i < lineWidths.length; i++) {
+            const centerPx = cursor + lineWidths[i] / 2;
+            cursor += lineWidths[i];
+            out.push(start + centerPx * degPerPx);
+          }
+          return out;
+        }
+
+        // Normal lines: fill exactly 360°, centered on angle 0.
         const out: number[] = [];
         let cursor = 0;
         for (let i = 0; i < lineWidths.length; i++) {
           const centerPx = cursor + lineWidths[i] / 2;
           cursor += lineWidths[i];
-          // centered on 0 (middle of the line faces the camera at rest)
           out.push((centerPx / total) * 360 - 180);
         }
         return out;
