@@ -220,16 +220,10 @@
 
         void container.offsetHeight;
 
-        // Tighten letters: subtract 3px from non-space glyphs. When the
-        // line is scaled to fill 360°, the slack goes into word spaces.
-        const LETTER_TIGHTEN = 3;
-        const widths = perLineSpans.map((spans, li) =>
-          spans.map((s, ci) => {
-            const w = Math.max(1, s.getBoundingClientRect().width);
-            const ch = MISSION_LINES[li]?.[ci] ?? '';
-            const isSpace = ch === ' ' || ch === '\u00A0';
-            return isSpace ? w : Math.max(1, w - LETTER_TIGHTEN);
-          }),
+        // Use the natural measured widths — the proportional 360° fill
+        // then reproduces the font's own letter spacing uniformly.
+        const widths = perLineSpans.map((spans) =>
+          spans.map((s) => Math.max(1, s.getBoundingClientRect().width)),
         );
 
         document.body.removeChild(container);

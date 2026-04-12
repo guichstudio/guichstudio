@@ -170,18 +170,10 @@ export default function TextSphere({
       // Force layout so rects are fresh.
       void container.offsetHeight;
 
-      // Tighten letters by subtracting LETTER_TIGHTEN px from every non-
-      // space glyph width. When the line is then scaled to fill 360°, the
-      // slack redistributes into the word spaces, making letters denser
-      // and word gaps wider — one sentence still fills exactly one ring.
-      const LETTER_TIGHTEN = 3;
-      const widths = perLineSpans.map((spans, lineIdx) =>
-        spans.map((s, charIdx) => {
-          const w = Math.max(1, s.getBoundingClientRect().width);
-          const ch = lines[lineIdx]?.[charIdx] ?? '';
-          const isSpace = ch === ' ' || ch === '\u00A0';
-          return isSpace ? w : Math.max(1, w - LETTER_TIGHTEN);
-        }),
+      // Use the natural measured widths — the proportional 360° fill
+      // then reproduces the font's own letter spacing uniformly.
+      const widths = perLineSpans.map((spans) =>
+        spans.map((s) => Math.max(1, s.getBoundingClientRect().width)),
       );
 
       document.body.removeChild(container);
