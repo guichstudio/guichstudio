@@ -15,40 +15,57 @@
 
       .hero{
         position:relative;
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        justify-content:center;
+        display:flex;flex-direction:column;
+        align-items:center;justify-content:center;
         min-height:85vh;
         padding:40px 20px;
-        overflow:visible;
       }
       .hero h1{
         position:relative;z-index:20;
         font-weight:900;
         font-size:clamp(3rem,7.5vw,7.5rem);
-        letter-spacing:-0.045em;
-        line-height:0.95;
-        text-align:center;
-        color:#000;
+        letter-spacing:-0.045em;line-height:0.95;
+        text-align:center;color:#000;
       }
       .hero .sub{
         position:relative;z-index:20;
-        margin-top:24px;
-        font-size:16px;font-weight:400;color:#555;
-        text-align:center;letter-spacing:-0.01em;
+        margin-top:24px;font-size:16px;font-weight:400;
+        color:#555;text-align:center;
       }
 
-      /* Each card is positioned absolutely inside .hero */
+      /* Fan wrapper — holds the 5 cards on each side, applies the
+         gradient mask so cards blend to white at both ends. */
+      .fan-wrap{
+        position:absolute;
+        top:50%;
+        height:420px;
+        transform:translateY(-50%);
+        pointer-events:none;
+        perspective:1200px;
+      }
+      .fan-wrap.left{
+        left:0;
+        /* fade: left edge (outer) → solid → right edge (near text) */
+        -webkit-mask-image:linear-gradient(to right,transparent 0%,black 12%,black 55%,transparent 100%);
+        mask-image:linear-gradient(to right,transparent 0%,black 12%,black 55%,transparent 100%);
+      }
+      .fan-wrap.right{
+        right:0;
+        -webkit-mask-image:linear-gradient(to left,transparent 0%,black 12%,black 55%,transparent 100%);
+        mask-image:linear-gradient(to left,transparent 0%,black 12%,black 55%,transparent 100%);
+      }
+
       .card{
         position:absolute;
-        border-radius:6px;
+        border-radius:5px;
         overflow:hidden;
         cursor:pointer;
+        pointer-events:auto;
+        transform-style:preserve-3d;
         transition:box-shadow .3s,filter .3s;
       }
       .card:hover{
-        box-shadow:0 25px 70px rgba(0,0,0,.3)!important;
+        box-shadow:0 20px 60px rgba(0,0,0,.3)!important;
         filter:brightness(1.08);
       }
       .card video{
@@ -56,17 +73,19 @@
         object-fit:cover;display:block;
         pointer-events:none;
       }
-      .card .overlay{
+      .card .ov{
         position:absolute;inset:0;
-        pointer-events:none;border-radius:6px;
+        pointer-events:none;border-radius:5px;
       }
 
-      @media(max-width:1024px){.card{display:none}}
+      @media(max-width:1024px){.fan-wrap{display:none}}
     </style>
   </head>
   <body>
     <nav class="nav"><span>BuildLore</span><a href="#">Work</a></nav>
     <section class="hero" id="hero">
+      <div class="fan-wrap left" id="fan-left"></div>
+      <div class="fan-wrap right" id="fan-right"></div>
       <h1>Retain attention.<br>Build brand.</h1>
       <p class="sub">Narrative-led branding, video production, and content for tech & Web3.</p>
     </section>
@@ -85,81 +104,81 @@
         'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-3.mp4',
       ];
 
-      var hero=document.getElementById('hero');
-      var vw=window.innerWidth;
-      var vh=hero.offsetHeight;
-      var cx=vw/2; // center x
+      var vw = window.innerWidth;
+      // Fan wrapper width: from viewport edge to ~40% from center
+      var fanW = Math.round(vw * 0.42);
+      document.getElementById('fan-left').style.width = fanW + 'px';
+      document.getElementById('fan-right').style.width = fanW + 'px';
 
-      // Reference image analysis:
-      // - Card 0 (closest to text): large, light, barely rotated, ~30% from center
-      // - Card 4 (edge): small, dark, heavily rotated, at viewport edge
-      // Left cards go from center-left outward to left edge
-      // Right cards mirror
+      function buildFan(container, side, videos) {
+        var count = videos.length;
+        var flip = side === 'right' ? -1 : 1;
+        var wrapW = container.offsetWidth || fanW;
+        var wrapH = 420;
 
-      function makeCard(videoUrl,x,y,w,h,rotY,darkness,z,delay){
-        var card=document.createElement('div');
-        card.className='card';
-        card.style.width=w+'px';
-        card.style.height=h+'px';
-        card.style.left=x+'px';
-        card.style.top=y+'px';
-        card.style.transform='perspective(1200px) rotateY('+rotY+'deg)';
-        card.style.transformOrigin=rotY>0?'left center':'right center';
-        card.style.zIndex=z;
-        card.style.boxShadow='0 10px 40px rgba(0,0,0,'+(0.08+darkness*0.2)+')';
+        for (var i = 0; i < count; i++) {
+          var t = i / (count - 1 || 1); // 0 → 1
 
-        var vid=document.createElement('video');
-        vid.src=videoUrl;
-        vid.muted=true;vid.loop=true;vid.playsInline=true;vid.autoplay=true;
-        vid.setAttribute('playsinline','');
-        card.appendChild(vid);
+          // 16:9 cards — largest closest to center, smallest at edge
+          var cardW = Math.round(320 - t * 160);  // 320 → 160
+          var cardH = Math.round(cardW * 9 / 16);  // 16:9
 
-        if(darkness>0.02){
-          var ov=document.createElement('div');
-          ov.className='overlay';
-          ov.style.background='rgba(0,0,0,'+darkness+')';
-          card.appendChild(ov);
+          // Position inside wrapper: card 0 at inner edge, card 4 at outer edge
+          // For left: inner = right side of wrapper, outer = left side
+          var spacing = (wrapW - cardW * 0.3) / (count - 1); // tight overlap
+          var x;
+          if (side === 'left') {
+            // Card 0 at right of wrapper (near center), card 4 at left (edge)
+            x = wrapW - cardW - i * spacing;
+          } else {
+            x = i * spacing;
+          }
+          var y = (wrapH - cardH) / 2 + t * 15; // slight vertical drift
+
+          // Rotation: more at the edges
+          var ry = (5 + t * 55) * flip;
+
+          // Dark overlay increases toward edges
+          var dark = t * 0.5;
+
+          var card = document.createElement('div');
+          card.className = 'card';
+          card.style.width = cardW + 'px';
+          card.style.height = cardH + 'px';
+          card.style.left = x + 'px';
+          card.style.top = y + 'px';
+          card.style.transform = 'rotateY(' + ry + 'deg)';
+          card.style.transformOrigin = side === 'left' ? 'right center' : 'left center';
+          card.style.zIndex = count - i;
+          card.style.boxShadow = '0 8px 30px rgba(0,0,0,' + (0.06 + t * 0.15) + ')';
+
+          var vid = document.createElement('video');
+          vid.src = videos[i];
+          vid.muted = true; vid.loop = true; vid.playsInline = true; vid.autoplay = true;
+          vid.setAttribute('playsinline', '');
+          card.appendChild(vid);
+
+          if (dark > 0.02) {
+            var ov = document.createElement('div');
+            ov.className = 'ov';
+            ov.style.background = 'rgba(0,0,0,' + dark + ')';
+            card.appendChild(ov);
+          }
+
+          card.style.opacity = '0';
+          (function(c, d) {
+            setTimeout(function() {
+              c.style.transition = 'opacity .6s ease';
+              c.style.opacity = '1';
+            }, d);
+          })(card, 200 + i * 100);
+
+          container.appendChild(card);
         }
-
-        card.style.opacity='0';
-        setTimeout(function(){
-          card.style.transition='opacity .7s ease';
-          card.style.opacity='1';
-        },delay);
-
-        hero.appendChild(card);
       }
 
-      // Card dimensions & positions — tuned to match the ref
-      // Index 0 = closest to center, 4 = at viewport edge
-      var centerY=vh/2;
-
-      // LEFT SIDE (5 cards) — cards fan left, rotateY positive (turning left face toward viewer)
-      for(var i=0;i<5;i++){
-        var t=i/4;
-        var w=280-t*130;   // 280 → 150
-        var h=380-t*140;   // 380 → 240
-        // x: start near center (~35% from left), spread to left edge
-        var x=cx-320-i*110;
-        var y=centerY-h/2-10+t*20;
-        var ry=5+t*55;     // 5° → 60°
-        var dark=t*0.5;    // 0 → 0.5
-        var z=10-i;
-        makeCard(VIDEOS[i],x,y,w,h,ry,dark,z,200+i*100);
-      }
-
-      // RIGHT SIDE (5 cards) — mirror
-      for(var i=0;i<5;i++){
-        var t=i/4;
-        var w=280-t*130;
-        var h=380-t*140;
-        var x=cx+320-w+i*110;
-        var y=centerY-h/2-10+t*20;
-        var ry=-(5+t*55);
-        var dark=t*0.5;
-        var z=10-i;
-        makeCard(VIDEOS[5+i],x,y,w,h,ry,dark,z,200+i*100);
-      }
+      buildFan(document.getElementById('fan-left'), 'left', VIDEOS.slice(0, 5));
+      buildFan(document.getElementById('fan-right'), 'right', VIDEOS.slice(5, 10));
     </script>
   </body>
 </html>
