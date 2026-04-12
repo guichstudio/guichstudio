@@ -78,16 +78,16 @@
       pointer-events: none;
     }
 
-    /* White gradient fades near the text so cards blend out */
+    /* White gradient fades — wider and stronger blend to white */
     .fade {
       position: absolute;
       top: 0; bottom: 0;
-      width: 30%;
+      width: 42%;
       z-index: 25;
       pointer-events: none;
     }
-    .fade-l { left: 20%; background: linear-gradient(to left, rgba(255,255,255,0.97), transparent) }
-    .fade-r { right: 20%; background: linear-gradient(to right, rgba(255,255,255,0.97), transparent) }
+    .fade-l { left: 12%; background: linear-gradient(to left, rgba(255,255,255,1) 10%, rgba(255,255,255,0.9) 40%, transparent 100%) }
+    .fade-r { right: 12%; background: linear-gradient(to right, rgba(255,255,255,1) 10%, rgba(255,255,255,0.9) 40%, transparent 100%) }
 
     @media (max-width: 1024px) { .card, .fade { display: none } }
   </style>
@@ -108,11 +108,11 @@
       'https://d8clex4mautkm.cloudfront.net/video-landing/projection/pressiat.mp4',
       'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/eterna.mp4',
       'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-2.mp4',
-      'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-2.mp4',
+      'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-1.mp4',
+      'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-2.mp4',
       'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-1.mp4',
       'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-2.mp4',
       'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/pump-fun.mp4',
-      'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-3.mp4',
     ];
 
     var hero = document.getElementById('hero');
@@ -124,7 +124,7 @@
     // ---- CONFIG ----
     var CARD_W = 360;
     var CARD_H = 260;
-    var ROTATE_Y = 55;          // same angle for every card
+    var ROTATE_Y = 72;          // same angle for every card (+30% from 55)
     var CARD_SPACING = 70;      // horizontal offset between each card's anchor
     var COUNT = 5;              // cards per side
     var INNER_GAP = 280;        // half-width of the clear zone around the text
