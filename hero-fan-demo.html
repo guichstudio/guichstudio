@@ -1,129 +1,169 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Hero Fan — BuildLore</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800;900&display=swap" media="print" onload="this.media='all'" />
-    <style>
-      *{box-sizing:border-box;margin:0;padding:0}
-      html,body{font-family:'Inter',system-ui,sans-serif;background:#fff;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-      .nav{display:flex;justify-content:space-between;padding:20px 48px;font-weight:700;font-size:18px}
-      .nav a{text-decoration:none;color:#000}
-      .hero{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:85vh;padding:40px 20px}
-      .hero h1{position:relative;z-index:20;font-weight:900;font-size:clamp(3rem,7.5vw,7.5rem);letter-spacing:-0.045em;line-height:0.95;text-align:center;color:#000}
-      .hero .sub{position:relative;z-index:20;margin-top:24px;font-size:16px;font-weight:400;color:#555;text-align:center}
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Hero Fan — BuildLore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800;900&display=swap" media="print" onload="this.media='all'"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{font-family:'Inter',system-ui,sans-serif;background:#fff;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    .nav{display:flex;justify-content:space-between;padding:20px 48px;font-weight:700;font-size:18px}
+    .nav a{text-decoration:none;color:#000}
 
-      /* Fan wrapper — a perspective stage. Cards inside are flat rectangles
-         pushed back in Z. The perspective foreshortening creates the wedge. */
-      .fan{
-        position:absolute;
-        top:50%;
-        width:46vw;
-        height:480px;
-        transform:translateY(-50%);
-        pointer-events:none;
-        transform-style:preserve-3d;
-      }
-      .fan.left{
-        left:-2vw;
-        perspective:550px;
-        perspective-origin:right center;
-        -webkit-mask-image:linear-gradient(to right,transparent 0%,black 5%,black 45%,transparent 95%);
-        mask-image:linear-gradient(to right,transparent 0%,black 5%,black 45%,transparent 95%);
-      }
-      .fan.right{
-        right:-2vw;
-        perspective:550px;
-        perspective-origin:left center;
-        -webkit-mask-image:linear-gradient(to left,transparent 0%,black 5%,black 45%,transparent 95%);
-        mask-image:linear-gradient(to left,transparent 0%,black 5%,black 45%,transparent 95%);
-      }
+    .hero{
+      position:relative;
+      display:flex;flex-direction:column;
+      align-items:center;justify-content:center;
+      min-height:82vh;
+      padding:40px 20px;
+      overflow:hidden;
+    }
+    .hero h1{
+      position:relative;z-index:20;
+      font-weight:900;
+      font-size:clamp(3rem,7.5vw,7.5rem);
+      letter-spacing:-0.045em;line-height:0.95;
+      text-align:center;color:#000;
+    }
+    .hero .sub{
+      position:relative;z-index:20;
+      margin-top:24px;font-size:16px;font-weight:400;
+      color:#555;text-align:center;
+    }
 
-      .card{
-        position:absolute;
-        width:200px;
-        height:440px;
-        overflow:hidden;
-        border-radius:4px;
-        cursor:pointer;
-        pointer-events:auto;
-        transition:filter .3s;
-      }
-      .card:hover{filter:brightness(1.12)}
-      .card video{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+    /* ---- Card stacks at each edge ---- */
+    .stack{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      display:flex;
+      align-items:center;
+      z-index:5;
+    }
+    .stack.left{left:0}
+    .stack.right{right:0}
 
-      @media(max-width:1024px){.fan{display:none}}
-    </style>
-  </head>
-  <body>
-    <nav class="nav"><span>BuildLore</span><a href="#">Work</a></nav>
-    <section class="hero">
-      <div class="fan left" id="fan-left"></div>
-      <div class="fan right" id="fan-right"></div>
-      <h1>Retain attention.<br>Build brand.</h1>
-      <p class="sub">Narrative-led branding, video production, and content for tech & Web3.</p>
-    </section>
-    <script>
-      var V=[
-        'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-1.mp4',
-        'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-1.mp4',
-        'https://d8clex4mautkm.cloudfront.net/video-landing/projection/pressiat.mp4',
-        'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/eterna.mp4',
-        'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-2.mp4',
-        'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-2.mp4',
-        'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-1.mp4',
-        'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-2.mp4',
-        'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/pump-fun.mp4',
-        'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-3.mp4',
-      ];
+    .stack .card{
+      position:absolute;
+      width:70px;
+      height:360px;
+      border-radius:3px;
+      overflow:hidden;
+      cursor:pointer;
+      transition:filter .3s;
+    }
+    .stack .card:hover{filter:brightness(1.15)}
+    .stack .card video{
+      width:100%;height:100%;
+      object-fit:cover;display:block;
+      pointer-events:none;
+    }
 
-      // Build one side: 5 cards side-by-side, each pushed further back in Z.
-      // The container's perspective does the foreshortening — outer cards appear
-      // big, inner cards appear tiny, creating the wedge/corridor from the ref.
-      function fan(el, side, vids) {
-        var n = vids.length;
-        var step = 55;     // horizontal gap between card left edges
-        var zStep = 120;   // depth step per card
-        var h = 440;
-        var y = (480 - h) / 2;
+    /* ---- Beam / triangle gradient from stack toward center ---- */
+    .beam{
+      position:absolute;
+      top:50%;
+      z-index:2;
+      pointer-events:none;
+    }
+    .beam.left{
+      left:0;
+      width:52%;
+      height:400px;
+      transform:translateY(-50%);
+      /* Triangle pointing right — wide at left, converges to a point at right */
+      clip-path:polygon(0% 5%, 0% 95%, 100% 48%);
+      background:linear-gradient(to right, #bbb 0%, #ddd 30%, rgba(255,255,255,0) 100%);
+    }
+    .beam.right{
+      right:0;
+      width:52%;
+      height:400px;
+      transform:translateY(-50%);
+      clip-path:polygon(100% 5%, 100% 95%, 0% 48%);
+      background:linear-gradient(to left, #bbb 0%, #ddd 30%, rgba(255,255,255,0) 100%);
+    }
 
-        for (var i = 0; i < n; i++) {
-          var x, z;
-          if (side === 'left') {
-            // Card 0 at the outer (left) edge = closest to camera
-            x = i * step;
-            z = -i * zStep;
-          } else {
-            // Mirror: card 0 at the outer (right) edge
-            x = el.offsetWidth - 200 - i * step;
-            z = -i * zStep;
-          }
+    @media(max-width:900px){
+      .stack,.beam{display:none}
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav"><span>BuildLore</span><a href="#">Work</a></nav>
+  <section class="hero">
+    <!-- Gradient beams (behind everything) -->
+    <div class="beam left"></div>
+    <div class="beam right"></div>
 
-          var c = document.createElement('div');
-          c.className = 'card';
-          c.style.left = x + 'px';
-          c.style.top = y + 'px';
-          c.style.transform = 'translateZ(' + z + 'px)';
-          c.style.zIndex = n - i;
+    <!-- Card stacks at edges -->
+    <div class="stack left" id="stack-left"></div>
+    <div class="stack right" id="stack-right"></div>
 
-          var v = document.createElement('video');
-          v.src = vids[i]; v.muted = true; v.loop = true;
-          v.playsInline = true; v.autoplay = true;
-          v.setAttribute('playsinline','');
-          c.appendChild(v);
+    <h1>Retain attention.<br>Build brand.</h1>
+    <p class="sub">Narrative-led branding, video production, and content for tech & Web3.</p>
+  </section>
 
-          c.style.opacity = '0';
-          (function(el,d){setTimeout(function(){el.style.transition='opacity .5s';el.style.opacity='1'},d)})(c,100+i*80);
+  <script>
+    var V=[
+      'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-1.mp4',
+      'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-1.mp4',
+      'https://d8clex4mautkm.cloudfront.net/video-landing/projection/pressiat.mp4',
+      'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/eterna.mp4',
+      'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-2.mp4',
+      'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-2.mp4',
+      'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-1.mp4',
+      'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-2.mp4',
+      'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/pump-fun.mp4',
+      'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-3.mp4',
+    ];
 
-          el.appendChild(c);
+    // Build a tight stack of 5 cards at one edge.
+    // Cards are offset by ~14px horizontally, darkest at the outside edge.
+    function buildStack(el, side, vids) {
+      var n = vids.length;
+      var offset = 14; // px between each card's left edge
+      var shades = [40, 80, 120, 165, 210]; // dark → light toward center
+
+      for (var i = 0; i < n; i++) {
+        var c = document.createElement('div');
+        c.className = 'card';
+
+        // Position: outermost card at edge, each next one offset inward
+        if (side === 'left') {
+          c.style.left = (i * offset) + 'px';
+        } else {
+          c.style.right = (i * offset) + 'px';
         }
-      }
 
-      fan(document.getElementById('fan-left'), 'left', V.slice(0,5));
-      fan(document.getElementById('fan-right'), 'right', V.slice(5,10));
-    </script>
-  </body>
+        // Z-index: outermost on top (visually in front)
+        // Actually inner cards should be in front (they overlap the outer ones)
+        // In the ref: inner (lighter) cards are IN FRONT of outer (darker) cards
+        c.style.zIndex = i + 1;
+
+        // Fallback bg color (shown until video loads)
+        var s = shades[i];
+        c.style.background = 'rgb('+s+','+s+','+s+')';
+
+        var v = document.createElement('video');
+        v.src = vids[i];
+        v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
+        v.setAttribute('playsinline','');
+        c.appendChild(v);
+
+        // Stagger entrance
+        c.style.opacity = '0';
+        (function(el,d){setTimeout(function(){el.style.transition='opacity .4s';el.style.opacity='1'},d)})(c,80+i*60);
+
+        el.appendChild(c);
+      }
+    }
+
+    buildStack(document.getElementById('stack-left'), 'left', V.slice(0,5));
+    buildStack(document.getElementById('stack-right'), 'right', V.slice(5,10));
+  </script>
+</body>
 </html>
