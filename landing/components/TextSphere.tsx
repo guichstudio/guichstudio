@@ -93,21 +93,34 @@ export default function TextSphere({
   // mobile even though it still fits the circumference geometrically.
   const fontSize = Math.max(14, Math.round(maxFontSize * scale));
 
-  // Split the text into lines. Caller may pass an explicit array.
+  // Auto-wrap the text into lines that FILL the circumference naturally.
+  // Each line targets `circumference / avgCharWidth` characters so the
+  // 360° wrap needs close to zero stretch. If the caller passes an
+  // explicit string[] we respect that.
   const lines = useMemo(() => {
     if (Array.isArray(linesProp)) {
       return linesProp.filter((s) => s && s.length > 0);
     }
-    const numLines = Math.max(1, linesProp);
+    const circumference = 2 * Math.PI * radius;
+    const avgCharWidth = 0.55 * fontSize;
+    const target = Math.max(20, Math.floor(circumference / avgCharWidth));
+
+    // Greedy word-wrap to target char count per line.
     const words = text.trim().split(/\s+/);
-    const per = Math.ceil(words.length / numLines);
     const out: string[] = [];
-    for (let i = 0; i < numLines; i++) {
-      const slice = words.slice(i * per, (i + 1) * per).join(' ');
-      if (slice) out.push(slice);
+    let current = '';
+    for (const word of words) {
+      const candidate = current ? current + ' ' + word : word;
+      if (current && candidate.length > target) {
+        out.push(current);
+        current = word;
+      } else {
+        current = candidate;
+      }
     }
+    if (current) out.push(current);
     return out;
-  }, [text, linesProp]);
+  }, [text, linesProp, radius, fontSize]);
 
   // Measure each character with real DOM inline-block spans that have the
   // exact same CSS as the final render. getBoundingClientRect().width gives
