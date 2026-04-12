@@ -3,117 +3,76 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Hero Fan Cards — BuildLore</title>
+    <title>Hero Fan — BuildLore</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap"
-      media="print"
-      onload="this.media='all'"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800;900&display=swap" media="print" onload="this.media='all'" />
     <style>
-      * { box-sizing: border-box; margin: 0; padding: 0; }
-      html, body {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        background: #fff;
-        min-height: 100vh;
-        -webkit-font-smoothing: antialiased;
-        overflow-x: hidden;
-      }
-      .nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 20px 48px;
-        font-weight: 700;
-        font-size: 18px;
-      }
-      .nav a { text-decoration: none; color: #000; }
+      *{box-sizing:border-box;margin:0;padding:0}
+      html,body{font-family:'Inter',system-ui,sans-serif;background:#fff;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+      .nav{display:flex;justify-content:space-between;padding:20px 48px;font-weight:700;font-size:18px}
+      .nav a{text-decoration:none;color:#000}
 
-      .hero {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 80vh;
-        padding: 40px 20px;
-        overflow: hidden;
+      .hero{
+        position:relative;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        min-height:85vh;
+        padding:40px 20px;
+        overflow:visible;
       }
-
-      .hero h1 {
-        position: relative;
-        z-index: 10;
-        font-weight: 900;
-        font-size: clamp(3rem, 7.5vw, 7.5rem);
-        letter-spacing: -0.045em;
-        line-height: 0.95;
-        text-align: center;
-        color: #000;
+      .hero h1{
+        position:relative;z-index:20;
+        font-weight:900;
+        font-size:clamp(3rem,7.5vw,7.5rem);
+        letter-spacing:-0.045em;
+        line-height:0.95;
+        text-align:center;
+        color:#000;
       }
-      .hero .sub {
-        position: relative;
-        z-index: 10;
-        margin-top: 24px;
-        font-size: 16px;
-        font-weight: 400;
-        color: #555;
-        text-align: center;
-        letter-spacing: -0.01em;
+      .hero .sub{
+        position:relative;z-index:20;
+        margin-top:24px;
+        font-size:16px;font-weight:400;color:#555;
+        text-align:center;letter-spacing:-0.01em;
       }
 
-      /* Fan containers — pinned to viewport edges */
-      .fan {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-55%);
-        perspective: 1200px;
+      /* Each card is positioned absolutely inside .hero */
+      .card{
+        position:absolute;
+        border-radius:6px;
+        overflow:hidden;
+        cursor:pointer;
+        transition:box-shadow .3s,filter .3s;
       }
-      .fan.left { left: -60px; }
-      .fan.right { right: -60px; }
-
-      .fan .card {
-        position: absolute;
-        border-radius: 6px;
-        overflow: hidden;
-        cursor: pointer;
-        transform-style: preserve-3d;
-        transition: box-shadow 0.3s, filter 0.3s;
+      .card:hover{
+        box-shadow:0 25px 70px rgba(0,0,0,.3)!important;
+        filter:brightness(1.08);
       }
-      .fan .card:hover {
-        box-shadow: 0 25px 70px rgba(0,0,0,0.3) !important;
-        filter: brightness(1.05);
+      .card video{
+        width:100%;height:100%;
+        object-fit:cover;display:block;
+        pointer-events:none;
       }
-      .fan .card video {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        pointer-events: none;
+      .card .overlay{
+        position:absolute;inset:0;
+        pointer-events:none;border-radius:6px;
       }
 
-      @media (max-width: 1024px) {
-        .fan { display: none; }
-      }
+      @media(max-width:1024px){.card{display:none}}
     </style>
   </head>
   <body>
-    <nav class="nav">
-      <span>BuildLore</span>
-      <a href="#">Work</a>
-    </nav>
-
-    <section class="hero">
-      <div class="fan left" id="fan-left"></div>
-      <div class="fan right" id="fan-right"></div>
+    <nav class="nav"><span>BuildLore</span><a href="#">Work</a></nav>
+    <section class="hero" id="hero">
       <h1>Retain attention.<br>Build brand.</h1>
       <p class="sub">Narrative-led branding, video production, and content for tech & Web3.</p>
     </section>
 
     <script>
-      // 10 videos from CloudFront — 5 per side
-      const VIDEOS = [
+      var VIDEOS=[
         'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-1.mp4',
         'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-1.mp4',
         'https://d8clex4mautkm.cloudfront.net/video-landing/projection/pressiat.mp4',
@@ -126,76 +85,81 @@
         'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-3.mp4',
       ];
 
-      // Card config — index 0 = closest to center (biggest, lightest), 4 = edge (smallest, darkest)
-      // Matching the ref: cards fan OUT from center, perspective vanishing point at center.
-      // Closest card is tall & wide, outer cards are narrower, more rotated, darker overlay.
-      function buildFan(container, side, videoSlice) {
-        const flip = side === 'right' ? -1 : 1;
-        const count = videoSlice.length;
+      var hero=document.getElementById('hero');
+      var vw=window.innerWidth;
+      var vh=hero.offsetHeight;
+      var cx=vw/2; // center x
 
-        for (let i = 0; i < count; i++) {
-          const t = i / (count - 1 || 1); // 0 → 1
+      // Reference image analysis:
+      // - Card 0 (closest to text): large, light, barely rotated, ~30% from center
+      // - Card 4 (edge): small, dark, heavily rotated, at viewport edge
+      // Left cards go from center-left outward to left edge
+      // Right cards mirror
 
-          // Dimensions: closest card is largest
-          const w = 300 - t * 120;   // 300 → 180
-          const h = 420 - t * 120;   // 420 → 300
+      function makeCard(videoUrl,x,y,w,h,rotY,darkness,z,delay){
+        var card=document.createElement('div');
+        card.className='card';
+        card.style.width=w+'px';
+        card.style.height=h+'px';
+        card.style.left=x+'px';
+        card.style.top=y+'px';
+        card.style.transform='perspective(1200px) rotateY('+rotY+'deg)';
+        card.style.transformOrigin=rotY>0?'left center':'right center';
+        card.style.zIndex=z;
+        card.style.boxShadow='0 10px 40px rgba(0,0,0,'+(0.08+darkness*0.2)+')';
 
-          // Position: spread outward from center
-          const tx = 80 + i * 100;      // horizontal offset from fan anchor
-          const tz = -i * 60;           // push back in Z
-          const ry = 8 + t * 55;        // rotateY: 8° → 63°
-          const sc = 1 - t * 0.05;      // slight scale reduction
+        var vid=document.createElement('video');
+        vid.src=videoUrl;
+        vid.muted=true;vid.loop=true;vid.playsInline=true;vid.autoplay=true;
+        vid.setAttribute('playsinline','');
+        card.appendChild(vid);
 
-          // Darkness overlay increases toward edges
-          const overlayOpacity = t * 0.55;
-
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.style.width = w + 'px';
-          card.style.height = h + 'px';
-          card.style.transform =
-            'translateX(' + (flip * -tx) + 'px) ' +
-            'translateZ(' + tz + 'px) ' +
-            'rotateY(' + (flip * ry) + 'deg) ' +
-            'scale(' + sc + ')';
-          card.style.zIndex = count - i;
-          card.style.boxShadow = '0 10px 40px rgba(0,0,0,' + (0.1 + t * 0.15) + ')';
-
-          // Video element (autoplay muted loop)
-          const video = document.createElement('video');
-          video.src = videoSlice[i];
-          video.muted = true;
-          video.loop = true;
-          video.playsInline = true;
-          video.autoplay = true;
-          video.setAttribute('playsinline', '');
-          card.appendChild(video);
-
-          // Dark overlay for depth effect
-          if (overlayOpacity > 0.01) {
-            const overlay = document.createElement('div');
-            overlay.style.cssText =
-              'position:absolute;inset:0;background:rgba(0,0,0,' +
-              overlayOpacity +
-              ');pointer-events:none;border-radius:6px;';
-            card.appendChild(overlay);
-          }
-
-          // Stagger entrance
-          card.style.opacity = '0';
-          setTimeout(function () {
-            card.style.transition = 'opacity 0.7s ease';
-            card.style.opacity = '1';
-          }, 300 + i * 120);
-
-          container.appendChild(card);
+        if(darkness>0.02){
+          var ov=document.createElement('div');
+          ov.className='overlay';
+          ov.style.background='rgba(0,0,0,'+darkness+')';
+          card.appendChild(ov);
         }
+
+        card.style.opacity='0';
+        setTimeout(function(){
+          card.style.transition='opacity .7s ease';
+          card.style.opacity='1';
+        },delay);
+
+        hero.appendChild(card);
       }
 
-      const leftVideos = VIDEOS.slice(0, 5);
-      const rightVideos = VIDEOS.slice(5, 10);
-      buildFan(document.getElementById('fan-left'), 'left', leftVideos);
-      buildFan(document.getElementById('fan-right'), 'right', rightVideos);
+      // Card dimensions & positions — tuned to match the ref
+      // Index 0 = closest to center, 4 = at viewport edge
+      var centerY=vh/2;
+
+      // LEFT SIDE (5 cards) — cards fan left, rotateY positive (turning left face toward viewer)
+      for(var i=0;i<5;i++){
+        var t=i/4;
+        var w=280-t*130;   // 280 → 150
+        var h=380-t*140;   // 380 → 240
+        // x: start near center (~35% from left), spread to left edge
+        var x=cx-320-i*110;
+        var y=centerY-h/2-10+t*20;
+        var ry=5+t*55;     // 5° → 60°
+        var dark=t*0.5;    // 0 → 0.5
+        var z=10-i;
+        makeCard(VIDEOS[i],x,y,w,h,ry,dark,z,200+i*100);
+      }
+
+      // RIGHT SIDE (5 cards) — mirror
+      for(var i=0;i<5;i++){
+        var t=i/4;
+        var w=280-t*130;
+        var h=380-t*140;
+        var x=cx+320-w+i*110;
+        var y=centerY-h/2-10+t*20;
+        var ry=-(5+t*55);
+        var dark=t*0.5;
+        var z=10-i;
+        makeCard(VIDEOS[5+i],x,y,w,h,ry,dark,z,200+i*100);
+      }
     </script>
   </body>
 </html>
