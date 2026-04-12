@@ -24,7 +24,7 @@ export default function CTA() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="overflow-hidden"
             >
-              Learn how we build
+              Ready to build something
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: -100 }}
@@ -33,7 +33,7 @@ export default function CTA() {
               transition={{ duration: 0.6, delay: 0.5 }}
               className="overflow-hidden"
             >
-              retention with
+              people actually
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 100 }}
@@ -42,7 +42,7 @@ export default function CTA() {
               transition={{ duration: 0.6, delay: 0.7 }}
               className="overflow-hidden"
             >
-              story.
+              remember?
             </motion.div>
           </motion.h2>
 
