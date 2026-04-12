@@ -127,13 +127,12 @@
     <p class="hint">Drag the sphere left / right to spin it.</p>
 
     <script>
-      const MISSION_TEXT =
-        'Visual experience studio for brands, founders and product leaders in Web3 and live events. We move fast, work with full autonomy, and deliver high-quality brands and products that stay ahead. Enhanced by deep Web3 expertise, applied AI, and structured yet flexible processes. From installations and projection mapping to films and creative direction, anywhere in the world.';
-
-      // Auto-wrap is computed AFTER sizing (below) so it uses the actual
-      // RADIUS and FONT_SIZE to compute the optimal chars-per-line.
-      // Defined here as a placeholder, filled in after sizing constants.
-      let MISSION_LINES;
+      const MISSION_LINES = [
+        'Visual experience studio for brands, founders and product leaders in Web3 and live events.',
+        'We move fast, delivering high-quality brands and products that consistently stay ahead globally.',
+        'Enhanced by Web3 expertise, applied AI, and structured yet flexible processes for scalable execution.',
+        'From installations and projection mapping to films and creative direction, anywhere in the world.',
+      ];
 
       // Responsive sizing — the sphere always fits on screen and stays
       // centered. Threshold 900 covers iPad portrait (768-834) so it also
@@ -150,28 +149,6 @@
       );
       const RADIUS = Math.max(80, Math.round(MAX_RADIUS * scale));
       const FONT_SIZE = Math.max(14, Math.round(MAX_FONT_SIZE * scale));
-
-      // Auto-wrap: target chars per line = circumference / avg char width.
-      // This gives near-zero stretch when each line is scaled to fill 360°.
-      const circumference = 2 * Math.PI * RADIUS;
-      const avgCharWidth = 0.55 * FONT_SIZE;
-      const targetChars = Math.max(20, Math.floor(circumference / avgCharWidth));
-      MISSION_LINES = (function () {
-        const words = MISSION_TEXT.trim().split(/\s+/);
-        const out = [];
-        let cur = '';
-        for (const w of words) {
-          const c = cur ? cur + ' ' + w : w;
-          if (cur && c.length > targetChars) {
-            out.push(cur);
-            cur = w;
-          } else {
-            cur = c;
-          }
-        }
-        if (cur) out.push(cur);
-        return out;
-      })();
 
       // Negative = left-to-right scroll of the text around the sphere.
       const SPIN = -14;
