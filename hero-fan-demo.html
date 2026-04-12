@@ -8,70 +8,101 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800;900&display=swap" media="print" onload="this.media='all'"/>
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{font-family:'Inter',system-ui,sans-serif;background:#fff;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-    .nav{display:flex;justify-content:space-between;padding:20px 48px;font-weight:700;font-size:18px}
-    .nav a{text-decoration:none;color:#000}
+    * { box-sizing: border-box; margin: 0; padding: 0 }
+    html, body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #fff;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px 48px;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .nav a { text-decoration: none; color: #000 }
 
-    .hero{
-      position:relative;
-      display:flex;flex-direction:column;
-      align-items:center;justify-content:center;
-      min-height:82vh;
-      padding:40px 20px;
-      overflow:hidden;
-      /* THE KEY: perspective centered on the heading text = vanishing point */
-      perspective:1200px;
-      perspective-origin:50% 45%;
+    /* Hero — perspective vanishing point at the center of the heading */
+    .hero {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 82vh;
+      padding: 40px 20px;
+      overflow: hidden;
+      perspective: 1400px;
+      perspective-origin: 50% 46%;
     }
-    .hero h1{
-      position:relative;z-index:30;
-      font-weight:900;
-      font-size:clamp(3rem,7.5vw,7.5rem);
-      letter-spacing:-0.045em;line-height:0.95;
-      text-align:center;color:#000;
+    .hero h1 {
+      position: relative;
+      z-index: 30;
+      font-weight: 900;
+      font-size: clamp(3rem, 7.5vw, 7.5rem);
+      letter-spacing: -0.045em;
+      line-height: 0.95;
+      text-align: center;
+      color: #000;
     }
-    .hero .sub{
-      position:relative;z-index:30;
-      margin-top:24px;font-size:16px;font-weight:400;
-      color:#555;text-align:center;
+    .hero .sub {
+      position: relative;
+      z-index: 30;
+      margin-top: 24px;
+      font-size: 16px;
+      font-weight: 400;
+      color: #555;
+      text-align: center;
     }
 
-    .card{
-      position:absolute;
-      width:380px;height:270px;
-      border-radius:6px;
-      overflow:hidden;cursor:pointer;
-      transition:filter .3s;
-      backface-visibility:hidden;
+    /* Card — all same size, same rotation angle */
+    .card {
+      position: absolute;
+      width: 360px;
+      height: 260px;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      backface-visibility: hidden;
+      transition: filter 0.3s;
     }
-    .card:hover{filter:brightness(1.12)}
-    .card video{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
-
-    /* White fade overlays on inner edges so cards blend to white near text */
-    .fade-left,.fade-right{
-      position:absolute;top:0;bottom:0;
-      width:45%;z-index:25;pointer-events:none;
+    .card:hover { filter: brightness(1.1) }
+    .card video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
     }
-    .fade-left{left:0;background:linear-gradient(to left,rgba(255,255,255,.95) 0%,transparent 65%)}
-    .fade-right{right:0;background:linear-gradient(to right,rgba(255,255,255,.95) 0%,transparent 65%)}
 
-    @media(max-width:900px){.card,.fade-left,.fade-right{display:none}}
+    /* White gradient fades near the text so cards blend out */
+    .fade {
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 30%;
+      z-index: 25;
+      pointer-events: none;
+    }
+    .fade-l { left: 20%; background: linear-gradient(to left, rgba(255,255,255,0.97), transparent) }
+    .fade-r { right: 20%; background: linear-gradient(to right, rgba(255,255,255,0.97), transparent) }
+
+    @media (max-width: 1024px) { .card, .fade { display: none } }
   </style>
 </head>
 <body>
   <nav class="nav"><span>BuildLore</span><a href="#">Work</a></nav>
   <section class="hero" id="hero">
-    <!-- White fades near the text -->
-    <div class="fade-left"></div>
-    <div class="fade-right"></div>
-
+    <div class="fade fade-l"></div>
+    <div class="fade fade-r"></div>
     <h1>Retain attention.<br>Build brand.</h1>
     <p class="sub">Narrative-led branding, video production, and content for tech & Web3.</p>
   </section>
 
   <script>
-    var V=[
+    var VIDEOS = [
       'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-1.mp4',
       'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-1.mp4',
       'https://d8clex4mautkm.cloudfront.net/video-landing/projection/pressiat.mp4',
@@ -87,58 +118,75 @@
     var hero = document.getElementById('hero');
     var vw = window.innerWidth;
     var heroH = hero.offsetHeight;
-    var centerY = heroH * 0.45; // match perspective-origin Y
+    var cx = vw / 2;
+    var cy = heroH * 0.46;
 
-    // LEFT cards: positioned left of center, rotateY positive (face right toward center)
-    // transform-origin: right center so the right edge (inner) is the pivot
-    // Card 0 = outermost (most rotated, at viewport left edge)
-    // Card 4 = innermost (least rotated, closest to text)
-    var leftConf = [
-      { x: -180, ry: 78, z: 1 },
-      { x: -90,  ry: 68, z: 2 },
-      { x: 10,   ry: 55, z: 3 },
-      { x: 110,  ry: 40, z: 4 },
-      { x: 220,  ry: 22, z: 5 },
-    ];
+    // ---- CONFIG ----
+    var CARD_W = 360;
+    var CARD_H = 260;
+    var ROTATE_Y = 55;          // same angle for every card
+    var CARD_SPACING = 70;      // horizontal offset between each card's anchor
+    var COUNT = 5;              // cards per side
+    var INNER_GAP = 280;        // half-width of the clear zone around the text
 
-    // RIGHT cards: mirror — rotateY negative, transform-origin: left center
-    var rightConf = [
-      { x: vw - 200, ry: -78, z: 1 },
-      { x: vw - 290, ry: -68, z: 2 },
-      { x: vw - 390, ry: -55, z: 3 },
-      { x: vw - 490, ry: -40, z: 4 },
-      { x: vw - 600, ry: -22, z: 5 },
-    ];
-
-    function makeCard(src, x, ry, z, originSide, delay) {
+    function createCard(src, x, y, ry, origin, z, delay) {
       var c = document.createElement('div');
       c.className = 'card';
       c.style.left = x + 'px';
-      c.style.top = (centerY - 135) + 'px'; // vertically centered on vanishing point
+      c.style.top = y + 'px';
       c.style.transform = 'rotateY(' + ry + 'deg)';
-      c.style.transformOrigin = originSide + ' center';
+      c.style.transformOrigin = origin;
       c.style.zIndex = z;
 
       var v = document.createElement('video');
-      v.src = src; v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
-      v.setAttribute('playsinline','');
+      v.src = src;
+      v.muted = true;
+      v.loop = true;
+      v.playsInline = true;
+      v.autoplay = true;
+      v.setAttribute('playsinline', '');
       c.appendChild(v);
 
       c.style.opacity = '0';
-      setTimeout(function(){ c.style.transition='opacity .5s'; c.style.opacity='1'; }, delay);
+      setTimeout(function () {
+        c.style.transition = 'opacity 0.5s';
+        c.style.opacity = '1';
+      }, delay);
 
       hero.appendChild(c);
     }
 
-    // Build left fan
-    for (var i = 0; i < 5; i++) {
-      var lc = leftConf[i];
-      makeCard(V[i], lc.x, lc.ry, lc.z, 'right', 100 + i * 80);
+    var topY = cy - CARD_H / 2;
+
+    // LEFT side — cards fan out from center toward left edge
+    // transform-origin: right center (inner edge is the pivot)
+    // Card 0 = innermost (closest to text, highest z), Card 4 = outermost
+    for (var i = 0; i < COUNT; i++) {
+      var anchorX = cx - INNER_GAP - i * CARD_SPACING;
+      createCard(
+        VIDEOS[i],
+        anchorX - CARD_W,     // left edge of the card (right edge = anchorX)
+        topY,
+        ROTATE_Y,
+        'right center',
+        COUNT - i,            // inner cards in front
+        120 + i * 70
+      );
     }
-    // Build right fan
-    for (var i = 0; i < 5; i++) {
-      var rc = rightConf[i];
-      makeCard(V[5+i], rc.x, rc.ry, rc.z, 'left', 100 + i * 80);
+
+    // RIGHT side — mirror
+    // transform-origin: left center (inner edge is the pivot)
+    for (var i = 0; i < COUNT; i++) {
+      var anchorX = cx + INNER_GAP + i * CARD_SPACING;
+      createCard(
+        VIDEOS[COUNT + i],
+        anchorX,              // left edge = anchorX (left edge is the pivot)
+        topY,
+        -ROTATE_Y,
+        'left center',
+        COUNT - i,
+        120 + i * 70
+      );
     }
   </script>
 </body>
