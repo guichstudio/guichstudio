@@ -12,80 +12,62 @@
       html,body{font-family:'Inter',system-ui,sans-serif;background:#fff;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
       .nav{display:flex;justify-content:space-between;padding:20px 48px;font-weight:700;font-size:18px}
       .nav a{text-decoration:none;color:#000}
+      .hero{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:85vh;padding:40px 20px}
+      .hero h1{position:relative;z-index:20;font-weight:900;font-size:clamp(3rem,7.5vw,7.5rem);letter-spacing:-0.045em;line-height:0.95;text-align:center;color:#000}
+      .hero .sub{position:relative;z-index:20;margin-top:24px;font-size:16px;font-weight:400;color:#555;text-align:center}
 
-      .hero{
-        position:relative;
-        display:flex;flex-direction:column;
-        align-items:center;justify-content:center;
-        min-height:85vh;
-        padding:40px 20px;
-      }
-      .hero h1{
-        position:relative;z-index:20;
-        font-weight:900;
-        font-size:clamp(3rem,7.5vw,7.5rem);
-        letter-spacing:-0.045em;line-height:0.95;
-        text-align:center;color:#000;
-      }
-      .hero .sub{
-        position:relative;z-index:20;
-        margin-top:24px;font-size:16px;font-weight:400;
-        color:#555;text-align:center;
-      }
-
-      /* Fan wrapper — perspective corridor converging toward the text */
-      .fan-wrap{
+      /* Fan wrapper — a perspective stage. Cards inside are flat rectangles
+         pushed back in Z. The perspective foreshortening creates the wedge. */
+      .fan{
         position:absolute;
         top:50%;
+        width:46vw;
+        height:480px;
         transform:translateY(-50%);
         pointer-events:none;
+        transform-style:preserve-3d;
       }
-      .fan-wrap.left{
-        left:0;
-        /* Vanishing point at the right edge (toward text) */
-        perspective:700px;
-        perspective-origin:100% 50%;
-        /* Blend: fade at outer edge + fade toward text */
-        -webkit-mask-image:linear-gradient(to right,transparent 0%,black 8%,black 50%,transparent 100%);
-        mask-image:linear-gradient(to right,transparent 0%,black 8%,black 50%,transparent 100%);
+      .fan.left{
+        left:-2vw;
+        perspective:550px;
+        perspective-origin:right center;
+        -webkit-mask-image:linear-gradient(to right,transparent 0%,black 5%,black 45%,transparent 95%);
+        mask-image:linear-gradient(to right,transparent 0%,black 5%,black 45%,transparent 95%);
       }
-      .fan-wrap.right{
-        right:0;
-        perspective:700px;
-        perspective-origin:0% 50%;
-        -webkit-mask-image:linear-gradient(to left,transparent 0%,black 8%,black 50%,transparent 100%);
-        mask-image:linear-gradient(to left,transparent 0%,black 8%,black 50%,transparent 100%);
+      .fan.right{
+        right:-2vw;
+        perspective:550px;
+        perspective-origin:left center;
+        -webkit-mask-image:linear-gradient(to left,transparent 0%,black 5%,black 45%,transparent 95%);
+        mask-image:linear-gradient(to left,transparent 0%,black 5%,black 45%,transparent 95%);
       }
 
       .card{
         position:absolute;
+        width:200px;
+        height:440px;
         overflow:hidden;
+        border-radius:4px;
         cursor:pointer;
         pointer-events:auto;
-        transform-style:preserve-3d;
         transition:filter .3s;
       }
-      .card:hover{filter:brightness(1.1)}
-      .card video{
-        width:100%;height:100%;
-        object-fit:cover;display:block;
-        pointer-events:none;
-      }
+      .card:hover{filter:brightness(1.12)}
+      .card video{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
 
-      @media(max-width:1024px){.fan-wrap{display:none}}
+      @media(max-width:1024px){.fan{display:none}}
     </style>
   </head>
   <body>
     <nav class="nav"><span>BuildLore</span><a href="#">Work</a></nav>
-    <section class="hero" id="hero">
-      <div class="fan-wrap left" id="fan-left"></div>
-      <div class="fan-wrap right" id="fan-right"></div>
+    <section class="hero">
+      <div class="fan left" id="fan-left"></div>
+      <div class="fan right" id="fan-right"></div>
       <h1>Retain attention.<br>Build brand.</h1>
       <p class="sub">Narrative-led branding, video production, and content for tech & Web3.</p>
     </section>
-
     <script>
-      var VIDEOS=[
+      var V=[
         'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-1.mp4',
         'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-1.mp4',
         'https://d8clex4mautkm.cloudfront.net/video-landing/projection/pressiat.mp4',
@@ -98,81 +80,50 @@
         'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-3.mp4',
       ];
 
-      var vw = window.innerWidth;
-      // Fan wrapper width: ~42% of viewport
-      var fanW = Math.round(vw * 0.42);
-      document.getElementById('fan-left').style.width = fanW + 'px';
-      document.getElementById('fan-right').style.width = fanW + 'px';
-      document.getElementById('fan-left').style.height = '480px';
-      document.getElementById('fan-right').style.height = '480px';
+      // Build one side: 5 cards side-by-side, each pushed further back in Z.
+      // The container's perspective does the foreshortening — outer cards appear
+      // big, inner cards appear tiny, creating the wedge/corridor from the ref.
+      function fan(el, side, vids) {
+        var n = vids.length;
+        var step = 55;     // horizontal gap between card left edges
+        var zStep = 120;   // depth step per card
+        var h = 440;
+        var y = (480 - h) / 2;
 
-      function buildFan(container, side, videos) {
-        var count = videos.length;
-
-        // All cards same 3D size (tall portrait like the ref)
-        var cardW = 170;
-        var cardH = 380;
-
-        // Cards packed tightly from the outer edge toward center.
-        // Card 0 = at the outer edge (closest to camera, biggest visually)
-        // Card 4 = near center (farthest from camera, smallest visually)
-        // The container's perspective makes further cards (higher translateZ magnitude)
-        // appear smaller — creating the corridor/tunnel convergence effect.
-
-        var gap = 18; // tight horizontal gap between cards
-
-        for (var i = 0; i < count; i++) {
-          var t = i / (count - 1 || 1); // 0 = edge, 1 = center
-
-          // Horizontal position: card 0 at outer edge, card 4 near inner edge
-          var x;
+        for (var i = 0; i < n; i++) {
+          var x, z;
           if (side === 'left') {
-            x = i * (cardW * 0.28 + gap); // tight overlap
+            // Card 0 at the outer (left) edge = closest to camera
+            x = i * step;
+            z = -i * zStep;
           } else {
-            x = fanW - cardW - i * (cardW * 0.28 + gap);
+            // Mirror: card 0 at the outer (right) edge
+            x = el.offsetWidth - 200 - i * step;
+            z = -i * zStep;
           }
 
-          // Z depth: card 0 at z=0 (camera), card 4 pushed deep into screen
-          var z = -i * 120;
+          var c = document.createElement('div');
+          c.className = 'card';
+          c.style.left = x + 'px';
+          c.style.top = y + 'px';
+          c.style.transform = 'translateZ(' + z + 'px)';
+          c.style.zIndex = n - i;
 
-          // Vertical center
-          var y = (480 - cardH) / 2;
+          var v = document.createElement('video');
+          v.src = vids[i]; v.muted = true; v.loop = true;
+          v.playsInline = true; v.autoplay = true;
+          v.setAttribute('playsinline','');
+          c.appendChild(v);
 
-          // Shading: edge (i=0) = darkest, center (i=4) = lightest
-          var shade = Math.round(60 + t * 160); // rgb 60 → 220
+          c.style.opacity = '0';
+          (function(el,d){setTimeout(function(){el.style.transition='opacity .5s';el.style.opacity='1'},d)})(c,100+i*80);
 
-          var card = document.createElement('div');
-          card.className = 'card';
-          card.style.width = cardW + 'px';
-          card.style.height = cardH + 'px';
-          card.style.left = x + 'px';
-          card.style.top = y + 'px';
-          card.style.transform = 'translateZ(' + z + 'px)';
-          card.style.zIndex = count - i;
-          card.style.background = 'rgb(' + shade + ',' + shade + ',' + shade + ')';
-
-          var vid = document.createElement('video');
-          vid.src = videos[i];
-          vid.muted = true; vid.loop = true; vid.playsInline = true; vid.autoplay = true;
-          vid.setAttribute('playsinline', '');
-          vid.style.opacity = '0';
-          vid.addEventListener('loadeddata', function() { this.style.opacity = '1'; this.style.transition = 'opacity .5s'; });
-          card.appendChild(vid);
-
-          card.style.opacity = '0';
-          (function(c, d) {
-            setTimeout(function() {
-              c.style.transition = 'opacity .5s ease';
-              c.style.opacity = '1';
-            }, d);
-          })(card, 150 + i * 80);
-
-          container.appendChild(card);
+          el.appendChild(c);
         }
       }
 
-      buildFan(document.getElementById('fan-left'), 'left', VIDEOS.slice(0, 5));
-      buildFan(document.getElementById('fan-right'), 'right', VIDEOS.slice(5, 10));
+      fan(document.getElementById('fan-left'), 'left', V.slice(0,5));
+      fan(document.getElementById('fan-right'), 'right', V.slice(5,10));
     </script>
   </body>
 </html>
