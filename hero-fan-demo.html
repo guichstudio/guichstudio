@@ -16,6 +16,8 @@
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
+
+    /* ---- Nav ---- */
     .nav {
       display: flex;
       justify-content: space-between;
@@ -25,7 +27,7 @@
     }
     .nav a { text-decoration: none; color: #000 }
 
-    /* Hero — perspective vanishing point at the center of the heading */
+    /* ---- Hero ---- */
     .hero {
       position: relative;
       display: flex;
@@ -34,7 +36,7 @@
       justify-content: center;
       min-height: 82vh;
       padding: 40px 20px;
-      overflow: hidden;
+      /* Perspective vanishing point = center of heading */
       perspective: 1400px;
       perspective-origin: 50% 46%;
     }
@@ -58,7 +60,7 @@
       text-align: center;
     }
 
-    /* Card — all same size, same rotation angle */
+    /* ---- Card ---- */
     .card {
       position: absolute;
       width: 360px;
@@ -67,7 +69,7 @@
       overflow: hidden;
       cursor: pointer;
       backface-visibility: hidden;
-      transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), z-index 0s;
+      transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
     }
     .card video {
       width: 100%;
@@ -77,7 +79,7 @@
       pointer-events: none;
     }
 
-    /* White gradient fades — wider and stronger blend to white */
+    /* ---- White gradient fades near the text ---- */
     .fade {
       position: absolute;
       top: 0; bottom: 0;
@@ -85,121 +87,130 @@
       z-index: 25;
       pointer-events: none;
     }
-    .fade-l { left: 12%; background: linear-gradient(to left, rgba(255,255,255,1) 10%, rgba(255,255,255,0.9) 40%, transparent 100%) }
-    .fade-r { right: 12%; background: linear-gradient(to right, rgba(255,255,255,1) 10%, rgba(255,255,255,0.9) 40%, transparent 100%) }
+    .fade-l {
+      left: 12%;
+      background: linear-gradient(to left, rgba(255,255,255,1) 10%, rgba(255,255,255,0.9) 40%, transparent 100%);
+    }
+    .fade-r {
+      right: 12%;
+      background: linear-gradient(to right, rgba(255,255,255,1) 10%, rgba(255,255,255,0.9) 40%, transparent 100%);
+    }
 
-    @media (max-width: 1024px) { .card, .fade { display: none } }
+    @media (max-width: 1024px) {
+      .card, .fade { display: none }
+    }
   </style>
 </head>
 <body>
   <nav class="nav"><span>BuildLore</span><a href="#">Work</a></nav>
-  <section class="hero" id="hero">
+
+  <section class="hero" id="hero" role="banner">
     <div class="fade fade-l"></div>
     <div class="fade fade-r"></div>
     <h1>Retain attention.<br>Build brand.</h1>
-    <p class="sub">Narrative-led branding, video production, and content for tech & Web3.</p>
+    <p class="sub">Narrative-led branding, video production, and content for tech &amp; Web3.</p>
   </section>
 
   <script>
-    var VIDEOS = [
-      'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-1.mp4',
-      'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-1.mp4',
-      'https://d8clex4mautkm.cloudfront.net/video-landing/projection/pressiat.mp4',
-      'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/eterna.mp4',
-      'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-2.mp4',
-      'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-1.mp4',
-      'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-2.mp4',
-      'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-1.mp4',
-      'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-2.mp4',
-      'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/pump-fun.mp4',
+    // ---- Video sources (CloudFront) ----
+    // Left side: 0-4, Right side: 5-9
+    const VIDEOS = [
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-1.mp4',             poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-1-thumbnail.webp',     label: 'Fantasy Top — Brand film' },
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-1.mp4',      poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-1-thumbnail.webp', label: 'H Company — Commercial' },
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/projection/pressiat.mp4',         poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/projection/pressiat-thumbnail.webp', label: 'Pressiat — Projection mapping' },
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/eterna.mp4',                poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/eterna-thumbnail.webp',        label: 'Eterna Labs — Web3' },
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-2.mp4',      poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-2-thumbnail.webp', label: 'H Company — Brand' },
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-1.mp4',       poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-2-thumbnail.webp', label: 'Pressiat — Commercial' },
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-2.mp4',       poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-2-thumbnail.webp', label: 'Pressiat — Event' },
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-1.mp4',     poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-1-thumbnail.webp', label: 'Domestique — Commercial' },
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-2.mp4',     poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-2-thumbnail.webp', label: 'Domestique — Brand' },
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/pump-fun.mp4',              poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/pump-fun-thumbnail.webp',      label: 'Pump Fun — Web3' },
     ];
 
-    var hero = document.getElementById('hero');
-    var vw = window.innerWidth;
-    var heroH = hero.offsetHeight;
-    var cx = vw / 2;
-    var cy = heroH * 0.46;
+    // ---- Layout config ----
+    const CARD_W     = 360;
+    const CARD_H     = 260;
+    const ROTATE_Y   = 84;   // all cards same angle — ~10% face visible
+    const SPACING    = 70;   // px between each card's pivot edge
+    const COUNT      = 5;    // cards per side
+    const INNER_GAP  = 280;  // px from center to first card's pivot
 
-    // ---- CONFIG ----
-    var CARD_W = 360;
-    var CARD_H = 260;
-    var ROTATE_Y = 84;          // aggressive — cards show ~10% of their face (cos84°≈0.10)
-    var CARD_SPACING = 70;      // horizontal offset between each card's anchor
-    var COUNT = 5;              // cards per side
-    var INNER_GAP = 280;        // half-width of the clear zone around the text
+    const hero = document.getElementById('hero');
 
-    function createCard(src, x, y, ry, origin, z, delay) {
-      var c = document.createElement('div');
-      c.className = 'card';
-      c.style.left = x + 'px';
-      c.style.top = y + 'px';
-      c.style.transform = 'rotateY(' + ry + 'deg)';
-      c.style.transformOrigin = origin;
-      c.style.zIndex = z;
+    function createCard({ src, poster, label }, x, y, ry, origin, z, delay) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.setAttribute('role', 'img');
+      card.setAttribute('aria-label', label);
+      card.style.left = x + 'px';
+      card.style.top  = y + 'px';
+      card.style.zIndex = z;
+      card.style.transformOrigin = origin;
 
-      var v = document.createElement('video');
-      v.src = src;
-      v.muted = true;
-      v.loop = true;
-      v.playsInline = true;
-      v.autoplay = true;
-      v.setAttribute('playsinline', '');
-      c.appendChild(v);
+      const baseTransform = 'rotateY(' + ry + 'deg)';
+      card.style.transform = baseTransform;
 
-      // Hover: card pops out face-on and lifts up
-      var baseTransform = 'rotateY(' + ry + 'deg)';
-      c.addEventListener('mouseenter', function () {
-        c.style.zIndex = 50;
-        c.style.transform = 'rotateY(0deg) translateY(-60px) scale(1.05)';
+      // Video — preload none, poster for instant first paint
+      const vid = document.createElement('video');
+      vid.src = src;
+      vid.poster = poster;
+      vid.preload = 'none';
+      vid.muted = true;
+      vid.loop = true;
+      vid.playsInline = true;
+      vid.setAttribute('playsinline', '');
+      card.appendChild(vid);
+
+      // Start playback only when the card enters the viewport
+      const io = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+          vid.play().catch(() => {});
+          io.disconnect();
+        }
+      }, { threshold: 0.1 });
+      io.observe(card);
+
+      // Hover interaction: pop out face-on, lift up
+      card.addEventListener('mouseenter', () => {
+        card.style.zIndex = 50;
+        card.style.transform = 'rotateY(0deg) translateY(-60px) scale(1.05)';
       });
-      c.addEventListener('mouseleave', function () {
-        c.style.zIndex = z;
-        c.style.transform = baseTransform;
+      card.addEventListener('mouseleave', () => {
+        card.style.zIndex = z;
+        card.style.transform = baseTransform;
       });
 
-      // Stagger entrance
-      c.style.opacity = '0';
-      setTimeout(function () {
-        c.style.transition =
-          'transform 0.5s cubic-bezier(0.23,1,0.32,1), opacity 0.5s, z-index 0s';
-        c.style.opacity = '1';
-      }, delay);
+      // Staggered entrance
+      card.style.opacity = '0';
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          card.style.opacity = '1';
+          card.style.transition = 'transform 0.5s cubic-bezier(0.23,1,0.32,1), opacity 0.5s ease';
+        }, delay);
+      });
 
-      hero.appendChild(c);
+      hero.appendChild(card);
     }
 
-    var topY = cy - CARD_H / 2;
+    // Wait for layout to stabilize before reading dimensions
+    requestAnimationFrame(() => {
+      const vw = window.innerWidth;
+      const cx = vw / 2;
+      const cy = hero.offsetHeight * 0.46;
+      const topY = cy - CARD_H / 2;
 
-    // LEFT side — cards fan out from center toward left edge
-    // transform-origin: right center (inner edge is the pivot)
-    // Card 0 = innermost (closest to text, highest z), Card 4 = outermost
-    for (var i = 0; i < COUNT; i++) {
-      var anchorX = cx - INNER_GAP - i * CARD_SPACING;
-      createCard(
-        VIDEOS[i],
-        anchorX - CARD_W,     // left edge of the card (right edge = anchorX)
-        topY,
-        ROTATE_Y,
-        'right center',
-        COUNT - i,            // inner cards in front
-        120 + i * 70
-      );
-    }
+      // LEFT fan — pivot on right edge, cards spread leftward
+      for (let i = 0; i < COUNT; i++) {
+        const anchor = cx - INNER_GAP - i * SPACING;
+        createCard(VIDEOS[i], anchor - CARD_W, topY, ROTATE_Y, 'right center', COUNT - i, 120 + i * 70);
+      }
 
-    // RIGHT side — mirror
-    // transform-origin: left center (inner edge is the pivot)
-    for (var i = 0; i < COUNT; i++) {
-      var anchorX = cx + INNER_GAP + i * CARD_SPACING;
-      createCard(
-        VIDEOS[COUNT + i],
-        anchorX,              // left edge = anchorX (left edge is the pivot)
-        topY,
-        -ROTATE_Y,
-        'left center',
-        COUNT - i,
-        120 + i * 70
-      );
-    }
+      // RIGHT fan — mirror, pivot on left edge
+      for (let i = 0; i < COUNT; i++) {
+        const anchor = cx + INNER_GAP + i * SPACING;
+        createCard(VIDEOS[COUNT + i], anchor, topY, -ROTATE_Y, 'left center', COUNT - i, 120 + i * 70);
+      }
+    });
   </script>
 </body>
 </html>
