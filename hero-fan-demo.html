@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hero Fan Cards — BuildLore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: #fff;
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+
+      /* Nav */
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 40px;
+        font-weight: 700;
+        font-size: 18px;
+      }
+      .nav a { text-decoration: none; color: #000; }
+
+      /* Hero container */
+      .hero {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 520px;
+        padding: 60px 20px;
+        overflow: hidden;
+      }
+
+      /* Heading */
+      .hero h1 {
+        position: relative;
+        z-index: 10;
+        font-weight: 900;
+        font-size: clamp(2.8rem, 7vw, 7rem);
+        letter-spacing: -0.04em;
+        line-height: 1.0;
+        text-align: center;
+        color: #000;
+      }
+      .hero .subtitle {
+        position: relative;
+        z-index: 10;
+        margin-top: 20px;
+        font-size: 16px;
+        font-weight: 400;
+        color: #666;
+        text-align: center;
+        letter-spacing: -0.01em;
+      }
+
+      /* Fan cards container */
+      .fan {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        perspective: 800px;
+      }
+      .fan.left { left: 0; }
+      .fan.right { right: 0; }
+
+      /* Individual card */
+      .card {
+        position: absolute;
+        width: 240px;
+        height: 320px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: box-shadow 0.3s, transform 0.3s;
+        transform-style: preserve-3d;
+      }
+      .card:hover {
+        box-shadow: 0 20px 60px rgba(0,0,0,0.25) !important;
+      }
+
+      @media (max-width: 1024px) {
+        .fan { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav">
+      <span>BuildLore</span>
+      <a href="#">Work</a>
+    </nav>
+
+    <section class="hero" id="hero">
+      <div class="fan left" id="fan-left"></div>
+      <div class="fan right" id="fan-right"></div>
+      <h1>Retain attention.<br>Build brand.</h1>
+      <p class="subtitle">Narrative-led branding, video production, and content for tech & Web3.</p>
+    </section>
+
+    <script>
+      const CARD_COUNT = 5;
+
+      function buildCards(container, side) {
+        const flip = side === 'right' ? -1 : 1;
+        for (let i = 0; i < CARD_COUNT; i++) {
+          const t = i / (CARD_COUNT - 1);
+          const shade = Math.round(210 - t * 140);
+          const rotY = 5 + t * 45;
+          const tx = 40 + i * 65;
+          const tz = -i * 35;
+          const sc = 1 - t * 0.08;
+
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.style.background = `rgb(${shade},${shade},${shade})`;
+          card.style.boxShadow = `0 8px 30px rgba(0,0,0,${0.08 + t * 0.12})`;
+          card.style.transform =
+            `translateX(${flip * -tx}px) translateZ(${tz}px) rotateY(${flip * rotY}deg) scale(${sc})`;
+          card.style.zIndex = CARD_COUNT - i;
+
+          // Animate in
+          card.style.opacity = '0';
+          setTimeout(() => {
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            card.style.opacity = '1';
+          }, 200 + i * 100);
+
+          container.appendChild(card);
+        }
+      }
+
+      buildCards(document.getElementById('fan-left'), 'left');
+      buildCards(document.getElementById('fan-right'), 'right');
+    </script>
+  </body>
+</html>
