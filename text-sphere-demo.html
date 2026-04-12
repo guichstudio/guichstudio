@@ -258,12 +258,35 @@
 
       function computeAngles() {
         const widths = measureDOM();
-        // Each line is scaled to fill exactly 360° of arc so there is no
-        // visible gap at the seam — the first and last chars meet exactly
-        // at the back of the sphere. Letter spacing adjusts per-line:
-        // shorter lines stretch, longer lines compress.
-        return widths.map((lineWidths) => {
-          const total = lineWidths.reduce((a, b) => a + b, 0) || 1;
+        // Every line except the last fills exactly 360°. The last line
+        // uses the same density as the longest previous line so it
+        // doesn't get stretched when it has fewer chars.
+        const totals = widths.map(
+          (w) => w.reduce((a, b) => a + b, 0) || 1,
+        );
+        const longestTotal =
+          widths.length > 1
+            ? Math.max.apply(null, totals.slice(0, -1))
+            : totals[0];
+
+        return widths.map((lineWidths, li) => {
+          const total = totals[li];
+          const isLast = li === widths.length - 1 && widths.length > 1;
+
+          if (isLast) {
+            const degPerPx = 360 / longestTotal;
+            const lineArc = total * degPerPx;
+            const start = -lineArc / 2;
+            const out = [];
+            let cursor = 0;
+            for (let i = 0; i < lineWidths.length; i++) {
+              const centerPx = cursor + lineWidths[i] / 2;
+              cursor += lineWidths[i];
+              out.push(start + centerPx * degPerPx);
+            }
+            return out;
+          }
+
           const out = [];
           let cursor = 0;
           for (let i = 0; i < lineWidths.length; i++) {
