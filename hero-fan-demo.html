@@ -67,9 +67,8 @@
       overflow: hidden;
       cursor: pointer;
       backface-visibility: hidden;
-      transition: filter 0.3s;
+      transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), z-index 0s;
     }
-    .card:hover { filter: brightness(1.1) }
     .card video {
       width: 100%;
       height: 100%;
@@ -147,9 +146,22 @@
       v.setAttribute('playsinline', '');
       c.appendChild(v);
 
+      // Hover: card pops out face-on and lifts up
+      var baseTransform = 'rotateY(' + ry + 'deg)';
+      c.addEventListener('mouseenter', function () {
+        c.style.zIndex = 50;
+        c.style.transform = 'rotateY(0deg) translateY(-60px) scale(1.05)';
+      });
+      c.addEventListener('mouseleave', function () {
+        c.style.zIndex = z;
+        c.style.transform = baseTransform;
+      });
+
+      // Stagger entrance
       c.style.opacity = '0';
       setTimeout(function () {
-        c.style.transition = 'opacity 0.5s';
+        c.style.transition =
+          'transform 0.5s cubic-bezier(0.23,1,0.32,1), opacity 0.5s, z-index 0s';
         c.style.opacity = '1';
       }, delay);
 
