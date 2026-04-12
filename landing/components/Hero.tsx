@@ -10,8 +10,13 @@ const sectionAnim = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } },
 };
 
-const MISSION_TEXT =
-  'Visual experience studio for brands, founders and product leaders in Web3 and live events. We move fast, work with full autonomy, and deliver high-quality brands and products that stay ahead. Enhanced by deep Web3 expertise, applied AI, and structured yet flexible processes. From installations and projection mapping to films and creative direction, anywhere in the world.';
+const MISSION_LINES = [
+  'Visual experience studio for brands, founders and product leaders in Web3 and live events.',
+  'We move fast, delivering high-quality brands and products that consistently stay ahead globally.',
+  'Enhanced by Web3 expertise, applied AI, and structured yet flexible processes for scalable execution.',
+  'From installations and projection mapping to films and creative direction, anywhere in the world.',
+];
+const MISSION_TEXT = MISSION_LINES.join(' ');
 
 export default function Hero() {
   return (
@@ -77,7 +82,7 @@ export default function Hero() {
         <p className="sr-only">{MISSION_TEXT}</p>
         <TextSphere
           text={MISSION_TEXT}
-          lines={8}
+          lines={MISSION_LINES}
           radius={260}
           fontSize={32}
           spin={-14}
