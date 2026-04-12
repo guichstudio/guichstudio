@@ -159,7 +159,7 @@ export default function TextSphere({
 
       // Small constant pad added to every measured width. It becomes extra
       // breathing room between glyphs once the line is scaled to fill 360°.
-      const SPACING_PX = 2;
+      const SPACING_PX = 0;
       const widths = perLineSpans.map((spans) =>
         spans.map(
           (s) => Math.max(1, s.getBoundingClientRect().width) + SPACING_PX,
@@ -369,7 +369,7 @@ export default function TextSphere({
   const boxSize = Math.round(radius * BOX_TO_R_RATIO);
   // ~20% leading so glyph ascenders/descenders of one line don't bleed
   // into the next.
-  const lineHeight = Math.round(fontSize * 1.2);
+  const lineHeight = Math.round(fontSize * 0.95);
   // Uniform fallback step used before DOM measurement has run.
   const fallbackDegPerChar = ((fontSize * 0.42) / radius) * (180 / Math.PI);
 

@@ -166,7 +166,7 @@
       const SPIN = -14;
       const TILT_X = -12;
       const TILT_Z = -8;
-      const LINE_HEIGHT = Math.round(FONT_SIZE * 1.2);
+      const LINE_HEIGHT = Math.round(FONT_SIZE * 0.95);
       const SPHERE_SIZE = RADIUS * 2;
       const BOX_SIZE = Math.round(RADIUS * BOX_TO_R);
       const DEG_PER_CHAR_FALLBACK =
@@ -233,7 +233,7 @@
         void container.offsetHeight;
 
         // Extra 2px per glyph — becomes breathing room after 360° scaling.
-        const SPACING_PX = 2;
+        const SPACING_PX = 0;
         const widths = perLineSpans.map((spans) =>
           spans.map(
             (s) =>
