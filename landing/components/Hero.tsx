@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import LogoCarousel from './LogoCarousel';
 import ServiceCards from './ServiceCards';
 import CTA from './CTA';
 import TextSphere from './TextSphere';
@@ -233,14 +232,9 @@ export default function Hero() {
         ))}
       </div>
 
-      {/* Logo carousel — tight spacing */}
-      <div className="-mt-2 lg:-mt-2">
-        <LogoCarousel />
-      </div>
-
       <motion.div
         id="service-cards"
-        className="-mt-4 lg:-mt-4"
+        className="mt-4 lg:mt-6"
         variants={sectionAnim}
         initial="hidden"
         whileInView="visible"
