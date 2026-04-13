@@ -55,13 +55,15 @@ function HeroFan() {
 
     // Responsive config — on mobile push cards to the very edges so
     // they're just tiny decorative slivers and don't overlap the heading
+    const mobileCount = 3;
     const cw = isMobile
-      ? Math.min(100, Math.max(70, vw * 0.22))
+      ? Math.min(280, Math.max(200, vw * 0.65))
       : Math.min(360, Math.max(240, vw * 0.22));
     const ch = cw * 9 / 16;
     const topY = cy - ch / 2;
-    const gap = isMobile ? Math.round(cx * 0.88) : INNER_GAP;
-    const space = isMobile ? 10 : SPACING;
+    const gap = isMobile ? Math.round(cx * 0.82) : INNER_GAP;
+    const space = isMobile ? 14 : SPACING;
+    const sideCount = isMobile ? mobileCount : COUNT;
 
     const cards: HTMLDivElement[] = [];
     let scrollRy = 0;
@@ -149,14 +151,14 @@ function HeroFan() {
     }
 
     // Build left fan
-    for (let i = 0; i < COUNT; i++) {
+    for (let i = 0; i < sideCount; i++) {
       const a = cx - gap - i * space;
-      createCard(FAN_VIDEOS[i], a - cw, topY, ROTATE_Y, 'right center', COUNT - i, 120 + i * 70);
+      createCard(FAN_VIDEOS[i], a - cw, topY, ROTATE_Y, 'right center', sideCount - i, 120 + i * 70);
     }
     // Build right fan
-    for (let i = 0; i < COUNT; i++) {
+    for (let i = 0; i < sideCount; i++) {
       const a = cx + gap + i * space;
-      createCard(FAN_VIDEOS[COUNT + i], a, topY, -ROTATE_Y, 'left center', COUNT - i, 120 + i * 70);
+      createCard(FAN_VIDEOS[COUNT + i], a, topY, -ROTATE_Y, 'left center', sideCount - i, 120 + i * 70);
     }
 
     // Scroll parallax
