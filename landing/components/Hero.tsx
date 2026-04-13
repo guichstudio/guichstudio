@@ -48,6 +48,9 @@ function HeroFan() {
     const hero = heroRef.current;
     if (!hero) return;
 
+    // Don't create fan cards on mobile/tablet — not enough room
+    if (window.innerWidth < 1024) return;
+
     const vw = hero.offsetWidth; // use container width, not viewport
     const cx = vw / 2;
     const cy = hero.offsetHeight * 0.46;
