@@ -48,22 +48,18 @@ function HeroFan() {
     const hero = heroRef.current;
     if (!hero) return;
 
-    const isMobile = window.innerWidth < 1024;
+    // Don't create fan cards on mobile — shown as carousel below CTA instead
+    if (window.innerWidth < 1024) return;
+
     const vw = hero.offsetWidth;
     const cx = vw / 2;
     const cy = hero.offsetHeight * 0.46;
 
-    // Responsive config — on mobile push cards to the very edges so
-    // they're just tiny decorative slivers and don't overlap the heading
-    const mobileCount = 3;
-    const cw = isMobile
-      ? Math.min(280, Math.max(200, vw * 0.65))
-      : Math.min(360, Math.max(240, vw * 0.22));
+    const cw = Math.min(360, Math.max(240, vw * 0.22));
     const ch = cw * 9 / 16;
     const topY = cy - ch / 2;
-    const gap = isMobile ? Math.round(cx * 0.82) : INNER_GAP;
-    const space = isMobile ? 14 : SPACING;
-    const sideCount = isMobile ? mobileCount : COUNT;
+    const gap = INNER_GAP;
+    const space = SPACING;
 
     const cards: HTMLDivElement[] = [];
     let scrollRy = 0;
@@ -77,12 +73,10 @@ function HeroFan() {
       const getT = () => `rotateY(${sign * (ROTATE_Y + scrollRy)}deg)`;
 
       const card = document.createElement('div');
-      card.className = isMobile
-        ? 'absolute rounded overflow-hidden backface-hidden pointer-events-none'
-        : 'absolute rounded-lg overflow-hidden cursor-pointer backface-hidden';
+      card.className = 'absolute rounded-lg overflow-hidden cursor-pointer backface-hidden';
       card.setAttribute('role', 'img');
       card.setAttribute('aria-label', data.label);
-      if (!isMobile) card.setAttribute('tabindex', '0');
+      card.setAttribute('tabindex', '0');
       card.style.cssText = `
         width:${cw}px;height:${ch}px;left:${x}px;top:${y}px;
         z-index:${z};transform-origin:${origin};
@@ -101,19 +95,15 @@ function HeroFan() {
       vid.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;pointer-events:none';
       card.appendChild(vid);
 
-      // Label on hover (desktop only)
-      let lbl: HTMLDivElement | null = null;
-      if (!isMobile) {
-        lbl = document.createElement('div');
-        lbl.textContent = data.label;
-        lbl.style.cssText = `
-          position:absolute;bottom:0;left:0;right:0;padding:10px 14px;
-          background:linear-gradient(transparent,rgba(0,0,0,.7));
-          color:#fff;font-size:13px;font-weight:600;opacity:0;
-          transition:opacity .3s;pointer-events:none;
-        `;
-        card.appendChild(lbl);
-      }
+      const lbl = document.createElement('div');
+      lbl.textContent = data.label;
+      lbl.style.cssText = `
+        position:absolute;bottom:0;left:0;right:0;padding:10px 14px;
+        background:linear-gradient(transparent,rgba(0,0,0,.7));
+        color:#fff;font-size:13px;font-weight:600;opacity:0;
+        transition:opacity .3s;pointer-events:none;
+      `;
+      card.appendChild(lbl);
 
       // Lazy play
       const io = new IntersectionObserver((e, o) => {
@@ -132,15 +122,12 @@ function HeroFan() {
         card.style.transform = getT();
         if (lbl) lbl.style.opacity = '0';
       };
-      // Desktop only: hover, focus, click navigation
-      if (!isMobile) {
-        card.addEventListener('mouseenter', activate);
-        card.addEventListener('mouseleave', deactivate);
-        card.addEventListener('focus', activate);
-        card.addEventListener('blur', deactivate);
-        card.addEventListener('click', () => { window.location.href = '/work/' + data.slug; });
-        card.addEventListener('keydown', (e) => { if (e.key === 'Enter') window.location.href = '/work/' + data.slug; });
-      }
+      card.addEventListener('mouseenter', activate);
+      card.addEventListener('mouseleave', deactivate);
+      card.addEventListener('focus', activate);
+      card.addEventListener('blur', deactivate);
+      card.addEventListener('click', () => { window.location.href = '/work/' + data.slug; });
+      card.addEventListener('keydown', (e) => { if (e.key === 'Enter') window.location.href = '/work/' + data.slug; });
 
       // Entrance
       setTimeout(() => { card.style.opacity = '1'; }, delay);
@@ -151,14 +138,14 @@ function HeroFan() {
     }
 
     // Build left fan
-    for (let i = 0; i < sideCount; i++) {
+    for (let i = 0; i < COUNT; i++) {
       const a = cx - gap - i * space;
-      createCard(FAN_VIDEOS[i], a - cw, topY, ROTATE_Y, 'right center', sideCount - i, 120 + i * 70);
+      createCard(FAN_VIDEOS[i], a - cw, topY, ROTATE_Y, 'right center', COUNT - i, 120 + i * 70);
     }
     // Build right fan
-    for (let i = 0; i < sideCount; i++) {
+    for (let i = 0; i < COUNT; i++) {
       const a = cx + gap + i * space;
-      createCard(FAN_VIDEOS[COUNT + i], a, topY, -ROTATE_Y, 'left center', sideCount - i, 120 + i * 70);
+      createCard(FAN_VIDEOS[COUNT + i], a, topY, -ROTATE_Y, 'left center', COUNT - i, 120 + i * 70);
     }
 
     // Scroll parallax
@@ -177,7 +164,7 @@ function HeroFan() {
   return (
     <div
       ref={heroRef}
-      className="relative min-h-[420px] lg:min-h-[520px] flex flex-col items-center justify-center"
+      className="relative min-h-[280px] lg:min-h-[520px] flex flex-col items-center justify-center"
       style={{ perspective: '1400px', perspectiveOrigin: '50% 46%' }}
     >
       {/* White fades near text */}
@@ -223,7 +210,7 @@ function HeroFan() {
 
 export default function Hero() {
   return (
-    <section className="container-gs pt-16 pb-0 tracking-tighter">
+    <section className="container-gs pt-10 pb-0 tracking-tighter">
       <h1 className="sr-only">
         BuildLore — Creative Agency for Branding, Video Marketing &amp; Content
         Production for Tech Companies and Web3 Projects
@@ -231,10 +218,14 @@ export default function Hero() {
 
       <HeroFan />
 
-      <LogoCarousel />
+      {/* Tighter spacing between sections on mobile */}
+      <div className="mt-2 lg:mt-0">
+        <LogoCarousel />
+      </div>
 
       <motion.div
         id="service-cards"
+        className="mt-2 lg:mt-0"
         variants={sectionAnim}
         initial="hidden"
         whileInView="visible"
@@ -245,7 +236,7 @@ export default function Hero() {
 
       {/* Mission statement — 3D text sphere */}
       <motion.div
-        className="mt-12 lg:mt-16 flex justify-center"
+        className="mt-8 lg:mt-16 flex justify-center"
         variants={sectionAnim}
         initial="hidden"
         whileInView="visible"
@@ -271,6 +262,28 @@ export default function Hero() {
       >
         <CTA />
       </motion.div>
+
+      {/* Mobile video carousel — auto-scrolling right→left, shown only on mobile */}
+      <div className="lg:hidden mt-8 -mx-4 sm:-mx-6 overflow-hidden">
+        <div className="flex gap-4 animate-scroll-rtl">
+          {[...FAN_VIDEOS, ...FAN_VIDEOS].map((v, i) => (
+            <div
+              key={i}
+              className="flex-shrink-0 w-[70vw] max-w-[300px] aspect-video rounded-xl overflow-hidden"
+            >
+              <video
+                src={v.src}
+                poster={v.poster}
+                muted
+                loop
+                playsInline
+                autoPlay
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
