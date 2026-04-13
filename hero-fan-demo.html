@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Hero Fan — BuildLore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800;900&display=swap" media="print" onload="this.media='all'"/>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0 }
+    html, body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #fff; min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    .nav { display: flex; justify-content: space-between; padding: 20px 48px; font-weight: 700; font-size: 18px }
+    .nav a { text-decoration: none; color: #000 }
+
+    .hero {
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 82vh; padding: 40px 20px;
+      perspective: 1400px; perspective-origin: 50% 46%;
+    }
+    .hero h1 {
+      position: relative; z-index: 30; font-weight: 900;
+      font-size: clamp(3rem, 7.5vw, 7.5rem);
+      letter-spacing: -0.045em; line-height: 0.95;
+      text-align: center; color: #000;
+    }
+    .hero .sub {
+      position: relative; z-index: 30; margin-top: 24px;
+      font-size: 16px; font-weight: 400; color: #555; text-align: center;
+    }
+
+    .card {
+      position: absolute; border-radius: 8px; overflow: hidden;
+      cursor: pointer; backface-visibility: hidden; outline: none;
+      transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .card:focus-visible { box-shadow: 0 0 0 3px #000 }
+    .card video { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none }
+    .card .card-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 10px 14px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      color: #fff; font-size: 13px; font-weight: 600;
+      opacity: 0; transition: opacity 0.3s; pointer-events: none;
+    }
+    .card:hover .card-label, .card:focus-visible .card-label { opacity: 1 }
+
+    .fade {
+      position: absolute; top: 0; bottom: 0; width: 42%;
+      z-index: 25; pointer-events: none;
+    }
+    .fade-l { left: 12%; background: linear-gradient(to left, rgba(255,255,255,1) 10%, rgba(255,255,255,0.9) 40%, transparent 100%) }
+    .fade-r { right: 12%; background: linear-gradient(to right, rgba(255,255,255,1) 10%, rgba(255,255,255,0.9) 40%, transparent 100%) }
+
+    .mobile-carousel {
+      display: none; overflow-x: auto; scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch; gap: 16px; padding: 24px 20px;
+      scrollbar-width: none;
+    }
+    .mobile-carousel::-webkit-scrollbar { display: none }
+    .mobile-carousel .m-card {
+      flex: 0 0 75vw; max-width: 320px; aspect-ratio: 16/9;
+      border-radius: 12px; overflow: hidden; scroll-snap-align: center;
+      cursor: pointer; position: relative;
+    }
+    .mobile-carousel .m-card video { width: 100%; height: 100%; object-fit: cover; display: block }
+    .mobile-carousel .m-card .m-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 8px 12px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.65));
+      color: #fff; font-size: 12px; font-weight: 600;
+    }
+
+    @media (max-width: 1024px) {
+      .card, .fade { display: none }
+      .mobile-carousel { display: flex }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav"><span>BuildLore</span><a href="#">Work</a></nav>
+  <section class="hero" id="hero" role="banner">
+    <div class="fade fade-l"></div>
+    <div class="fade fade-r"></div>
+    <h1>Retain attention.<br>Build brand.</h1>
+    <p class="sub">Narrative-led branding, video production, and content for tech &amp; Web3.</p>
+  </section>
+  <div class="mobile-carousel" id="carousel" role="region" aria-label="Portfolio showcase"></div>
+
+  <script>
+    const VIDEOS = [
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-1.mp4',         poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-1-thumbnail.webp',         label: 'Fantasy Top — Brand film',      slug: 'fantasy-top-1' },
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-1.mp4',  poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-1-thumbnail.webp',  label: 'H Company — Commercial',        slug: 'H-company-1' },
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/projection/pressiat.mp4',     poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/projection/pressiat-thumbnail.webp',     label: 'Pressiat — Projection mapping',  slug: 'pressiat-1' },
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/eterna.mp4',            poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/eterna-thumbnail.webp',            label: 'Eterna Labs — Web3',             slug: 'eterna-labs' },
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-2.mp4',  poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-2-thumbnail.webp',  label: 'H Company — Brand',              slug: 'H-company-2' },
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-1.mp4',   poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-2-thumbnail.webp',    label: 'Pressiat — Commercial',          slug: 'pressiat-2' },
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-2.mp4',   poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-2-thumbnail.webp',    label: 'Pressiat — Event',               slug: 'pressiat-3' },
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-1.mp4', poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-1-thumbnail.webp',  label: 'Domestique — Commercial',        slug: 'domestique-1' },
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-2.mp4', poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-2-thumbnail.webp',  label: 'Domestique — Brand',             slug: 'domestique-2' },
+      { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/pump-fun.mp4',          poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/pump-fun-thumbnail.webp',           label: 'Pump Fun — Web3',                slug: 'pump-fun' },
+    ];
+
+    const BASE_RY = 84, SPACING = 40, COUNT = 5, INNER_GAP = 340;
+    const hero = document.getElementById('hero');
+    const allCards = [];
+    let scrollRy = 0;
+
+    function cSize() {
+      const w = Math.min(360, Math.max(240, window.innerWidth * 0.22));
+      return { w, h: w * 9 / 16 };
+    }
+
+    function createCard(data, x, y, ry, origin, z, delay, cw, ch) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.setAttribute('role', 'img');
+      card.setAttribute('aria-label', data.label);
+      card.setAttribute('tabindex', '0');
+      card.style.width = cw + 'px';
+      card.style.height = ch + 'px';
+      card.style.left = x + 'px';
+      card.style.top = y + 'px';
+      card.style.zIndex = z;
+      card.style.transformOrigin = origin;
+
+      const sign = ry > 0 ? 1 : -1;
+      const getT = () => 'rotateY(' + sign * (BASE_RY + scrollRy) + 'deg)';
+      card.style.transform = getT();
+      card._sync = () => { card.style.transform = getT() };
+
+      const vid = document.createElement('video');
+      vid.src = data.src; vid.poster = data.poster; vid.preload = 'none';
+      vid.muted = true; vid.loop = true; vid.playsInline = true;
+      vid.setAttribute('playsinline', '');
+      card.appendChild(vid);
+
+      const lbl = document.createElement('div');
+      lbl.className = 'card-label';
+      lbl.textContent = data.label;
+      card.appendChild(lbl);
+
+      new IntersectionObserver((e, o) => {
+        if (e[0].isIntersecting) { vid.play().catch(() => {}); o.disconnect() }
+      }, { threshold: 0.1 }).observe(card);
+
+      const activate = () => { card.style.zIndex = 50; card.style.transform = 'rotateY(0deg) translateY(-60px) scale(1.05)' };
+      const deactivate = () => { card.style.zIndex = z; card.style.transform = getT() };
+      card.addEventListener('mouseenter', activate);
+      card.addEventListener('mouseleave', deactivate);
+      card.addEventListener('focus', activate);
+      card.addEventListener('blur', deactivate);
+
+      const go = () => { window.location.href = '/work/' + data.slug };
+      card.addEventListener('click', go);
+      card.addEventListener('keydown', e => { if (e.key === 'Enter') go() });
+
+      card.style.opacity = '0';
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          card.style.opacity = '1';
+          card.style.transition = 'transform 0.5s cubic-bezier(0.23,1,0.32,1), opacity 0.5s ease';
+        }, delay);
+      });
+
+      hero.appendChild(card);
+      return card;
+    }
+
+    // Desktop fans
+    requestAnimationFrame(() => {
+      const vw = window.innerWidth, cx = vw / 2;
+      const cy = hero.offsetHeight * 0.46;
+      const { w: cw, h: ch } = cSize();
+      const topY = cy - ch / 2;
+
+      for (let i = 0; i < COUNT; i++) {
+        const a = cx - INNER_GAP - i * SPACING;
+        allCards.push(createCard(VIDEOS[i], a - cw, topY, BASE_RY, 'right center', COUNT - i, 120 + i * 70, cw, ch));
+      }
+      for (let i = 0; i < COUNT; i++) {
+        const a = cx + INNER_GAP + i * SPACING;
+        allCards.push(createCard(VIDEOS[COUNT + i], a, topY, -BASE_RY, 'left center', COUNT - i, 120 + i * 70, cw, ch));
+      }
+    });
+
+    // Scroll parallax: cards close slightly on scroll
+    window.addEventListener('scroll', () => {
+      scrollRy = Math.min(6, window.scrollY / (window.innerHeight * 0.6) * 6);
+      allCards.forEach(c => c._sync && c._sync());
+    }, { passive: true });
+
+    // Mobile carousel
+    const carousel = document.getElementById('carousel');
+    VIDEOS.forEach(d => {
+      const c = document.createElement('div');
+      c.className = 'm-card';
+      c.addEventListener('click', () => { window.location.href = '/work/' + d.slug });
+      const v = document.createElement('video');
+      v.src = d.src; v.poster = d.poster; v.preload = 'none';
+      v.muted = true; v.loop = true; v.playsInline = true;
+      v.setAttribute('playsinline', '');
+      c.appendChild(v);
+      const l = document.createElement('div');
+      l.className = 'm-label'; l.textContent = d.label;
+      c.appendChild(l);
+      new IntersectionObserver((e, o) => {
+        if (e[0].isIntersecting) { v.play().catch(() => {}); o.disconnect() }
+      }, { threshold: 0.3 }).observe(c);
+      carousel.appendChild(c);
+    });
+  </script>
+</body>
+</html>
