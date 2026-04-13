@@ -48,7 +48,7 @@ function HeroFan() {
     const hero = heroRef.current;
     if (!hero) return;
 
-    const vw = window.innerWidth;
+    const vw = hero.offsetWidth; // use container width, not viewport
     const cx = vw / 2;
     const cy = hero.offsetHeight * 0.46;
     const cw = Math.min(360, Math.max(240, vw * 0.22));
