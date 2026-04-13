@@ -48,15 +48,20 @@ function HeroFan() {
     const hero = heroRef.current;
     if (!hero) return;
 
-    // Don't create fan cards on mobile/tablet — not enough room
-    if (window.innerWidth < 1024) return;
-
-    const vw = hero.offsetWidth; // use container width, not viewport
+    const isMobile = window.innerWidth < 1024;
+    const vw = hero.offsetWidth;
     const cx = vw / 2;
     const cy = hero.offsetHeight * 0.46;
-    const cw = Math.min(360, Math.max(240, vw * 0.22));
+
+    // Responsive config — scale everything for mobile
+    const cw = isMobile
+      ? Math.min(140, Math.max(90, vw * 0.28))
+      : Math.min(360, Math.max(240, vw * 0.22));
     const ch = cw * 9 / 16;
     const topY = cy - ch / 2;
+    const gap = isMobile ? 100 : INNER_GAP;
+    const space = isMobile ? 18 : SPACING;
+
     const cards: HTMLDivElement[] = [];
     let scrollRy = 0;
 
@@ -69,10 +74,12 @@ function HeroFan() {
       const getT = () => `rotateY(${sign * (ROTATE_Y + scrollRy)}deg)`;
 
       const card = document.createElement('div');
-      card.className = 'absolute rounded-lg overflow-hidden cursor-pointer backface-hidden';
+      card.className = isMobile
+        ? 'absolute rounded overflow-hidden backface-hidden pointer-events-none'
+        : 'absolute rounded-lg overflow-hidden cursor-pointer backface-hidden';
       card.setAttribute('role', 'img');
       card.setAttribute('aria-label', data.label);
-      card.setAttribute('tabindex', '0');
+      if (!isMobile) card.setAttribute('tabindex', '0');
       card.style.cssText = `
         width:${cw}px;height:${ch}px;left:${x}px;top:${y}px;
         z-index:${z};transform-origin:${origin};
@@ -91,16 +98,19 @@ function HeroFan() {
       vid.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;pointer-events:none';
       card.appendChild(vid);
 
-      // Label on hover
-      const lbl = document.createElement('div');
-      lbl.textContent = data.label;
-      lbl.style.cssText = `
-        position:absolute;bottom:0;left:0;right:0;padding:10px 14px;
-        background:linear-gradient(transparent,rgba(0,0,0,.7));
-        color:#fff;font-size:13px;font-weight:600;opacity:0;
-        transition:opacity .3s;pointer-events:none;
-      `;
-      card.appendChild(lbl);
+      // Label on hover (desktop only)
+      let lbl: HTMLDivElement | null = null;
+      if (!isMobile) {
+        lbl = document.createElement('div');
+        lbl.textContent = data.label;
+        lbl.style.cssText = `
+          position:absolute;bottom:0;left:0;right:0;padding:10px 14px;
+          background:linear-gradient(transparent,rgba(0,0,0,.7));
+          color:#fff;font-size:13px;font-weight:600;opacity:0;
+          transition:opacity .3s;pointer-events:none;
+        `;
+        card.appendChild(lbl);
+      }
 
       // Lazy play
       const io = new IntersectionObserver((e, o) => {
@@ -108,25 +118,26 @@ function HeroFan() {
       }, { threshold: 0.1 });
       io.observe(card);
 
-      // Hover / focus
+      // Hover / focus (desktop only)
       const activate = () => {
         card.style.zIndex = '50';
         card.style.transform = 'rotateY(0deg) translateY(-60px) scale(1.05)';
-        lbl.style.opacity = '1';
+        if (lbl) lbl.style.opacity = '1';
       };
       const deactivate = () => {
         card.style.zIndex = String(z);
         card.style.transform = getT();
-        lbl.style.opacity = '0';
+        if (lbl) lbl.style.opacity = '0';
       };
-      card.addEventListener('mouseenter', activate);
-      card.addEventListener('mouseleave', deactivate);
-      card.addEventListener('focus', activate);
-      card.addEventListener('blur', deactivate);
-
-      // Navigate
-      card.addEventListener('click', () => { window.location.href = '/work/' + data.slug; });
-      card.addEventListener('keydown', (e) => { if (e.key === 'Enter') window.location.href = '/work/' + data.slug; });
+      // Desktop only: hover, focus, click navigation
+      if (!isMobile) {
+        card.addEventListener('mouseenter', activate);
+        card.addEventListener('mouseleave', deactivate);
+        card.addEventListener('focus', activate);
+        card.addEventListener('blur', deactivate);
+        card.addEventListener('click', () => { window.location.href = '/work/' + data.slug; });
+        card.addEventListener('keydown', (e) => { if (e.key === 'Enter') window.location.href = '/work/' + data.slug; });
+      }
 
       // Entrance
       setTimeout(() => { card.style.opacity = '1'; }, delay);
@@ -138,12 +149,12 @@ function HeroFan() {
 
     // Build left fan
     for (let i = 0; i < COUNT; i++) {
-      const a = cx - INNER_GAP - i * SPACING;
+      const a = cx - gap - i * space;
       createCard(FAN_VIDEOS[i], a - cw, topY, ROTATE_Y, 'right center', COUNT - i, 120 + i * 70);
     }
     // Build right fan
     for (let i = 0; i < COUNT; i++) {
-      const a = cx + INNER_GAP + i * SPACING;
+      const a = cx + gap + i * space;
       createCard(FAN_VIDEOS[COUNT + i], a, topY, -ROTATE_Y, 'left center', COUNT - i, 120 + i * 70);
     }
 
@@ -167,9 +178,9 @@ function HeroFan() {
       style={{ perspective: '1400px', perspectiveOrigin: '50% 46%' }}
     >
       {/* White fades near text */}
-      <div className="absolute top-0 bottom-0 w-[42%] left-[12%] z-[25] pointer-events-none hidden lg:block"
+      <div className="absolute top-0 bottom-0 w-[42%] left-[12%] z-[25] pointer-events-none"
         style={{ background: 'linear-gradient(to left, rgba(255,255,255,1) 10%, rgba(255,255,255,0.9) 40%, transparent 100%)' }} />
-      <div className="absolute top-0 bottom-0 w-[42%] right-[12%] z-[25] pointer-events-none hidden lg:block"
+      <div className="absolute top-0 bottom-0 w-[42%] right-[12%] z-[25] pointer-events-none"
         style={{ background: 'linear-gradient(to right, rgba(255,255,255,1) 10%, rgba(255,255,255,0.9) 40%, transparent 100%)' }} />
 
       {/* Heading — same font size as production main */}
