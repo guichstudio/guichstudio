@@ -1,6 +1,6 @@
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import LogoCarousel from './LogoCarousel';
-import TwitterCarouselScratch from './TwitterCarouselScratch';
 import ServiceCards from './ServiceCards';
 import CTA from './CTA';
 import TextSphere from './TextSphere';
@@ -18,64 +18,188 @@ const MISSION_LINES = [
 ];
 const MISSION_TEXT = MISSION_LINES.join(' ');
 
-/**
- * Interactive fanning cards that flank the hero heading. Each card is a
- * placeholder for a video/asset. They spread outward in 3D perspective
- * from the center, getting darker and more rotated at the edges.
- */
-const CARD_COUNT = 5;
-const CARDS = Array.from({ length: CARD_COUNT }, (_, i) => {
-  // 0 = closest to center (lightest, least rotated), 4 = furthest (darkest)
-  const t = i / (CARD_COUNT - 1);
-  return {
-    shade: Math.round(210 - t * 140), // 210 (light gray) → 70 (dark gray)
-    rotateY: 5 + t * 40,              // 5° → 45° rotation
-    translateX: 30 + i * 55,          // spread outward
-    translateZ: -i * 30,              // push back in Z
-    scale: 1 - t * 0.08,             // slightly smaller at edges
-    delay: 0.15 + i * 0.08,          // staggered animation
-  };
-});
+// ---- Fan cards data ----
+const FAN_VIDEOS = [
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-1.mp4',         poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-1-thumbnail.webp',         label: 'Fantasy Top — Brand film',      slug: 'fantasy-top-1' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-1.mp4',  poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-1-thumbnail.webp',  label: 'H Company — Commercial',        slug: 'H-company-1' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/projection/pressiat.mp4',     poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/projection/pressiat-thumbnail.webp',     label: 'Pressiat — Projection mapping',  slug: 'pressiat-1' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/eterna.mp4',            poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/eterna-thumbnail.webp',             label: 'Eterna Labs — Web3',             slug: 'eterna-labs' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-2.mp4',  poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-2-thumbnail.webp',  label: 'H Company — Brand',              slug: 'H-company-2' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-1.mp4',   poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-2-thumbnail.webp',    label: 'Pressiat — Commercial',          slug: 'pressiat-2' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-2.mp4',   poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-2-thumbnail.webp',    label: 'Pressiat — Event',               slug: 'pressiat-3' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-1.mp4', poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-1-thumbnail.webp',  label: 'Domestique — Commercial',        slug: 'domestique-1' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-2.mp4', poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-2-thumbnail.webp',  label: 'Domestique — Brand',             slug: 'domestique-2' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/pump-fun.mp4',          poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/pump-fun-thumbnail.webp',           label: 'Pump Fun — Web3',                slug: 'pump-fun' },
+];
 
-function FanCards({ side }: { side: 'left' | 'right' }) {
-  const flip = side === 'right' ? -1 : 1;
+const ROTATE_Y = 84;
+const SPACING = 40;
+const COUNT = 5;
+const INNER_GAP = 340;
+
+/**
+ * Builds the perspective fan of video cards on each side of the heading.
+ * Cards are positioned imperatively after mount to read viewport dimensions.
+ */
+function HeroFan() {
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero) return;
+
+    const vw = window.innerWidth;
+    const cx = vw / 2;
+    const cy = hero.offsetHeight * 0.46;
+    const cw = Math.min(360, Math.max(240, vw * 0.22));
+    const ch = cw * 9 / 16;
+    const topY = cy - ch / 2;
+    const cards: HTMLDivElement[] = [];
+    let scrollRy = 0;
+
+    function createCard(
+      data: (typeof FAN_VIDEOS)[0],
+      x: number, y: number, ry: number,
+      origin: string, z: number, delay: number,
+    ) {
+      const sign = ry > 0 ? 1 : -1;
+      const getT = () => `rotateY(${sign * (ROTATE_Y + scrollRy)}deg)`;
+
+      const card = document.createElement('div');
+      card.className = 'absolute rounded-lg overflow-hidden cursor-pointer backface-hidden';
+      card.setAttribute('role', 'img');
+      card.setAttribute('aria-label', data.label);
+      card.setAttribute('tabindex', '0');
+      card.style.cssText = `
+        width:${cw}px;height:${ch}px;left:${x}px;top:${y}px;
+        z-index:${z};transform-origin:${origin};
+        transform:${getT()};backface-visibility:hidden;
+        transition:transform .5s cubic-bezier(.23,1,.32,1);opacity:0;
+      `;
+
+      const vid = document.createElement('video');
+      vid.src = data.src;
+      vid.poster = data.poster;
+      vid.preload = 'none';
+      vid.muted = true;
+      vid.loop = true;
+      vid.playsInline = true;
+      vid.setAttribute('playsinline', '');
+      vid.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;pointer-events:none';
+      card.appendChild(vid);
+
+      // Label on hover
+      const lbl = document.createElement('div');
+      lbl.textContent = data.label;
+      lbl.style.cssText = `
+        position:absolute;bottom:0;left:0;right:0;padding:10px 14px;
+        background:linear-gradient(transparent,rgba(0,0,0,.7));
+        color:#fff;font-size:13px;font-weight:600;opacity:0;
+        transition:opacity .3s;pointer-events:none;
+      `;
+      card.appendChild(lbl);
+
+      // Lazy play
+      const io = new IntersectionObserver((e, o) => {
+        if (e[0].isIntersecting) { vid.play().catch(() => {}); o.disconnect(); }
+      }, { threshold: 0.1 });
+      io.observe(card);
+
+      // Hover / focus
+      const activate = () => {
+        card.style.zIndex = '50';
+        card.style.transform = 'rotateY(0deg) translateY(-60px) scale(1.05)';
+        lbl.style.opacity = '1';
+      };
+      const deactivate = () => {
+        card.style.zIndex = String(z);
+        card.style.transform = getT();
+        lbl.style.opacity = '0';
+      };
+      card.addEventListener('mouseenter', activate);
+      card.addEventListener('mouseleave', deactivate);
+      card.addEventListener('focus', activate);
+      card.addEventListener('blur', deactivate);
+
+      // Navigate
+      card.addEventListener('click', () => { window.location.href = '/work/' + data.slug; });
+      card.addEventListener('keydown', (e) => { if (e.key === 'Enter') window.location.href = '/work/' + data.slug; });
+
+      // Entrance
+      setTimeout(() => { card.style.opacity = '1'; }, delay);
+
+      hero!.appendChild(card);
+      (card as HTMLDivElement & { _sync: () => void })._sync = () => { card.style.transform = getT(); };
+      cards.push(card);
+    }
+
+    // Build left fan
+    for (let i = 0; i < COUNT; i++) {
+      const a = cx - INNER_GAP - i * SPACING;
+      createCard(FAN_VIDEOS[i], a - cw, topY, ROTATE_Y, 'right center', COUNT - i, 120 + i * 70);
+    }
+    // Build right fan
+    for (let i = 0; i < COUNT; i++) {
+      const a = cx + INNER_GAP + i * SPACING;
+      createCard(FAN_VIDEOS[COUNT + i], a, topY, -ROTATE_Y, 'left center', COUNT - i, 120 + i * 70);
+    }
+
+    // Scroll parallax
+    const onScroll = () => {
+      scrollRy = Math.min(6, (window.scrollY / (window.innerHeight * 0.6)) * 6);
+      cards.forEach((c: any) => c._sync?.());
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      cards.forEach((c) => c.remove());
+    };
+  }, []);
+
   return (
     <div
-      className="absolute top-1/2 hidden lg:flex items-center"
-      style={{
-        [side]: 0,
-        transform: 'translateY(-50%)',
-        perspective: '800px',
-      }}
+      ref={heroRef}
+      className="relative min-h-[420px] lg:min-h-[520px] flex flex-col items-center justify-center"
+      style={{ perspective: '1400px', perspectiveOrigin: '50% 46%' }}
     >
-      {CARDS.map((card, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, x: flip * -60 }}
+      {/* White fades near text */}
+      <div className="absolute top-0 bottom-0 w-[42%] left-[12%] z-[25] pointer-events-none hidden lg:block"
+        style={{ background: 'linear-gradient(to left, rgba(255,255,255,1) 10%, rgba(255,255,255,0.9) 40%, transparent 100%)' }} />
+      <div className="absolute top-0 bottom-0 w-[42%] right-[12%] z-[25] pointer-events-none hidden lg:block"
+        style={{ background: 'linear-gradient(to right, rgba(255,255,255,1) 10%, rgba(255,255,255,0.9) 40%, transparent 100%)' }} />
+
+      {/* Heading — same font size as production main */}
+      <motion.p
+        aria-hidden="true"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.7 }}
+        className="relative z-30 text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tighter text-center"
+      >
+        <motion.span
+          initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{
-            duration: 0.7,
-            delay: card.delay,
-            ease: 'easeOut',
-          }}
-          whileHover={{ scale: card.scale + 0.04 }}
-          className="absolute cursor-pointer rounded-md shadow-lg
-                     transition-shadow duration-300 hover:shadow-2xl"
-          style={{
-            width: 220,
-            height: 300,
-            background: `rgb(${card.shade}, ${card.shade}, ${card.shade})`,
-            transform: `
-              translateX(${flip * -card.translateX}px)
-              translateZ(${card.translateZ}px)
-              rotateY(${flip * card.rotateY}deg)
-              scale(${card.scale})
-            `,
-            transformStyle: 'preserve-3d',
-            zIndex: CARD_COUNT - i,
-          }}
-        />
-      ))}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="block overflow-hidden"
+        >
+          Retain attention.
+        </motion.span>
+        <motion.span
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="block overflow-hidden"
+        >
+          Build brand.
+        </motion.span>
+      </motion.p>
+
+      <div className="relative z-30 flex justify-center">
+        <p className="mt-5 lg:mt-6 max-w-2xl lg:max-w-3xl text-neutral-600 text-center tracking-tighter lg:text-lg">
+          Narrative-led branding, video production, and content for tech &amp; Web3.
+        </p>
+      </div>
     </div>
   );
 }
@@ -88,47 +212,9 @@ export default function Hero() {
         Production for Tech Companies and Web3 Projects
       </h1>
 
-      {/* Hero heading with fanning cards */}
-      <div className="relative min-h-[420px] lg:min-h-[520px] flex flex-col items-center justify-center">
-        <FanCards side="left" />
-        <FanCards side="right" />
-
-        <motion.p
-          aria-hidden="true"
-          initial={{ opacity: 0, y: 0 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="relative z-10 text-5xl md:text-6xl lg:text-7xl xl:text-8xl
-                     font-extrabold tracking-tighter text-center"
-        >
-          <motion.span
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="block overflow-hidden"
-          >
-            Retain attention.
-          </motion.span>
-          <motion.span
-            initial={{ opacity: 0, x: -100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="block overflow-hidden"
-          >
-            Build brand.
-          </motion.span>
-        </motion.p>
-
-        <div className="relative z-10 flex justify-center">
-          <p className="mt-5 lg:mt-6 max-w-2xl lg:max-w-3xl text-neutral-600 text-center tracking-tighter lg:text-lg">
-            Narrative-led branding, video production, and content for tech &amp; Web3.
-          </p>
-        </div>
-      </div>
+      <HeroFan />
 
       <LogoCarousel />
-
-      <TwitterCarouselScratch />
 
       <motion.div
         id="service-cards"
@@ -140,7 +226,7 @@ export default function Hero() {
         <ServiceCards />
       </motion.div>
 
-      {/* Mission statement — rendered as a 3D text sphere */}
+      {/* Mission statement — 3D text sphere */}
       <motion.div
         className="mt-12 lg:mt-16 flex justify-center"
         variants={sectionAnim}
