@@ -39,6 +39,12 @@ html, body { @apply bg-white text-neutral-900 antialiased; overflow-x: hidden; }
   width: max-content;
 }
 
+/* Video carousel scroll right-to-left */
+.animate-scroll-rtl {
+  animation: scroll 40s linear infinite;
+  width: max-content;
+}
+
 /* Visually hidden but accessible to crawlers and screen readers */
 .sr-only {
   position: absolute;
