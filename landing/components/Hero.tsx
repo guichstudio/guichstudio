@@ -163,7 +163,7 @@ function HeroFan() {
   return (
     <div
       ref={heroRef}
-      className="relative min-h-[280px] lg:min-h-[520px] flex flex-col items-center justify-center"
+      className="relative min-h-[200px] lg:min-h-[520px] flex flex-col items-center justify-center"
       style={{ perspective: '1400px', perspectiveOrigin: '50% 46%' }}
     >
       {/* White fades near text */}
@@ -199,7 +199,7 @@ function HeroFan() {
       </motion.p>
 
       <div className="relative z-30 flex justify-center">
-        <p className="mt-5 lg:mt-6 max-w-2xl lg:max-w-3xl text-neutral-600 text-center tracking-tighter lg:text-lg">
+        <p className="mt-2 lg:mt-4 max-w-2xl lg:max-w-3xl text-neutral-600 text-center tracking-tighter lg:text-lg">
           Narrative-led branding, video production, and content for tech &amp; Web3.
         </p>
       </div>
@@ -209,7 +209,7 @@ function HeroFan() {
 
 export default function Hero() {
   return (
-    <section className="container-gs pt-10 pb-0 tracking-tighter">
+    <section className="container-gs pt-4 pb-0 tracking-tighter">
       <h1 className="sr-only">
         BuildLore — Creative Agency for Branding, Video Marketing &amp; Content
         Production for Tech Companies and Web3 Projects
@@ -218,7 +218,7 @@ export default function Hero() {
       <HeroFan />
 
       {/* Key stats */}
-      <div className="mt-4 lg:mt-6 grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8 max-w-3xl mx-auto px-4">
+      <div className="mt-1 lg:mt-4 grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-8 max-w-3xl mx-auto px-4">
         {[
           { value: '16+', label: 'Brands built' },
           { value: '23M+', label: 'Views generated' },
@@ -234,7 +234,7 @@ export default function Hero() {
 
       <motion.div
         id="service-cards"
-        className="mt-4 lg:mt-6"
+        className="mt-1 lg:mt-4"
         variants={sectionAnim}
         initial="hidden"
         whileInView="visible"

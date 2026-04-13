@@ -42,13 +42,13 @@ export default function ServiceCards() {
 
   return (
     <motion.div
-      className="mt-16"
+      className="mt-2"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
     >
-      <p className="text-xs sm:text-sm tracking-[0.2em] text-neutral-400 uppercase mb-8 lg:mb-10 text-center">
+      <p className="text-xs sm:text-sm tracking-[0.2em] text-neutral-400 uppercase mb-3 lg:mb-6 text-center">
         What we do
       </p>
 
