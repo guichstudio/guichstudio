@@ -218,14 +218,29 @@ export default function Hero() {
 
       <HeroFan />
 
-      {/* Tighter spacing between sections on mobile */}
-      <div className="mt-2 lg:mt-0">
+      {/* Key stats */}
+      <div className="mt-4 lg:mt-6 grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8 max-w-3xl mx-auto px-4">
+        {[
+          { value: '16+', label: 'Brands built' },
+          { value: '23M+', label: 'Views generated' },
+          { value: '48h', label: 'Avg. turnaround' },
+          { value: '100%', label: 'Remote-ready' },
+        ].map((s) => (
+          <div key={s.label} className="text-center">
+            <p className="text-2xl lg:text-4xl font-extrabold tracking-tight text-neutral-900">{s.value}</p>
+            <p className="text-xs lg:text-sm text-neutral-500 mt-1">{s.label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Logo carousel — tight spacing */}
+      <div className="-mt-2 lg:-mt-2">
         <LogoCarousel />
       </div>
 
       <motion.div
         id="service-cards"
-        className="mt-2 lg:mt-0"
+        className="-mt-4 lg:-mt-4"
         variants={sectionAnim}
         initial="hidden"
         whileInView="visible"
