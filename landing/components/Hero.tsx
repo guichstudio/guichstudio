@@ -53,14 +53,15 @@ function HeroFan() {
     const cx = vw / 2;
     const cy = hero.offsetHeight * 0.46;
 
-    // Responsive config — scale everything for mobile
+    // Responsive config — on mobile push cards to the very edges so
+    // they're just tiny decorative slivers and don't overlap the heading
     const cw = isMobile
-      ? Math.min(140, Math.max(90, vw * 0.28))
+      ? Math.min(100, Math.max(70, vw * 0.22))
       : Math.min(360, Math.max(240, vw * 0.22));
     const ch = cw * 9 / 16;
     const topY = cy - ch / 2;
-    const gap = isMobile ? 100 : INNER_GAP;
-    const space = isMobile ? 18 : SPACING;
+    const gap = isMobile ? Math.round(cx * 0.88) : INNER_GAP;
+    const space = isMobile ? 10 : SPACING;
 
     const cards: HTMLDivElement[] = [];
     let scrollRy = 0;
