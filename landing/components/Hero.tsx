@@ -206,7 +206,7 @@ function HeroFan() {
 
 export default function Hero() {
   return (
-    <section className="container-gs pt-16 pb-0 overflow-hidden tracking-tighter">
+    <section className="container-gs pt-16 pb-0 tracking-tighter">
       <h1 className="sr-only">
         BuildLore — Creative Agency for Branding, Video Marketing &amp; Content
         Production for Tech Companies and Web3 Projects
