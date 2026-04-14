@@ -14,13 +14,6 @@ export default function Document() {
           type="font/ttf"
           crossOrigin="anonymous"
         />
-        <link
-          rel="preload"
-          href="/fonts/BigCaslon.ttf"
-          as="font"
-          type="font/ttf"
-          crossOrigin="anonymous"
-        />
         {/* AI discoverability */}
         <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM Summary" />
         <link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLM Full Content" />
