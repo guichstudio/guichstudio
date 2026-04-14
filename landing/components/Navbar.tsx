@@ -17,8 +17,17 @@ export default function Navbar() {
     <>
       <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/60">
         <nav className="container-gs flex items-center justify-between py-4">
-          <Link href="/" className="text-2xl font-bold tracking-tight">
-            BuildLore
+          <Link
+            href="/"
+            onClick={(e) => {
+              if (router.pathname === '/') {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
+            className="font-serif text-2xl tracking-tight"
+          >
+            Buildlore.top
           </Link>
           <ul className="flex items-center gap-5 text-lg">
             {links.map(l => (
