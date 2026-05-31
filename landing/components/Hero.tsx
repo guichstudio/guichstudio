@@ -272,21 +272,22 @@ export default function Hero() {
         <CTA />
       </motion.div>
 
-      {/* Mobile video carousel — auto-scrolling right→left, shown only on mobile */}
+      {/* Mobile thumbnail carousel — auto-scrolling right→left, shown only on mobile.
+          We render the poster as an <img> rather than a <video>: iOS blocks
+          autoplay in Low Power Mode and paints a "play slashed" overlay on
+          top of the poster, which was breaking the display. Still images are
+          lighter and always render. */}
       <div className="lg:hidden mt-8 -mx-4 sm:-mx-6 overflow-hidden">
         <div className="flex gap-4 animate-scroll-rtl">
           {[...FAN_VIDEOS, ...FAN_VIDEOS].map((v, i) => (
             <div
               key={i}
-              className="flex-shrink-0 w-[70vw] max-w-[300px] aspect-video rounded-xl overflow-hidden"
+              className="flex-shrink-0 w-[70vw] max-w-[300px] aspect-video rounded-xl overflow-hidden bg-neutral-100"
             >
-              <video
-                src={v.src}
-                poster={v.poster}
-                muted
-                loop
-                playsInline
-                autoPlay
+              <img
+                src={v.poster}
+                alt={v.label}
+                loading="lazy"
                 className="w-full h-full object-cover"
               />
             </div>
