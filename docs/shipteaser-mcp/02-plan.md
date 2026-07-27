@@ -211,8 +211,15 @@ Portes existantes à ne pas casser : `tsc` web, `next build`, et les 628 tests
 `web/`. Les 1632 tests `pipeline/` ne devraient pas bouger — aucune étape ne
 touche `pipeline/`.
 
-L'étape 7 suppose un worker qui consomme la queue ; la spec le note déjà comme
-hors scope de ce build.
+L'étape 7 suppose un worker qui consomme la queue. La spec le notait comme une
+inconnue (§7 : « le test E2E aura besoin d'un worker qui consomme la queue
+quelque part ») — **c'est réglé** : `buildlore-worker.service` est un service
+systemd déjà installé sur le VPS, redémarré avec drainage par `deploy/deploy.sh`
+(SIGTERM, il finit le job en vol avant de sortir). Rien à monter.
+
+Corollaire sur le déploiement : `web/` n'est pas sur Vercel mais auto-hébergé
+(`next start` derrière systemd, `shipteaser.com`). Livrer le MCP = jouer les
+migrations dans l'éditeur SQL Supabase, puis un `deploy.sh`.
 
 ---
 
