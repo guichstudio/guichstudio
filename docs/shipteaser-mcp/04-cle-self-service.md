@@ -35,7 +35,12 @@ Cet ajout **touche le dashboard** — une section de plus dans
 génération, de render ou de quota n'est modifiée, on n'ajoute qu'un écran de
 gestion de clés. Le worker et l'extraction restent intacts.
 
-À valider explicitement, puisque la spec l'interdisait.
+**Validé le 2026-07-27.** La consigne d'origine était une clôture de
+périmètre, pas une interdiction de principe : les trois zones citées (worker,
+dashboard, extraction) sont celles où une régression est immédiatement
+visible en production, et la spec ajoutait elle-même « si un blocage dépend
+d'eux, le signaler et continuer sur le reste ». C'est ce qui est fait ici —
+signalé, borné, validé. Le worker et l'extraction restent hors limites.
 
 ---
 
