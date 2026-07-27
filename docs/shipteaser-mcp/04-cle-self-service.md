@@ -92,6 +92,63 @@ toi.
 - Un préfixe tronqué (`st_live_a1b2…`) est conservé en clair pour que le client
   reconnaisse ses clés dans la liste.
 
+## Modèle de menace et durcissement
+
+Analyse du 2026-07-27 (question : « est-ce safe d'avoir une clé API ? »).
+Réponse : oui — le rayon d'explosion d'une fuite est borné et réversible, à
+condition des ajouts ci-dessous.
+
+### Rayon d'explosion d'une clé volée
+
+Le scénario réaliste n°1 est la clé commitée dans un repo public. Ce que le
+voleur obtient : générer des teasers sur les brands du compte, lire des
+statuts. Rien de destructif — pas de suppression, pas de modification de
+compte, pas de facturation. Et c'est borné trois fois :
+
+1. **quota mensuel**, débit atomique (`05` §2.2) — pas de course sur le
+   dernier crédit ;
+2. **un render en vol par compte** (index existant) — impossible d'empiler
+   des jobs et de noyer le worker (concurrence 1) ;
+3. **révocation en un clic**, effet immédiat.
+
+Coût maximal connu d'avance : un mois de quota, un job à la fois.
+
+Côté données, le flux est **sortant uniquement** : ShipTeaser ne reçoit
+jamais d'accès au repo du client — son Claude lit le code et pousse un
+résumé. On ne stocke que ce qu'il choisit d'envoyer. (La skill cliente doit
+le dire explicitement : pas de secrets ni de code propriétaire dans le
+bundle.)
+
+### Acquis du design (rappel)
+
+- sha256 seul en base, secret affiché une fois — une fuite de la base ne
+  fuite pas les clés ;
+- préfixe `st_live_` : détectable par les scanners de secrets (GitHub le
+  signale), loggable tronqué sans exposer la clé ;
+- révocation sans suppression (`revoked_at`), historique conservé ;
+- RLS activée zéro policy sur toutes les tables touchées.
+
+### Trois ajouts requis à l'implémentation
+
+1. **Rate-limit sur les échecs d'auth** — quelques clés invalides par IP et
+   par minute, sinon la route est scannable. Réutiliser la machinerie de
+   `web/lib/security.ts` (`recordAttempt`, buckets par IP). Fail closed.
+2. **`product_url` passe par `assertPublicUrl`** — la protection SSRF existe
+   (`assertPublicUrl` côté web, `ssrfGuard.ts` côté pipeline) parce que le
+   produit crawle des URLs ; ne pas l'oublier sur la route MCP. Sans ça, une
+   clé volée devient un proxy pour sonder le réseau interne du VPS.
+3. **Plafonds de taille** — `max()` Zod partout sur le ContextBundle (déjà
+   dans le schéma de `06`) **plus** un plafond sur l'objet stocké, pour que
+   la clé ne serve pas à remplir l'object storage.
+
+### Détail d'implémentation qui rend le reste gratuit
+
+La clé se cherche par son hash — `where key_hash = sha256(clé reçue)` sur
+l'index unique — jamais par comparaison de chaîne : pas d'attaque par timing
+possible, et le lookup est le chemin le plus rapide de toute façon.
+
+---
+
 ### Points à trancher à l'implémentation
 
 - **Combien de clés actives par compte ?** Une seule (simple, mais la rotation
