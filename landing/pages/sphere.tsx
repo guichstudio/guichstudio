@@ -12,7 +12,7 @@ export default function SphereDemo() {
   return (
     <>
       <Head>
-        <title>3D Text Sphere — BuildLore</title>
+        <title>3D Text Sphere | BuildLore</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="min-h-screen flex flex-col items-center justify-center bg-neutral-100 px-4 py-16">

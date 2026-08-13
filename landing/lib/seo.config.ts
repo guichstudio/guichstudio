@@ -7,7 +7,7 @@ const DEFAULT_DESCRIPTION =
 
 export const SEO_CONFIG: DefaultSeoProps = {
   titleTemplate: '%s | BuildLore',
-  defaultTitle: 'BuildLore — Branding & Video Marketing for Tech & Web3',
+  defaultTitle: 'BuildLore | Branding & Video Marketing for Tech & Web3',
   description: DEFAULT_DESCRIPTION,
   canonical: SITE_URL,
   openGraph: {
@@ -15,14 +15,14 @@ export const SEO_CONFIG: DefaultSeoProps = {
     locale: 'en_US',
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: 'BuildLore — Branding & Video Marketing for Tech & Web3',
+    title: 'BuildLore | Branding & Video Marketing for Tech & Web3',
     description: DEFAULT_DESCRIPTION,
     images: [
       {
         url: `${SITE_URL}/og-default.jpg`,
         width: 1200,
         height: 630,
-        alt: 'BuildLore — Retain attention. Build fans.',
+        alt: 'BuildLore. Retain attention. Build fans.',
         type: 'image/jpeg',
       },
     ],

@@ -19,16 +19,16 @@ const MISSION_TEXT = MISSION_LINES.join(' ');
 
 // ---- Fan cards data ----
 const FAN_VIDEOS = [
-  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-1.mp4',         poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-1-thumbnail.webp',         label: 'Fantasy Top — Brand film',      slug: 'fantasy-top-1' },
-  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-1.mp4',  poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-1-thumbnail.webp',  label: 'H Company — Commercial',        slug: 'H-company-1' },
-  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/projection/pressiat.mp4',     poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/projection/pressiat-thumbnail.webp',     label: 'Pressiat — Projection mapping',  slug: 'pressiat-1' },
-  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/eterna.mp4',            poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/eterna-thumbnail.webp',             label: 'Eterna Labs — Web3',             slug: 'eterna-labs' },
-  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-2.mp4',  poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-2-thumbnail.webp',  label: 'H Company — Brand',              slug: 'H-company-2' },
-  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-1.mp4',   poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-2-thumbnail.webp',    label: 'Pressiat — Commercial',          slug: 'pressiat-2' },
-  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-2.mp4',   poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-2-thumbnail.webp',    label: 'Pressiat — Event',               slug: 'pressiat-3' },
-  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-1.mp4', poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-1-thumbnail.webp',  label: 'Domestique — Commercial',        slug: 'domestique-1' },
-  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-2.mp4', poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-2-thumbnail.webp',  label: 'Domestique — Brand',             slug: 'domestique-2' },
-  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/pump-fun.mp4',          poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/pump-fun-thumbnail.webp',           label: 'Pump Fun — Web3',                slug: 'pump-fun' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-1.mp4',         poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/fantasy-1-thumbnail.webp',         label: 'Fantasy Top · Brand film',      slug: 'fantasy-top-1' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-1.mp4',  poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-1-thumbnail.webp',  label: 'H Company · Commercial',        slug: 'H-company-1' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/projection/pressiat.mp4',     poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/projection/pressiat-thumbnail.webp',     label: 'Pressiat · Projection mapping',  slug: 'pressiat-1' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/eterna.mp4',            poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/eterna-thumbnail.webp',             label: 'Eterna Labs · Web3',             slug: 'eterna-labs' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-2.mp4',  poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/H-company-2-thumbnail.webp',  label: 'H Company · Brand',              slug: 'H-company-2' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-1.mp4',   poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-2-thumbnail.webp',    label: 'Pressiat · Commercial',          slug: 'pressiat-2' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-2.mp4',   poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/pressiat-2-thumbnail.webp',    label: 'Pressiat · Event',               slug: 'pressiat-3' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-1.mp4', poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-1-thumbnail.webp',  label: 'Domestique · Commercial',        slug: 'domestique-1' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-2.mp4', poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/commercial/domestique-2-thumbnail.webp',  label: 'Domestique · Brand',             slug: 'domestique-2' },
+  { src: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/pump-fun.mp4',          poster: 'https://d8clex4mautkm.cloudfront.net/video-landing/web-3/pump-fun-thumbnail.webp',           label: 'Pump Fun · Web3',                slug: 'pump-fun' },
 ];
 
 const ROTATE_Y = 84;
@@ -211,7 +211,7 @@ export default function Hero() {
   return (
     <section className="container-gs pt-4 pb-0 tracking-tighter">
       <h1 className="sr-only">
-        BuildLore — Creative Agency for Branding, Video Marketing &amp; Content
+        BuildLore: Creative Agency for Branding, Video Marketing &amp; Content
         Production for Tech Companies and Web3 Projects
       </h1>
 

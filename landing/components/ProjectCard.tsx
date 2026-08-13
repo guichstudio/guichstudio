@@ -93,7 +93,7 @@ export default function ProjectCard({ project }: { project: Project }) {
         {/* Thumbnail */}
         <Image
           src={project.thumb}
-          alt={`${project.title} — ${project.role}`}
+          alt={`${project.title}, ${project.role}`}
           fill
           className={`absolute inset-0 object-cover transition-all duration-500
             group-hover:scale-[1.03]

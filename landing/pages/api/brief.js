@@ -32,24 +32,24 @@ export default async function handler(req, res) {
       <hr style="border:none;border-top:1px solid #e5e5e5;margin:24px 0">
 
       <h2 style="font-size:16px;color:#999;text-transform:uppercase;letter-spacing:1px">General Idea</h2>
-      <p style="font-size:15px">${esc(brief.general_idea || '—')}</p>
+      <p style="font-size:15px">${esc(brief.general_idea || '-')}</p>
 
       <h2 style="font-size:16px;color:#999;text-transform:uppercase;letter-spacing:1px">Copy</h2>
       ${framesHtml || '<p style="color:#999">No frames</p>'}
 
       <h2 style="font-size:16px;color:#999;text-transform:uppercase;letter-spacing:1px">Structure</h2>
-      <p style="font-size:15px"><strong>${esc(brief.structure || '—')}</strong></p>
+      <p style="font-size:15px"><strong>${esc(brief.structure || '-')}</strong></p>
       ${brief.structure_detail ? `<p style="font-size:14px;color:#666">${esc(brief.structure_detail)}</p>` : ''}
 
       <h2 style="font-size:16px;color:#999;text-transform:uppercase;letter-spacing:1px">Sound / Mood</h2>
-      <p style="font-size:15px">${esc(brief.sounds || '—')}</p>
+      <p style="font-size:15px">${esc(brief.sounds || '-')}</p>
       ${formatLinks(brief.sound_links)}
 
       <h2 style="font-size:16px;color:#999;text-transform:uppercase;letter-spacing:1px">Visual Ideas</h2>
-      <p style="font-size:15px">${esc(brief.visual_ideas || '—')}</p>
+      <p style="font-size:15px">${esc(brief.visual_ideas || '-')}</p>
 
       <h2 style="font-size:16px;color:#999;text-transform:uppercase;letter-spacing:1px">Links</h2>
-      ${formatLinks(brief.links) || '<p style="color:#999">—</p>'}
+      ${formatLinks(brief.links) || '<p style="color:#999">-</p>'}
 
       <hr style="border:none;border-top:1px solid #e5e5e5;margin:24px 0">
       <p style="font-size:12px;color:#999">Sent from buildlore.top</p>
@@ -59,7 +59,7 @@ export default async function handler(req, res) {
       from: process.env.RESEND_FROM || 'BuildLore <onboarding@resend.dev>',
       to: 'guich.studio@gmail.com',
       replyTo: clientEmail || undefined,
-      subject: `Video Brief — ${clientName}`,
+      subject: `Video Brief: ${clientName}`,
       html,
     });
 

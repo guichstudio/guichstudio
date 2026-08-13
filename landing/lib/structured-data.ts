@@ -82,7 +82,7 @@ export function getProjectSchema(slug: string) {
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
     name: project.title,
-    description: project.description || `${project.title} — ${project.role}`,
+    description: project.description || `${project.title}, ${project.role}`,
     url: `${SITE_URL}/work/${project.slug}`,
     thumbnailUrl: project.thumb,
     creator: {

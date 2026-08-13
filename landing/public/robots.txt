@@ -4,7 +4,7 @@ Allow: /
 Disallow: /api/
 Disallow: /success
 
-# AI Search Engines — explicitly allowed
+# AI Search Engines, explicitly allowed
 User-agent: GPTBot
 Allow: /
 Disallow: /api/

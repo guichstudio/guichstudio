@@ -597,6 +597,6 @@ export const logos: string[] = [
     {
       question: 'How does the Launch Sprint work ?',
       answer:
-        "Two weeks : Day 1-2 narrative + visual micro-system. Day 3-7 teaser, Day 8-11  art direction. Day 11–14 social starter kit."
+        "Two weeks : Day 1-2 narrative + visual micro-system. Day 3-7 teaser, Day 8-11  art direction. Day 11-14 social starter kit."
     },
   ];

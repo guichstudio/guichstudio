@@ -28,10 +28,10 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
 export default function ProjectDetail({
   project,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const pageTitle = `${project.title} — ${project.role}`;
+  const pageTitle = `${project.title}, ${project.role}`;
   const pageDescription = project.description
     ? project.description.slice(0, 155) + '...'
-    : `${project.title} — ${project.role} by BuildLore.`;
+    : `${project.title}, ${project.role} by BuildLore.`;
   const pageUrl = `https://www.buildlore.top/work/${project.slug}`;
   const projectSchema = getProjectSchema(project.slug);
 
