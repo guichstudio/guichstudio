@@ -10,6 +10,8 @@ Rules:
 - Commercial-intent rows (marked **C**) matter most for leads, informational
   rows (**I**) build the surface that AI answers cite. Keep roughly one C for
   every two I.
+- Une ligne `drafted` a déjà son fichier dans `docs/blog/drafts/` : le runbook le
+  déplace au lieu de le réécrire (Étape 2).
 - Adding rows is expected. When a row turns out to be off-ICP or to collide
   with a published post, mark it `dropped` with the reason instead of deleting
   it, so it does not come back.
@@ -29,7 +31,7 @@ Rules:
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 1 | crypto video production | web3 | C | What actually differs when the film is for a protocol: mechanic-first shots, technical audience, remix-ready assets | todo |
+| 1 | crypto video production | web3 | C | What actually differs when the film is for a protocol: mechanic-first shots, technical audience, remix-ready assets | **drafted** (`docs/blog/drafts/crypto-video-production.ts`, portes vertes, non publié) |
 | 2 | product launch video | tech | C | The four decisions that set the film before anyone opens a project file | todo |
 | 3 | nft marketing video | web3 | I | Why collection reveals fail and what to show instead of art loops | todo |
 | 4 | saas explainer video | tech | I | Explainer vs product film vs teaser, and which one your page actually needs | todo |

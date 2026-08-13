@@ -38,7 +38,12 @@ reason, and take the next `todo` row. Do not create a second URL for one intent.
 
 ## Step 2. Write the post
 
-Read `docs/blog/EDITORIAL.md` first, in full. It holds the product facts, the
+**First check `docs/blog/drafts/`.** If a file `<slug>.ts` already exists there
+for the row you took, it was written ahead of time: re-read it against the
+policy, `git mv` it into `landing/content/blog/`, set `date` to today, register
+it in `index.ts`, and skip straight to Step 3. Do not rewrite it from scratch.
+
+Otherwise, read `docs/blog/EDITORIAL.md` first, in full. It holds the product facts, the
 voice, the banned words, the no-dash rule and the required structure.
 
 Create `landing/content/blog/<slug>.ts` following the shape of an existing post,
