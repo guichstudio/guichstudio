@@ -1,7 +1,10 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-const links = [{ href: '/work', label: 'Work' }];
+const links = [
+  { href: '/work', label: 'Work' },
+  { href: '/blog', label: 'Blog' },
+];
 
 function getCalendlyUrl() {
   const now = new Date();
@@ -25,7 +28,7 @@ export default function Navbar() {
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  className={`hover:opacity-100 opacity-70 transition ${router.pathname === l.href ? 'opacity-100 underline underline-offset-4' : ''}`}
+                  className={`hover:opacity-100 opacity-70 transition ${router.pathname.startsWith(l.href) ? 'opacity-100 underline underline-offset-4' : ''}`}
                 >
                   {l.label}
                 </Link>

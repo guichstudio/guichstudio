@@ -95,3 +95,102 @@ export function getProjectSchema(slug: string) {
     }),
   };
 }
+
+// ---------------------------------------------------------------------------
+// Blog
+// ---------------------------------------------------------------------------
+
+import type { BlogPost } from './blog';
+
+const PUBLISHER = {
+  '@type': 'Organization',
+  name: 'BuildLore',
+  url: SITE_URL,
+  logo: {
+    '@type': 'ImageObject',
+    url: `${SITE_URL}/og-default.jpg`,
+  },
+};
+
+export function getBlogPostingSchema(post: BlogPost) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.metaDescription,
+    url: `${SITE_URL}/blog/${post.slug}`,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${SITE_URL}/blog/${post.slug}`,
+    },
+    datePublished: post.date,
+    dateModified: post.updated || post.date,
+    inLanguage: 'en',
+    author: {
+      '@type': 'Organization',
+      name: 'BuildLore',
+      url: SITE_URL,
+    },
+    publisher: PUBLISHER,
+    image: `${SITE_URL}/og-default.jpg`,
+    articleSection: post.cluster === 'web3' ? 'Web3 & crypto' : 'Tech & brand',
+  };
+}
+
+export function getPostFaqSchema(post: BlogPost) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: post.faq.map(item => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  };
+}
+
+export function getPostBreadcrumbSchema(post: BlogPost) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Blog',
+        item: `${SITE_URL}/blog`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: post.title,
+        item: `${SITE_URL}/blog/${post.slug}`,
+      },
+    ],
+  };
+}
+
+export function getBlogSchema(posts: BlogPost[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: 'BuildLore Blog',
+    description:
+      'Notes on branding, video marketing and launch content for tech companies and Web3 projects.',
+    url: `${SITE_URL}/blog`,
+    inLanguage: 'en',
+    publisher: PUBLISHER,
+    blogPost: posts.map(post => ({
+      '@type': 'BlogPosting',
+      headline: post.title,
+      url: `${SITE_URL}/blog/${post.slug}`,
+      datePublished: post.date,
+      dateModified: post.updated || post.date,
+      description: post.metaDescription,
+    })),
+  };
+}
