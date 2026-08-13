@@ -1,0 +1,37 @@
+# Sauvegarde de la zone OVH de buildlore.top
+# Prise le 2026-08-13 avant nettoyage. Zone NON autoritaire (le domaine est delegue a Vercel).
+# Interrogation directe de dns10.ovh.net.
+
+## SOA
+buildlore.top.		3600	IN	SOA	dns10.ovh.net. tech.ovh.net. 2086641209 86400 3600 3600000 60
+
+## NS
+buildlore.top.		3600	IN	NS	dns10.ovh.net.
+buildlore.top.		3600	IN	NS	ns10.ovh.net.
+
+## A
+buildlore.top.		3600	IN	A	216.198.79.1
+
+## AAAA
+
+## MX
+buildlore.top.		3600	IN	MX	5 mx2.mail.ovh.net.
+buildlore.top.		3600	IN	MX	100 mx3.mail.ovh.net.
+buildlore.top.		3600	IN	MX	1 mx1.mail.ovh.net.
+
+## TXT
+buildlore.top.		3600	IN	TXT	"v=spf1 include:mx.ovh.com -all"
+buildlore.top.		3600	IN	TXT	"1|www.buildlore.top"
+buildlore.top.		3600	IN	TXT	"google-site-verification=BSyAOiwfBwR9MRFCZ6GOTc7pwe1XQi-b_EkSFAlIDOk"
+www.buildlore.top.	3600	IN	TXT	"3|welcome"
+_acme-challenge.buildlore.top. 3600 IN	TXT	"kwG5EUvFsGpl4LMiHLSFwPEqTQtNC7velH7uNCATZF8"
+_acme-challenge.buildlore.top. 3600 IN	TXT	"wO0xXqOE0qZ8mhobJSkRX0p8Bj0RSPctoNTcKy2RBSU"
+
+## SPF
+
+## CNAME
+
+## CAA
+
+## SRV
+
