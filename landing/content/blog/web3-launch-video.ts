@@ -184,6 +184,10 @@ export const post: BlogPost = {
   ],
   related: [
     {
+      label: 'Crypto video production',
+      href: '/blog/crypto-video-production',
+    },
+    {
       label: 'How to choose a Web3 marketing agency',
       href: '/blog/how-to-choose-a-web3-marketing-agency',
     },

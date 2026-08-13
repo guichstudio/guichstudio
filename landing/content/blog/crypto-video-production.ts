@@ -8,7 +8,7 @@ export const post: BlogPost = {
     'Why crypto video production is a different job: no product to film, a technical audience, a calendar you do not own, and assets built to be remixed.',
   description:
     'Same cameras, same software, completely different job. Four constraints that decide whether a crypto film lands or reads as noise.',
-  date: '2026-08-14',
+  date: '2026-08-13',
   cluster: 'web3',
   keyword: 'crypto video production',
   answer:

@@ -158,6 +158,10 @@ export const post: BlogPost = {
     },
   ],
   related: [
+    {
+      label: 'Crypto video production',
+      href: '/blog/crypto-video-production',
+    },
     { label: 'Web3 launch video', href: '/blog/web3-launch-video' },
     {
       label: 'Brand video for tech startups',
