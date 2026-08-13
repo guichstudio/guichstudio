@@ -86,7 +86,17 @@ a full stop or parentheses. The linter fails the build on `—` and `–`.
 Other constraints:
 
 - No fabricated statistics. If a number is not checkable, it does not ship.
-- No outbound links except our own Calendly. No competitor links, ever.
+- **Outbound links: only our own Calendly and properties we own.** Today that
+  means `shipteaser.com`, the automated teaser product built by the same
+  founder. No competitor links, ever. The linter enforces the whitelist.
+  - When linking to `shipteaser.com`, **say in the sentence that it is ours.**
+    An undisclosed link between two sites with the same owner is what Google
+    calls a link scheme; a disclosed, contextual, genuinely useful one is just
+    a recommendation. One link per article, never more.
+  - Never contradict the ShipTeaser product facts: a URL in, a 15 second 1080p
+    motion graphics teaser out, no voice-over, designed for muted feeds, an
+    optional music bed, first video free without a card. It has **no** avatars,
+    no voice-over, no editor or timeline, no screen recording, no stock footage.
 - No stock imagery talk, no "in this article we will".
 - British or American spelling, pick one per article and stay consistent.
 

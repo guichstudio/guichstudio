@@ -33,7 +33,7 @@ Rules:
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 1 | product launch video | tech | C | The four decisions that set the film before anyone opens a project file | todo |
+| 1 | product launch video | tech | C | The four decisions that set the film before anyone opens a project file | **drafted** (`docs/blog/drafts/product-launch-video.ts`, daté 2026-08-14, portes vertes, contient le lien vers shipteaser.com) |
 | 2 | nft marketing video | web3 | I | Why collection reveals fail and what to show instead of art loops | todo |
 | 3 | saas explainer video | tech | I | Explainer vs product film vs teaser, and which one your page actually needs | todo |
 | 4 | token launch marketing | web3 | I | The asset calendar around a listing, week by week | todo |

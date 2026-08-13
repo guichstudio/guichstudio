@@ -27,8 +27,17 @@ const BANNED_WORDS = [
   'take it to the next level',
 ];
 
-// Outbound links are allowed only to our own booking page.
+// Outbound links are allowed only to our own booking page and to properties we
+// own. Anything else, competitors included, is a policy violation.
 const ALLOWED_EXTERNAL = ['https://calendly.com/guichstudio/30min'];
+const OWNED_DOMAINS = ['https://shipteaser.com'];
+
+function isAllowedExternal(href) {
+  return (
+    ALLOWED_EXTERNAL.includes(href) ||
+    OWNED_DOMAINS.some(d => href === d || href.startsWith(`${d}/`))
+  );
+}
 
 const KNOWN_INTERNAL = ['/', '/work', '/blog', '/#service-cards'];
 
@@ -163,7 +172,7 @@ for (const file of files) {
     .map(b => b.href);
   for (const href of [...links, ...ctaHrefs, ...post.related.map(r => r.href)]) {
     if (href.startsWith('http')) {
-      if (!ALLOWED_EXTERNAL.includes(href))
+      if (!isAllowedExternal(href))
         fail(file, `outbound link not allowed: ${href}`);
     } else if (href.startsWith('/blog/')) {
       // checked after every post is loaded
