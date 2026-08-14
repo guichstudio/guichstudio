@@ -59,6 +59,10 @@ export const post: BlogPost = {
       text: 'Ask for the committed response window in writing. Ours is 48 hours on hot moments, which is the reason the [Growth retainer](/#service-cards) is structured monthly rather than per project.',
     },
     {
+      type: 'p',
+      text: 'It helps to know what the floor looks like as well. [ShipTeaser](https://shipteaser.com) is our own automated teaser tool, built by the same founder as this studio: paste a URL, get a 15 second teaser for muted feeds, the first one free without a card. No agency reacts faster than that. What it cannot do is decide what your launch should say, and that judgement is the actual thing you are hiring an agency for.',
+    },
+    {
       type: 'h2',
       text: '4. Do I own the source files?',
     },

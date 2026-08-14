@@ -59,6 +59,10 @@ export const post: BlogPost = {
       text: 'We build the teaser as part of a [Launch Sprint](/#service-cards) so it ships with the launch page art direction rather than after it. When the page and the film are designed apart, they always disagree about what the product is.',
     },
     {
+      type: 'p',
+      text: 'If the launch is this week and the visual system does not exist yet, there is a faster route we can vouch for because we built it. [ShipTeaser](https://shipteaser.com) is our own tool, made by the same founder as this studio: it turns a product URL into a 15 second teaser designed for muted feeds, with an optional music bed and no voice-over. The first one is free without a card. Treat it as the teaser you ship now, not as the brand system you still owe yourself.',
+    },
+    {
       type: 'h2',
       text: '3. Social loops',
     },

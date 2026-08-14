@@ -136,6 +136,10 @@ export const post: BlogPost = {
       text: 'We built the [Growth retainer](/#service-cards) around that last point: three to five on brand assets a week and a 48 hour response window on hot moments, so the reaction ships while the moment is still worth reacting to.',
     },
     {
+      type: 'p',
+      text: 'When the moment is now and there is no system to reopen yet, the honest fallback is automation. [ShipTeaser](https://shipteaser.com) is our own product, built by the same founder as this studio: you paste a product URL and it returns a 15 second 1080p motion graphics teaser, no voice-over, sized for muted feeds. It buys you a competent asset the same hour. What it does not give you is the narrative spine or the visual system, which is the part that makes the next twenty assets look like they belong to the same project.',
+    },
+    {
       type: 'h2',
       text: 'A checklist before you approve the final cut',
     },

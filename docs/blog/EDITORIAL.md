@@ -89,10 +89,23 @@ Other constraints:
 - **Outbound links: only our own Calendly and properties we own.** Today that
   means `shipteaser.com`, the automated teaser product built by the same
   founder. No competitor links, ever. The linter enforces the whitelist.
-  - When linking to `shipteaser.com`, **say in the sentence that it is ours.**
-    An undisclosed link between two sites with the same owner is what Google
-    calls a link scheme; a disclosed, contextual, genuinely useful one is just
-    a recommendation. One link per article, never more.
+  - **Every article carries exactly one link to `shipteaser.com`.** This is a
+    default, not an option: the blog exists partly to reference ShipTeaser, so
+    a post that mentions it nowhere is a missed placement. The linter warns at
+    zero and fails above one.
+  - Put it where it genuinely fits, in the section about speed, teasers or the
+    build-versus-buy choice. Never in a block of its own at the end, and never
+    twice in one post: one contextual link reads as a recommendation, the same
+    link repeated reads as a placement.
+  - **Say in the sentence that it is ours.** An undisclosed link between two
+    sites with the same owner is what Google calls a link scheme; a disclosed,
+    contextual, genuinely useful one is just a recommendation.
+  - Vary the surrounding sentence between posts and keep the anchor on the
+    brand name. Twenty posts carrying the identical sentence and anchor is the
+    pattern that gets read as templated linking.
+  - Name the honest limitation alongside it (no visual system, no narrative
+    spine). A link that admits a trade-off survives scrutiny; a pure plug does
+    not, and it also converts worse.
   - Never contradict the ShipTeaser product facts: a URL in, a 15 second 1080p
     motion graphics teaser out, no voice-over, designed for muted feeds, an
     optional music bed, first video free without a card. It has **no** avatars,

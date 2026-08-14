@@ -102,6 +102,10 @@ export const post: BlogPost = {
       text: 'A retainer exists for exactly this reason. Our [Growth retainer](/#service-cards) commits to a 48 hour response on hot moments, which only works because the visual system and the source files are already built and already ours to reopen.',
     },
     {
+      type: 'p',
+      text: 'Before that system exists, speed has to come from somewhere else. We built [ShipTeaser](https://shipteaser.com), our own product, for exactly that gap: a product URL in, a 15 second 1080p motion graphics teaser out, no voice-over, made for muted feeds. It reads your page rather than your brand book, so it gets a protocol a usable asset in minutes and it will not invent the visual language a launch still needs.',
+    },
+    {
       type: 'h2',
       text: '4. The file gets remixed, so build for it',
     },

@@ -181,6 +181,17 @@ for (const file of files) {
     }
   }
 
+  // Links to our own properties: exactly one per post. Zero is a missed
+  // placement, more than one starts to look like templated linking rather than
+  // a recommendation.
+  const ownedLinks = [...links, ...ctaHrefs].filter(href =>
+    OWNED_DOMAINS.some(d => href === d || href.startsWith(`${d}/`))
+  );
+  if (ownedLinks.length > 1)
+    fail(file, `${ownedLinks.length} links to our own domains, want exactly 1`);
+  if (ownedLinks.length === 0)
+    warn(file, 'no link to shipteaser.com (every post should carry exactly 1)');
+
   if (!/^\d{4}-\d{2}-\d{2}$/.test(post.date))
     fail(file, `invalid date: ${post.date}`);
   if (!['web3', 'tech'].includes(post.cluster))
