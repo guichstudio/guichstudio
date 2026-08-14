@@ -163,6 +163,7 @@ export const post: BlogPost = {
     },
   ],
   related: [
+    { label: 'Product launch video', href: '/blog/product-launch-video' },
     { label: 'Web3 launch video', href: '/blog/web3-launch-video' },
     {
       label: 'How to choose a Web3 marketing agency',
