@@ -188,6 +188,10 @@ export const post: BlogPost = {
   ],
   related: [
     {
+      label: 'NFT marketing video',
+      href: '/blog/nft-marketing-video',
+    },
+    {
       label: 'Crypto video production',
       href: '/blog/crypto-video-production',
     },
