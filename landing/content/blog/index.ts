@@ -6,6 +6,7 @@ import { post as brandVideoForTechStartups } from './brand-video-for-tech-startu
 import { post as cryptoVideoProduction } from './crypto-video-production';
 import { post as productLaunchVideo } from './product-launch-video';
 import { post as nftMarketingVideo } from './nft-marketing-video';
+import { post as saasExplainerVideo } from './saas-explainer-video';
 
 // Registry. Add one import + one entry per new post. Order does not matter,
 // getAllPosts() sorts by date descending.
@@ -16,4 +17,5 @@ export const posts: BlogPost[] = [
   cryptoVideoProduction,
   productLaunchVideo,
   nftMarketingVideo,
+  saasExplainerVideo,
 ];

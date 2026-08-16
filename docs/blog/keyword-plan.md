@@ -26,6 +26,7 @@ Rules:
 | 2026-08-13 | `crypto-video-production` | crypto video production | web3 |
 | 2026-08-14 | `product-launch-video` | product launch video | tech |
 | 2026-08-15 | `nft-marketing-video` | nft marketing video | web3 |
+| 2026-08-16 | `saas-explainer-video` | saas explainer video | tech |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -35,7 +36,6 @@ Rules:
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 2 | saas explainer video | tech | I | Explainer vs product film vs teaser, and which one your page actually needs | todo |
 | 3 | token launch marketing | web3 | I | The asset calendar around a listing, week by week | todo |
 | 4 | motion design agency | tech | C | How to brief a motion studio so the first cut is close | todo |
 | 5 | web3 branding | web3 | C | Identity systems that survive a bear market and a rebrand | todo |

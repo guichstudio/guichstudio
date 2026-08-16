@@ -58,7 +58,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'Pick one. The other three get cuts from the same build, which is cheap, rather than their own production, which is not.',
+      text: 'Pick one. The other three get cuts from the same build, which is cheap, rather than their own production, which is not. And if the film has to make an unfamiliar product understandable rather than announce it, you are not looking at a launch video at all: that is a [SaaS explainer video](/blog/saas-explainer-video), a different format with different rules.',
     },
     {
       type: 'h2',
