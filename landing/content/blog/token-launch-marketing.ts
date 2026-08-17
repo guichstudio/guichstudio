@@ -8,7 +8,7 @@ export const post: BlogPost = {
     'A week by week asset calendar for a token launch, built backwards from a listing date you do not control, and the kit to have ready before it.',
   description:
     'Most teams commission one announcement graphic the week of the listing. The calendar that works starts four weeks earlier, while the date is still private.',
-  date: '2026-08-16',
+  date: '2026-08-17',
   cluster: 'web3',
   keyword: 'token launch marketing',
   answer:

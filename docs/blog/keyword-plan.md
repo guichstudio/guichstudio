@@ -27,13 +27,16 @@ Rules:
 | 2026-08-14 | `product-launch-video` | product launch video | tech |
 | 2026-08-15 | `nft-marketing-video` | nft marketing video | web3 |
 | 2026-08-16 | `saas-explainer-video` | saas explainer video | tech |
-| 2026-08-16 | `token-launch-marketing` | token launch marketing | web3 |
+| 2026-08-17 | `token-launch-marketing` | token launch marketing | web3 |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
-> explicit call. Same thing on 2026-08-16: `saas-explainer-video` shipped in the
-> morning by the daily routine, then `token-launch-marketing` in the afternoon on
-> Louis' explicit call. Otherwise it is strictly one per day.
+> explicit call. From here on it is strictly one per day.
+>
+> Note 2026-08-17: the machine clock was a day behind at the start of that day's
+> run, so the Step 0 cadence gate read `saas-explainer-video` (2026-08-16) as
+> "already published today" and stopped. It was yesterday's post. Check the clock
+> against an external source before trusting `git log --since=midnight`.
 
 ## Queue
 
