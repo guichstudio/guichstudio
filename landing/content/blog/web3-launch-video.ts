@@ -83,7 +83,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'The hero film is the anchor, but it is the least used asset of the week. The launch actually runs on the cuts around it, and those need to be planned while the project file is still open.',
+      text: 'The hero film is the anchor, but it is the least used asset of the week. The launch actually runs on the cuts around it, and those need to be planned while the project file is still open. If the launch is a token rather than a product, the sequencing of that kit is its own subject, covered in our [token launch marketing](/blog/token-launch-marketing) calendar.',
     },
     {
       type: 'table',
