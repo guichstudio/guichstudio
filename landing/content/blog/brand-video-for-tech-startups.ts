@@ -135,7 +135,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'That is the whole argument for working with one studio across formats instead of shopping each film separately. You can see how it looks across clients in [the work](/work).',
+      text: 'That is the whole argument for working with one studio across formats instead of shopping each film separately. You can see how it looks across clients in [the work](/work), and what to write down before you brief one in our guide to [working with a motion design agency](/blog/motion-design-agency).',
     },
     {
       type: 'cta',

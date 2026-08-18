@@ -28,6 +28,7 @@ Rules:
 | 2026-08-15 | `nft-marketing-video` | nft marketing video | web3 |
 | 2026-08-16 | `saas-explainer-video` | saas explainer video | tech |
 | 2026-08-17 | `token-launch-marketing` | token launch marketing | web3 |
+| 2026-08-18 | `motion-design-agency` | motion design agency | tech |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -42,7 +43,6 @@ Rules:
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 4 | motion design agency | tech | C | How to brief a motion studio so the first cut is close | todo |
 | 5 | web3 branding | web3 | C | Identity systems that survive a bear market and a rebrand | todo |
 | 6 | startup video marketing strategy | tech | I | A quarter of video planned from one build | todo |
 | 7 | crypto community content | web3 | I | Weekly content that a Discord actually reposts | todo |
