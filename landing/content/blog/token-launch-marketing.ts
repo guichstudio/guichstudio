@@ -117,7 +117,7 @@ export const post: BlogPost = {
     {
       type: 'ol',
       items: [
-        '**Week minus four. Narrative and system.** One sentence on what the token is for, one on why now, one on what it is not. Then the visual system that carries them: type, color, motion behavior, how numbers and charts appear on screen. Every later asset inherits from this, which is why it cannot be week minus one.',
+        '**Week minus four. Narrative and system.** One sentence on what the token is for, one on why now, one on what it is not. Then the [visual system](/blog/web3-branding) that carries them: type, color, motion behavior, how numbers and charts appear on screen. Every later asset inherits from this, which is why it cannot be week minus one.',
         '**Week minus three. The evergreen films.** The explainer of the mechanism, and the teaser with the empty end card. Both reviewable without pressure, both usable again at every later milestone.',
         '**Week minus two. The community kit.** Banners, avatars, emotes, role art, announcement frames for Discord and Telegram, thread and post templates in the system. Communities repost what looks like it belongs to them, and that kit is what makes user made content look on brand instead of scraped.',
         '**Week minus one. Templates and rehearsal.** Announcement variants for every ratio, the empty end card ready to be filled in minutes, and one dry run where somebody actually publishes a test into a private channel. Rehearsal finds the missing export, the wrong safe area, the login nobody has.',
@@ -226,6 +226,10 @@ export const post: BlogPost = {
     {
       label: 'NFT marketing video',
       href: '/blog/nft-marketing-video',
+    },
+    {
+      label: 'Web3 branding',
+      href: '/blog/web3-branding',
     },
   ],
 };
