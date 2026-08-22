@@ -10,6 +10,7 @@ import { post as saasExplainerVideo } from './saas-explainer-video';
 import { post as tokenLaunchMarketing } from './token-launch-marketing';
 import { post as motionDesignAgency } from './motion-design-agency';
 import { post as web3Branding } from './web3-branding';
+import { post as startupVideoMarketingStrategy } from './startup-video-marketing-strategy';
 
 // Registry. Add one import + one entry per new post. Order does not matter,
 // getAllPosts() sorts by date descending.
@@ -24,4 +25,5 @@ export const posts: BlogPost[] = [
   tokenLaunchMarketing,
   motionDesignAgency,
   web3Branding,
+  startupVideoMarketingStrategy,
 ];

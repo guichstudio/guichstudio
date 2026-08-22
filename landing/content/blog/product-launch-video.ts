@@ -149,7 +149,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'A brief that fits on one page is a brief people actually read. Anything longer gets skimmed, and skimmed briefs produce films that look expensive and say nothing, which is the failure mode this whole article exists to prevent.',
+      text: 'A brief that fits on one page is a brief people actually read. Anything longer gets skimmed, and skimmed briefs produce films that look expensive and say nothing, which is the failure mode this whole article exists to prevent. And if launches keep arriving with this page starting from zero each time, the fix sits one level up: plan the build once per quarter, which is what a [startup video marketing strategy](/blog/startup-video-marketing-strategy) is for.',
     },
     {
       type: 'cta',

@@ -30,6 +30,7 @@ Rules:
 | 2026-08-17 | `token-launch-marketing` | token launch marketing | web3 |
 | 2026-08-18 | `motion-design-agency` | motion design agency | tech |
 | 2026-08-19 | `web3-branding` | web3 branding | web3 |
+| 2026-08-22 | `startup-video-marketing-strategy` | startup video marketing strategy | tech |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -44,7 +45,6 @@ Rules:
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 6 | startup video marketing strategy | tech | I | A quarter of video planned from one build | todo |
 | 7 | crypto community content | web3 | I | Weekly content that a Discord actually reposts | todo |
 | 8 | teaser video for app launch | tech | I | Fifteen seconds, muted, on a feed you do not control | todo |
 | 9 | discord and telegram visual assets | web3 | I | The asset kit a community needs on day one | todo |
