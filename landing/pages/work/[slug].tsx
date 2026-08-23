@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { generateNextSeo } from 'next-seo/pages';
 import Layout from '@/components/Layout';
 import JsonLd from '@/components/JsonLd';
-import { getProject, projects, Project } from '@/lib/cms';
+import { absoluteMediaUrl, getProject, projects, Project } from '@/lib/cms';
 import { getProjectSchema } from '@/lib/structured-data';
 import type {
   GetStaticPaths,
@@ -48,7 +48,7 @@ export default function ProjectDetail({
             description: pageDescription,
             images: [
               {
-                url: project.thumb,
+                url: absoluteMediaUrl(project.thumb),
                 width: 1280,
                 height: 720,
                 alt: project.title,

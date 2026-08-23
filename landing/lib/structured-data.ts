@@ -1,4 +1,4 @@
-import { faqData, projects } from './cms';
+import { absoluteMediaUrl, faqData, projects } from './cms';
 
 const SITE_URL = 'https://www.buildlore.top';
 
@@ -84,7 +84,7 @@ export function getProjectSchema(slug: string) {
     name: project.title,
     description: project.description || `${project.title}, ${project.role}`,
     url: `${SITE_URL}/work/${project.slug}`,
-    thumbnailUrl: project.thumb,
+    thumbnailUrl: absoluteMediaUrl(project.thumb),
     creator: {
       '@type': 'Organization',
       name: 'BuildLore',
