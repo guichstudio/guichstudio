@@ -137,7 +137,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'That last one matters more than it sounds. A system with no owner becomes a suggestion within a month. You can see the difference in the projects on our [selected work](/work): the ones that still look coherent a year later are the ones where somebody on the team was allowed to say no.',
+      text: 'That last one matters more than it sounds. A system with no owner becomes a suggestion within a month, and the first place the drift shows is the weekly output the system has to feed, which we cover in our piece on [crypto community content](/blog/crypto-community-content). You can see the difference in the projects on our [selected work](/work): the ones that still look coherent a year later are the ones where somebody on the team was allowed to say no.',
     },
     {
       type: 'h2',
