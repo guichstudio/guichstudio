@@ -128,7 +128,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'The third row is what a [Launch Sprint](/#service-cards) is: two weeks, narrative and visual micro system first, then the teaser film, then the launch page art direction, then the social starter kit. You pick it when the launch has to look like the start of a brand rather than a one off asset.',
+      text: 'The third row is what a [Launch Sprint](/#service-cards) is: two weeks, narrative and visual micro system first, then the teaser film, then the launch page art direction, then the social starter kit. You pick it when the launch has to look like the start of a brand rather than a one off asset. The teaser inside that sequence has its own rules, which we break down in the post on the [teaser video for app launch](/blog/teaser-video-for-app-launch).',
     },
     {
       type: 'h2',
