@@ -6,6 +6,9 @@ The publishing queue. The daily routine takes the **first row with status
 Rules:
 
 - One keyword, one URL. Never two rows targeting the same intent.
+- **The queue is ordered by winnability, not by preference.** The top row is the
+  one this domain can realistically rank for soonest. Take rows in order, do not
+  cherry pick further down because a topic looks more fun.
 - Alternate clusters when possible, so neither side of the site goes stale.
 - Commercial-intent rows (marked **C**) matter most for leads, informational
   rows (**I**) build the surface that AI answers cite. Keep roughly one C for
@@ -15,6 +18,76 @@ Rules:
 - Adding rows is expected. When a row turns out to be off-ICP or to collide
   with a published post, mark it `dropped` with the reason instead of deleting
   it, so it does not come back.
+
+## Choosing a keyword (added 2026-08-24)
+
+The first twelve posts targeted head commercial terms: `motion design agency`,
+`crypto video production`, `web3 branding`, `product launch video`. Those are
+contested by agencies with years of accumulated links. A domain this young does
+not reach page one on them, and the Search Console data confirms it: zero
+impressions on any of them in three months.
+
+Every new row must pass these four tests before it goes in the queue:
+
+1. **Four words or more, or question form.** `landing page video` is a head
+   term. `video for a saas landing page hero` is a query a real buyer types.
+   Question phrasings (`how much does...`, `what to...`, `do we need...`) are
+   the cheapest wins because they are long, specific, and they are what
+   assistants quote.
+2. **Buyer-side, always.** Per `EDITORIAL.md` section 2: if the searcher wants
+   to *make* the asset in After Effects, it is the wrong row. Tool comparisons,
+   format specs and software questions bring designers, not clients.
+3. **A situation, not a category.** The best rows name a moment in the buyer's
+   year: a seed round, an exchange listing, a conference, a rebrand. Situations
+   are specific enough to rank and they map to a budget that already exists.
+4. **No overlap with a published post.** `grep` the content directory first.
+   Same intent as an existing URL means extending that post, not opening a
+   second one.
+
+Ordering is editorial judgment, not tool data: there is no keyword research
+subscription behind this file. If one is ever added, revalidate the order
+against real volume and difficulty numbers before trusting it.
+
+## Before adding more volume, read this (2026-08-24)
+
+Search Console, two exports pulled on 2026-08-24:
+
+- **Performance**, three months to 2026-08-22: 102 impressions, **0 clicks**.
+  Only three queries reported, all navigational: `buildlore` (3), `build lore`
+  (2), `polycoolapp` (1). The homepage alone took 90 of the 102 impressions.
+  Zero impressions on any targeted commercial keyword.
+- **Coverage**: **9 pages indexed, 42 not indexed.** Of those, 36 are
+  "Détectée, actuellement non indexée", meaning Google knows the URL from the
+  sitemap and has not spent the crawl budget to fetch it. Between 2026-08-13
+  and 2026-08-21 the blog published twelve posts and the index count went from
+  8 to 9.
+
+The conclusion that matters for this file: **keyword choice is not currently the
+binding constraint, indexation is.** A better targeted post that never gets
+crawled ranks exactly as well as a badly targeted one. Fixing the targeting is
+still worth doing, and this queue does it, but on its own it will not move the
+numbers.
+
+The three things that gate everything upstream of this file:
+
+1. **The 33 thin `/work` pages.** Median project description is about 30 words.
+   They are two thirds of the sitemap, they hold zero impressions, and they are
+   the bulk of the 36 uncrawled URLs. They spend crawl budget and they tell
+   Google the domain is mostly filler. Either give each one real content
+   (context, problem, approach, outcome, 150 to 300 words) or take them out of
+   the sitemap and keep `/work` as a single page.
+2. **No inbound links.** Nothing points at this domain, so there is no reason
+   for Google to raise its crawl budget. Client credits (Fantasy.top, Pump.fun,
+   Wasabi, Gondi, H Company are all on `/work`), agency directories and the
+   social profiles are the accessible starting points.
+3. **Cadence.** One post a day into an index that absorbs one page a month is
+   not compounding, it is queueing. Consider slowing to two or three posts a
+   week and spending the freed time on points 1 and 2. This is Louis' call, the
+   routine keeps running daily until he says otherwise.
+
+Also worth clearing while in Search Console: the coverage export lists **3 pages
+with a redirect and 1 page returning 404** among the known URLs. The export only
+gives counts, so the URLs have to be read from the GSC interface directly.
 
 ## Published
 
@@ -45,28 +118,45 @@ Rules:
 
 ## Queue
 
+Reordered 2026-08-24 against the four tests above. Head terms were narrowed to
+the situation a buyer is actually in when they search.
+
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 9 | discord and telegram visual assets | web3 | I | The asset kit a community needs on day one | todo |
-| 10 | brand guidelines for startups | tech | I | The smallest brand system that still holds | todo |
-| 11 | projection mapping for events | web3 | C | When a launch deserves a room instead of a feed | todo |
-| 12 | 3d product animation | tech | C | When 3D pays for itself and when it is decoration | todo |
-| 13 | how to brief a creative agency | tech | I | The brief that gets you a good first cut | todo |
-| 14 | crypto conference booth content | web3 | I | Content built for a loud room and a passing glance | todo |
-| 15 | video for fundraising deck | tech | I | What investors actually watch, and for how long | todo |
-| 16 | memecoin marketing | web3 | I | Speed as a craft discipline, not an excuse for slop | todo |
-| 17 | ai video vs studio production | tech | I | Where generated video is fine and where it reads as cheap | todo |
-| 18 | rebranding a crypto project | web3 | C | Changing the mark without losing the community | todo |
-| 19 | social media video sizes and formats | tech | I | One build, every ratio, no reshoot | todo |
-| 20 | creator seeding for web3 | web3 | I | Seeding assets that creators want to use | todo |
-| 21 | landing page video | tech | I | The film above the fold, and what it must not do | todo |
-| 22 | exchange listing announcement | web3 | I | The announcement kit, ready before the date is public | todo |
-| 23 | video content calendar for startups | tech | I | Planning a month of cuts from one shoot | todo |
-| 24 | art direction for tech brands | tech | C | Why the same components look expensive or cheap | todo |
-| 25 | web3 pitch video | web3 | I | Explaining a protocol without a whiteboard | todo |
-| 26 | animated logo for startups | tech | I | The 2 second asset used more than any film | todo |
-| 27 | gaming and metaverse trailers | web3 | C | Trailer beats borrowed from games, applied to launches | todo |
-| 28 | how much does a brand video cost | tech | C | What drives the number, without quoting ours | todo |
+| 1 | discord and telegram visual assets | web3 | I | The asset kit a community needs on day one | todo |
+| 2 | how much does a brand video cost | tech | C | What drives the number, without quoting ours | todo |
+| 3 | crypto conference booth content | web3 | I | Content built for a loud room and a passing glance | todo |
+| 4 | in house designer vs creative agency | tech | C | When hiring beats contracting, honestly | todo |
+| 5 | exchange listing announcement assets | web3 | I | The kit, ready before the date is public | todo |
+| 6 | how to brief a video agency | tech | I | The brief that gets you a good first cut | todo |
+| 7 | airdrop announcement graphics | web3 | I | Announcing a distribution without looking like a scam | todo |
+| 8 | video for a seed fundraising deck | tech | I | What investors actually watch, and for how long | todo |
+| 9 | creator seeding for web3 | web3 | I | Seeding assets that creators want to use | todo |
+| 10 | how to give feedback on a video edit | tech | I | The revision round that does not burn the budget | todo |
+| 11 | rebranding a crypto project | web3 | C | Changing the mark without losing the community | todo |
+| 12 | ai video vs studio production | tech | I | Where generated video is fine and where it reads as cheap | todo |
+| 13 | pitch video for a web3 protocol | web3 | I | Explaining a protocol without a whiteboard | todo |
+| 14 | brand assets a startup needs at seed stage | tech | I | The smallest brand system that still holds | todo |
+| 15 | memecoin launch visual identity | web3 | I | Speed as a craft discipline, not an excuse for slop | todo |
+| 16 | video content calendar for startups | tech | I | Planning a month of cuts from one build | todo |
+| 17 | gaming and metaverse trailers | web3 | C | Trailer beats borrowed from games, applied to launches | todo |
+| 18 | video for a saas landing page hero | tech | I | The film above the fold, and what it must not do | todo |
+| 19 | projection mapping for a product launch event | web3 | C | When a launch deserves a room instead of a feed | todo |
+| 20 | art direction for tech brands | tech | C | Why the same components look expensive or cheap | todo |
+| 21 | conference recap video for crypto teams | web3 | I | Three days of booth footage into something usable | todo |
+| 22 | 3d product animation for a software launch | tech | C | When 3D pays for itself and when it is decoration | todo |
+| 23 | nft collection reveal video | web3 | I | The reveal beat, and why most of them land flat | todo |
+| 24 | how many videos does a startup actually need | tech | I | One build, several cuts, versus several productions | todo |
+
+Collision watch, check with `grep` before writing:
+
+- Row 21 sits next to row 3. Row 3 is the assets you bring to the booth, row 21
+  is what you cut afterwards. If the draft starts covering both, merge them.
+- Row 23 is close to the published `nft-marketing-video`. Read that post first;
+  if the reveal is already covered there, extend it and mark row 23 `dropped`.
+- Row 6 touches the brief sections that already exist in `product-launch-video`
+  and `teaser-video-for-app-launch`. This row is the whole process, those are
+  one section each, so it holds, but link them rather than repeat them.
 
 ## Dropped
 
@@ -76,3 +166,14 @@ Rules:
 | best video editing software | Tool comparison, brings editors, not clients. |
 | free video maker | Free-tool intent, no overlap with an agency engagement. |
 | smart contract audit | Named as not included in the service scope. |
+| social media video sizes and formats | Spec-sheet intent. Brings editors looking for a ratio chart, not buyers. Fails test 2. |
+| animated logo for startups | Dominated by logo generators and marketplace listings. Tool intent, wrong reader, unwinnable SERP. |
+| landing page video | Head term, narrowed to row 18 (`video for a saas landing page hero`). |
+| brand guidelines for startups | Head term, narrowed to row 14 (`brand assets a startup needs at seed stage`). |
+| 3d product animation | Head term, narrowed to row 22 (`3d product animation for a software launch`). |
+| projection mapping for events | Head term, narrowed to row 19 (`projection mapping for a product launch event`). |
+| how to brief a creative agency | Narrowed to row 6 (`how to brief a video agency`), closer to what we sell. |
+| memecoin marketing | Head term and a messy SERP. Narrowed to row 15 (`memecoin launch visual identity`). |
+| web3 pitch video | Narrowed to row 13 (`pitch video for a web3 protocol`). |
+| video for fundraising deck | Narrowed to row 8 (`video for a seed fundraising deck`). |
+| exchange listing announcement | Narrowed to row 5 (`exchange listing announcement assets`). |
