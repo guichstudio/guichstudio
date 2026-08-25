@@ -157,7 +157,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'This is the same system a proper identity gives you, applied to the weekly grind rather than the launch. If none of it exists yet, the kit is the first thing to buy, and our note on [Web3 branding](/blog/web3-branding) covers what that system has to contain before it can carry a weekly cadence.',
+      text: 'This is the same system a proper identity gives you, applied to the weekly grind rather than the launch. If none of it exists yet, the kit is the first thing to buy, and our note on [Web3 branding](/blog/web3-branding) covers what that system has to contain before it can carry a weekly cadence. The static furniture the server itself needs, icon, banner, role colours, emotes and announcement frames, is a separate list, and it is in our post on [Discord and Telegram visual assets](/blog/discord-and-telegram-visual-assets).',
     },
     {
       type: 'p',
