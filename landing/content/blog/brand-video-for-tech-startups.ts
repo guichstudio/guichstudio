@@ -72,7 +72,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'The mistake is treating them as an afterthought. If the loops are planned during the build, they cost almost nothing. If they are requested three weeks later, someone has to reopen and relight the whole scene.',
+      text: 'The mistake is treating them as an afterthought. If the loops are planned during the build, they cost almost nothing. If they are requested three weeks later, someone has to reopen and relight the whole scene. That timing difference is one of the larger swings in a quote, along with the others listed in our post on [how much a brand video costs](/blog/how-much-does-a-brand-video-cost).',
     },
     {
       type: 'h2',

@@ -107,6 +107,7 @@ gives counts, so the URLs have to be read from the GSC interface directly.
 | 2026-08-23 | `crypto-community-content` | crypto community content | web3 |
 | 2026-08-24 | `teaser-video-for-app-launch` | teaser video for app launch | tech |
 | 2026-08-25 | `discord-and-telegram-visual-assets` | discord and telegram visual assets | web3 |
+| 2026-08-26 | `how-much-does-a-brand-video-cost` | how much does a brand video cost | tech |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -128,7 +129,6 @@ valid.
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 2 | how much does a brand video cost | tech | C | What drives the number, without quoting ours | todo |
 | 3 | crypto conference booth content | web3 | I | Content built for a loud room and a passing glance | todo |
 | 4 | in house designer vs creative agency | tech | C | When hiring beats contracting, honestly | todo |
 | 5 | exchange listing announcement assets | web3 | I | The kit, ready before the date is public | todo |
