@@ -134,6 +134,10 @@ export const post: BlogPost = {
       text: 'That is three to five assets a week, which is exactly the load our Growth package is built around, alongside a 48 hour response on hot moments. The cadence is only sustainable because none of it starts from a blank canvas.',
     },
     {
+      type: 'p',
+      text: 'The weeks around a conference are the exception, because the schedule is set by the event rather than by what shipped. Plan those separately, using the loop and the footage the stand produces, which we break down in our post on [crypto conference booth content](/blog/crypto-conference-booth-content).',
+    },
+    {
       type: 'callout',
       text: 'If a weekly asset takes a new brief, it will not be weekly by week four. The rhythm is a production decision, not a discipline problem.',
     },

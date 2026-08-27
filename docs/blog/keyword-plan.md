@@ -108,6 +108,7 @@ gives counts, so the URLs have to be read from the GSC interface directly.
 | 2026-08-24 | `teaser-video-for-app-launch` | teaser video for app launch | tech |
 | 2026-08-25 | `discord-and-telegram-visual-assets` | discord and telegram visual assets | web3 |
 | 2026-08-26 | `how-much-does-a-brand-video-cost` | how much does a brand video cost | tech |
+| 2026-08-27 | `crypto-conference-booth-content` | crypto conference booth content | web3 |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -129,7 +130,6 @@ valid.
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 3 | crypto conference booth content | web3 | I | Content built for a loud room and a passing glance | todo |
 | 4 | in house designer vs creative agency | tech | C | When hiring beats contracting, honestly | todo |
 | 5 | exchange listing announcement assets | web3 | I | The kit, ready before the date is public | todo |
 | 6 | how to brief a video agency | tech | I | The brief that gets you a good first cut | todo |
@@ -154,8 +154,11 @@ valid.
 
 Collision watch, check with `grep` before writing:
 
-- Row 21 sits next to row 3. Row 3 is the assets you bring to the booth, row 21
-  is what you cut afterwards. If the draft starts covering both, merge them.
+- Row 21 sits next to row 3, now published as `crypto-conference-booth-content`.
+  That post is the assets you bring to the booth; row 21 is what you cut
+  afterwards. It already carries a short "after the doors close" section on the
+  follow up, so read it first: row 21 holds only if it stays on the edit itself
+  (what to shoot, how to assemble three days of footage), otherwise merge it.
 - Row 23 is close to the published `nft-marketing-video`. Read that post first;
   if the reveal is already covered there, extend it and mark row 23 `dropped`.
 - Row 6 touches the brief sections that already exist in `product-launch-video`
