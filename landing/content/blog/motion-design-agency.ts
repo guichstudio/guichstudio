@@ -45,7 +45,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'If you already have all four, a good freelancer will execute against them faster and cheaper than any agency, and you should hire one. If you have none of them, hiring execution means paying a specialist to invent your brand decisions in a project file, at the worst possible moment to be inventing them.',
+      text: 'If you already have all four, a good freelancer will execute against them faster and cheaper than any agency, and you should hire one. If you have none of them, hiring execution means paying a specialist to invent your brand decisions in a project file, at the worst possible moment to be inventing them. The same reasoning applies to a permanent hire, which we set out in [in house designer vs creative agency](/blog/in-house-designer-vs-creative-agency).',
     },
     {
       type: 'h2',

@@ -16,6 +16,7 @@ import { post as teaserVideoForAppLaunch } from './teaser-video-for-app-launch';
 import { post as discordAndTelegramVisualAssets } from './discord-and-telegram-visual-assets';
 import { post as howMuchDoesABrandVideoCost } from './how-much-does-a-brand-video-cost';
 import { post as cryptoConferenceBoothContent } from './crypto-conference-booth-content';
+import { post as inHouseDesignerVsCreativeAgency } from './in-house-designer-vs-creative-agency';
 
 // Registry. Add one import + one entry per new post. Order does not matter,
 // getAllPosts() sorts by date descending.
@@ -36,4 +37,5 @@ export const posts: BlogPost[] = [
   discordAndTelegramVisualAssets,
   howMuchDoesABrandVideoCost,
   cryptoConferenceBoothContent,
+  inHouseDesignerVsCreativeAgency,
 ];
