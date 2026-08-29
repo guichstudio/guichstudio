@@ -110,6 +110,7 @@ gives counts, so the URLs have to be read from the GSC interface directly.
 | 2026-08-26 | `how-much-does-a-brand-video-cost` | how much does a brand video cost | tech |
 | 2026-08-27 | `crypto-conference-booth-content` | crypto conference booth content | web3 |
 | 2026-08-28 | `in-house-designer-vs-creative-agency` | in house designer vs creative agency | tech |
+| 2026-08-29 | `exchange-listing-announcement-assets` | exchange listing announcement assets | web3 |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -131,7 +132,6 @@ valid.
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 5 | exchange listing announcement assets | web3 | I | The kit, ready before the date is public | todo |
 | 6 | how to brief a video agency | tech | I | The brief that gets you a good first cut | todo |
 | 7 | airdrop announcement graphics | web3 | I | Announcing a distribution without looking like a scam | todo |
 | 8 | video for a seed fundraising deck | tech | I | What investors actually watch, and for how long | todo |

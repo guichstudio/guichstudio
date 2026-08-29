@@ -149,7 +149,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'Once the date is public, production capacity stops being the constraint. Decision capacity becomes it. Teams lose the launch window waiting for approvals, not waiting for renders.',
+      text: 'Once the date is public, production capacity stops being the constraint. Decision capacity becomes it. Teams lose the launch window waiting for approvals, not waiting for renders. The narrower version of this week, for a project that is already live and getting listed somewhere new, is covered file by file in our post on [exchange listing announcement assets](/blog/exchange-listing-announcement-assets).',
     },
     {
       type: 'ul',
