@@ -18,6 +18,7 @@ import { post as howMuchDoesABrandVideoCost } from './how-much-does-a-brand-vide
 import { post as cryptoConferenceBoothContent } from './crypto-conference-booth-content';
 import { post as inHouseDesignerVsCreativeAgency } from './in-house-designer-vs-creative-agency';
 import { post as exchangeListingAnnouncementAssets } from './exchange-listing-announcement-assets';
+import { post as airdropAnnouncementGraphics } from './airdrop-announcement-graphics';
 
 // Registry. Add one import + one entry per new post. Order does not matter,
 // getAllPosts() sorts by date descending.
@@ -40,4 +41,5 @@ export const posts: BlogPost[] = [
   cryptoConferenceBoothContent,
   inHouseDesignerVsCreativeAgency,
   exchangeListingAnnouncementAssets,
+  airdropAnnouncementGraphics,
 ];

@@ -111,6 +111,7 @@ gives counts, so the URLs have to be read from the GSC interface directly.
 | 2026-08-27 | `crypto-conference-booth-content` | crypto conference booth content | web3 |
 | 2026-08-28 | `in-house-designer-vs-creative-agency` | in house designer vs creative agency | tech |
 | 2026-08-29 | `exchange-listing-announcement-assets` | exchange listing announcement assets | web3 |
+| 2026-08-30 | `airdrop-announcement-graphics` | airdrop announcement graphics | web3 |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -132,8 +133,6 @@ valid.
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 6 | how to brief a video agency | tech | I | The brief that gets you a good first cut | todo |
-| 7 | airdrop announcement graphics | web3 | I | Announcing a distribution without looking like a scam | todo |
 | 8 | video for a seed fundraising deck | tech | I | What investors actually watch, and for how long | todo |
 | 9 | creator seeding for web3 | web3 | I | Seeding assets that creators want to use | todo |
 | 10 | how to give feedback on a video edit | tech | I | The revision round that does not burn the budget | todo |
@@ -161,9 +160,11 @@ Collision watch, check with `grep` before writing:
   (what to shoot, how to assemble three days of footage), otherwise merge it.
 - Row 23 is close to the published `nft-marketing-video`. Read that post first;
   if the reveal is already covered there, extend it and mark row 23 `dropped`.
-- Row 6 touches the brief sections that already exist in `product-launch-video`
-  and `teaser-video-for-app-launch`. This row is the whole process, those are
-  one section each, so it holds, but link them rather than repeat them.
+- Row 6 was dropped on 2026-08-30, see the Dropped table. The collision was not
+  with `product-launch-video` or `teaser-video-for-app-launch`, which carry one
+  brief section each, but with `motion-design-agency`, whose whole subject is
+  how to brief a studio. If the queue ever needs that intent again, extend that
+  post rather than opening a second URL.
 
 ## Dropped
 
@@ -184,3 +185,4 @@ Collision watch, check with `grep` before writing:
 | web3 pitch video | Narrowed to row 13 (`pitch video for a web3 protocol`). |
 | video for fundraising deck | Narrowed to row 8 (`video for a seed fundraising deck`). |
 | exchange listing announcement | Narrowed to row 5 (`exchange listing announcement assets`). |
+| how to brief a video agency | Row 6, dropped 2026-08-30. Same intent as the published `motion-design-agency` post, titled "how to brief one so the first cut lands": it already holds the four decisions, the reference set, the approval path, how to read the proposal, and an FAQ entry "How do I brief a motion design agency?". A second URL would cannibalise it. Extend that post if the angle needs more room. |

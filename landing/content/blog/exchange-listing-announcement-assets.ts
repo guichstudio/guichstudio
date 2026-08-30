@@ -185,7 +185,7 @@ export const post: BlogPost = {
       items: [
         '**Announcing before the venue does.** It breaks the embargo, it can cost the relationship, and it makes your post look like a rumour.',
         '**A logo pulled from a search result.** If you did not send the files, someone will find some. Send them early.',
-        '**Scam adjacent design.** Countdowns, glowing coins, forced urgency and a wallet prompt in the first frame. Listing announcements are the single most impersonated post type in crypto, so the visual distance between your real announcement and a fake one is a security feature, not a taste preference.',
+        '**Scam adjacent design.** Countdowns, glowing coins, forced urgency and a wallet prompt in the first frame. Listings are among the most impersonated post types in crypto, so the visual distance between your real announcement and a fake one is a security feature, not a taste preference. The same argument applied to a distribution is in our post on [airdrop announcement graphics](/blog/airdrop-announcement-graphics).',
         '**No contract address anywhere.** The first fake token appears fast. State the address on your own surfaces and keep it one click from the announcement.',
         '**One image for every channel.** The crop that works on a timeline loses the pair in a story, and the channel where your holders actually talk gets the leftovers.',
         '**Treating the listing as a campaign.** It is an announcement. Spend the campaign budget on the explainer that keeps working in month two.',
