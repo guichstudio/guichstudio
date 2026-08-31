@@ -1,0 +1,25 @@
+{
+  "name": "guichstudio-remotion",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Studio-grade motion for BuildLore, built with Remotion. Encodes docs/motion-design.md.",
+  "scripts": {
+    "dev": "remotion studio",
+    "studio": "remotion studio",
+    "render": "remotion render BrandMark out/brand-mark.mp4",
+    "render:square": "remotion render BrandMarkSquare out/brand-mark-square.mp4",
+    "still": "remotion still BrandMark out/brand-mark.png --frame=68",
+    "upgrade": "remotion upgrade"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.496",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "remotion": "4.0.496"
+  },
+  "devDependencies": {
+    "@types/react": "18.2.66",
+    "@types/react-dom": "18.2.22",
+    "typescript": "5.4.5"
+  }
+}
