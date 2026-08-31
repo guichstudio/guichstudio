@@ -19,6 +19,7 @@ import { post as cryptoConferenceBoothContent } from './crypto-conference-booth-
 import { post as inHouseDesignerVsCreativeAgency } from './in-house-designer-vs-creative-agency';
 import { post as exchangeListingAnnouncementAssets } from './exchange-listing-announcement-assets';
 import { post as airdropAnnouncementGraphics } from './airdrop-announcement-graphics';
+import { post as videoForASeedFundraisingDeck } from './video-for-a-seed-fundraising-deck';
 
 // Registry. Add one import + one entry per new post. Order does not matter,
 // getAllPosts() sorts by date descending.
@@ -42,4 +43,5 @@ export const posts: BlogPost[] = [
   inHouseDesignerVsCreativeAgency,
   exchangeListingAnnouncementAssets,
   airdropAnnouncementGraphics,
+  videoForASeedFundraisingDeck,
 ];
