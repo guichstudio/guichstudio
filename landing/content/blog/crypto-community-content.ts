@@ -187,7 +187,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'That last point is a habit rather than a campaign, and it compounds. It also connects to the launch calendar: the same kit that carries a quiet week is what a [token launch marketing](/blog/token-launch-marketing) push draws from when the date finally lands.',
+      text: 'That last point is a habit rather than a campaign, and it compounds. What goes in the drop, and when it should land, is the subject of our post on [creator seeding for web3](/blog/creator-seeding-for-web3). It also connects to the launch calendar: the same kit that carries a quiet week is what a [token launch marketing](/blog/token-launch-marketing) push draws from when the date finally lands.',
     },
     {
       type: 'h2',

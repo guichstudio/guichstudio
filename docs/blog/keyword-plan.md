@@ -113,6 +113,7 @@ gives counts, so the URLs have to be read from the GSC interface directly.
 | 2026-08-29 | `exchange-listing-announcement-assets` | exchange listing announcement assets | web3 |
 | 2026-08-30 | `airdrop-announcement-graphics` | airdrop announcement graphics | web3 |
 | 2026-08-31 | `video-for-a-seed-fundraising-deck` | video for a seed fundraising deck | tech |
+| 2026-09-01 | `creator-seeding-for-web3` | creator seeding for web3 | web3 |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -134,7 +135,6 @@ valid.
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 9 | creator seeding for web3 | web3 | I | Seeding assets that creators want to use | todo |
 | 10 | how to give feedback on a video edit | tech | I | The revision round that does not burn the budget | todo |
 | 11 | rebranding a crypto project | web3 | C | Changing the mark without losing the community | todo |
 | 12 | ai video vs studio production | tech | I | Where generated video is fine and where it reads as cheap | todo |
