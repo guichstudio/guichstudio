@@ -21,6 +21,7 @@ import { post as exchangeListingAnnouncementAssets } from './exchange-listing-an
 import { post as airdropAnnouncementGraphics } from './airdrop-announcement-graphics';
 import { post as videoForASeedFundraisingDeck } from './video-for-a-seed-fundraising-deck';
 import { post as creatorSeedingForWeb3 } from './creator-seeding-for-web3';
+import { post as howToGiveFeedbackOnAVideoEdit } from './how-to-give-feedback-on-a-video-edit';
 
 // Registry. Add one import + one entry per new post. Order does not matter,
 // getAllPosts() sorts by date descending.
@@ -46,4 +47,5 @@ export const posts: BlogPost[] = [
   airdropAnnouncementGraphics,
   videoForASeedFundraisingDeck,
   creatorSeedingForWeb3,
+  howToGiveFeedbackOnAVideoEdit,
 ];

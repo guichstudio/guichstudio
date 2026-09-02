@@ -129,7 +129,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'A studio that pushes back on this at the proposal stage is protecting your date, not defending itself. The same discipline is what makes our [Launch Sprint](/#service-cards) fit in two weeks: the decisions happen on day one and day two, and everything after that is production.',
+      text: 'A studio that pushes back on this at the proposal stage is protecting your date, not defending itself. The same discipline is what makes our [Launch Sprint](/#service-cards) fit in two weeks: the decisions happen on day one and day two, and everything after that is production. For the format the notes themselves should take once the first cut arrives, see [how to give feedback on a video edit](/blog/how-to-give-feedback-on-a-video-edit).',
     },
     {
       type: 'h2',
