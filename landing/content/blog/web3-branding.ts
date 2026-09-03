@@ -153,7 +153,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'A rebrand is also the moment to fix the things the first identity never had: the coin icon, the motion language, the announcement templates. If you are rewriting the system anyway, rewrite all of it.',
+      text: 'A rebrand is also the moment to fix the things the first identity never had: the coin icon, the motion language, the announcement templates. If you are rewriting the system anyway, rewrite all of it. The migration itself is its own piece of work, which we cover in [rebranding a crypto project](/blog/rebranding-a-crypto-project): the surfaces you do not control set the date, not the design.',
     },
     {
       type: 'h2',

@@ -115,6 +115,7 @@ gives counts, so the URLs have to be read from the GSC interface directly.
 | 2026-08-31 | `video-for-a-seed-fundraising-deck` | video for a seed fundraising deck | tech |
 | 2026-09-01 | `creator-seeding-for-web3` | creator seeding for web3 | web3 |
 | 2026-09-02 | `how-to-give-feedback-on-a-video-edit` | how to give feedback on a video edit | tech |
+| 2026-09-03 | `rebranding-a-crypto-project` | rebranding a crypto project | web3 |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -136,7 +137,6 @@ valid.
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 11 | rebranding a crypto project | web3 | C | Changing the mark without losing the community | todo |
 | 12 | ai video vs studio production | tech | I | Where generated video is fine and where it reads as cheap | todo |
 | 13 | pitch video for a web3 protocol | web3 | I | Explaining a protocol without a whiteboard | todo |
 | 14 | brand assets a startup needs at seed stage | tech | I | The smallest brand system that still holds | todo |
@@ -160,6 +160,15 @@ Collision watch, check with `grep` before writing:
   (what to shoot, how to assemble three days of footage), otherwise merge it.
 - Row 23 is close to the published `nft-marketing-video`. Read that post first;
   if the reveal is already covered there, extend it and mark row 23 `dropped`.
+- Row 11 was published on 2026-09-03 as `rebranding-a-crypto-project`, after
+  checking it against `web3-branding`, which already carried a "Rebranding
+  without losing the community" h2 and a matching FAQ entry. It was kept as its
+  own URL because rebranding is one section of six in that post, not its whole
+  subject (the test that sent row 6 to the Dropped table). The new post stays on
+  the migration: the surfaces you do not control, the queue times that set the
+  date, the single switch day, the announcement package. The identity system
+  itself remains the subject of `web3-branding`, which now links to it. Anything
+  further on what an identity *contains* extends that post, not this one.
 - Row 6 was dropped on 2026-08-30, see the Dropped table. The collision was not
   with `product-launch-video` or `teaser-video-for-app-launch`, which carry one
   brief section each, but with `motion-design-agency`, whose whole subject is
