@@ -116,6 +116,7 @@ gives counts, so the URLs have to be read from the GSC interface directly.
 | 2026-09-01 | `creator-seeding-for-web3` | creator seeding for web3 | web3 |
 | 2026-09-02 | `how-to-give-feedback-on-a-video-edit` | how to give feedback on a video edit | tech |
 | 2026-09-03 | `rebranding-a-crypto-project` | rebranding a crypto project | web3 |
+| 2026-09-04 | `ai-video-vs-studio-production` | ai video vs studio production | tech |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -137,7 +138,6 @@ valid.
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 12 | ai video vs studio production | tech | I | Where generated video is fine and where it reads as cheap | todo |
 | 13 | pitch video for a web3 protocol | web3 | I | Explaining a protocol without a whiteboard | todo |
 | 14 | brand assets a startup needs at seed stage | tech | I | The smallest brand system that still holds | todo |
 | 15 | memecoin launch visual identity | web3 | I | Speed as a craft discipline, not an excuse for slop | todo |
@@ -169,6 +169,12 @@ Collision watch, check with `grep` before writing:
   date, the single switch day, the announcement package. The identity system
   itself remains the subject of `web3-branding`, which now links to it. Anything
   further on what an identity *contains* extends that post, not this one.
+- Row 12 was published on 2026-09-04 as `ai-video-vs-studio-production`. It sorts
+  assets by whether they carry a claim or fill a slot, and it carries the cost
+  comparison for generation versus a build. It stays out of channel planning and
+  out of the one build, several cuts argument, so row 16 and row 24 are still
+  clear; anything further on where generated work is acceptable extends this post
+  rather than opening a second URL.
 - Row 6 was dropped on 2026-08-30, see the Dropped table. The collision was not
   with `product-launch-video` or `teaser-video-for-app-launch`, which carry one
   brief section each, but with `motion-design-agency`, whose whole subject is

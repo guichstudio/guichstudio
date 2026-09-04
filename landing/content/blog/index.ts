@@ -23,6 +23,7 @@ import { post as videoForASeedFundraisingDeck } from './video-for-a-seed-fundrai
 import { post as creatorSeedingForWeb3 } from './creator-seeding-for-web3';
 import { post as howToGiveFeedbackOnAVideoEdit } from './how-to-give-feedback-on-a-video-edit';
 import { post as rebrandingACryptoProject } from './rebranding-a-crypto-project';
+import { post as aiVideoVsStudioProduction } from './ai-video-vs-studio-production';
 
 // Registry. Add one import + one entry per new post. Order does not matter,
 // getAllPosts() sorts by date descending.
@@ -50,4 +51,5 @@ export const posts: BlogPost[] = [
   creatorSeedingForWeb3,
   howToGiveFeedbackOnAVideoEdit,
   rebrandingACryptoProject,
+  aiVideoVsStudioProduction,
 ];

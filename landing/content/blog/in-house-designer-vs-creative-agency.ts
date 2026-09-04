@@ -168,6 +168,10 @@ export const post: BlogPost = {
       text: 'We should disclose that this next tool is ours: [ShipTeaser](https://shipteaser.com) was built by the same founder as this studio. You paste a product URL and it returns a 15 second 1080p motion graphics teaser made for muted feeds, with an optional music bed, and the first video is free without a card. There is no voice-over, no screen recording, no editor and no timeline, and it will not give you a visual system or a narrative spine, so it is not a substitute for either option in this post. For filling a gap on a week when nobody has capacity, it is a fair trade, and knowing that keeps small moments from eating a budget meant for the big ones.',
     },
     {
+      type: 'p',
+      text: 'Generated video sits in the same third case, with the same caveat. It covers the assets that only have to exist, and it fails on the ones a buyer judges you by, which is the line we draw in [AI video vs studio production](/blog/ai-video-vs-studio-production).',
+    },
+    {
       type: 'h2',
       text: 'A short test to run before you decide',
     },
