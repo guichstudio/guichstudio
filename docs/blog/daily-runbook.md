@@ -106,6 +106,28 @@ Commit trailer: `Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>`.
 If `git status` shows unrelated modified files, leave them alone. Never
 `git add -A` in this repo.
 
+**Note 2026-09-04.** In the scheduled sandbox the checkout starts on a
+**detached HEAD** at the real remote tip, while the local `main` ref is left
+several commits behind. `git push origin main` then pushes that stale branch
+and is rejected as non fast forward. This is not an authentication problem and
+it is not a reason to stop. Check first:
+
+```bash
+git rev-parse --abbrev-ref HEAD      # prints HEAD when detached
+git rev-parse HEAD main origin/main
+```
+
+If `origin/main` is an ancestor of `HEAD` (`git merge-base --is-ancestor
+origin/main HEAD`), the commit is a clean fast forward and the fix is simply to
+name the right ref:
+
+```bash
+git push origin HEAD:main
+```
+
+Never force push, never change the remote. If the commit is *not* a fast
+forward, stop and report.
+
 ## Step 6. Verify in production
 
 Vercel builds on push, usually under two minutes. Then, and only then, call it
