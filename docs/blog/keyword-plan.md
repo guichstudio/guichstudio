@@ -117,6 +117,7 @@ gives counts, so the URLs have to be read from the GSC interface directly.
 | 2026-09-02 | `how-to-give-feedback-on-a-video-edit` | how to give feedback on a video edit | tech |
 | 2026-09-03 | `rebranding-a-crypto-project` | rebranding a crypto project | web3 |
 | 2026-09-04 | `ai-video-vs-studio-production` | ai video vs studio production | tech |
+| 2026-09-05 | `pitch-video-for-a-web3-protocol` | pitch video for a web3 protocol | web3 |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -138,7 +139,6 @@ valid.
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 13 | pitch video for a web3 protocol | web3 | I | Explaining a protocol without a whiteboard | todo |
 | 14 | brand assets a startup needs at seed stage | tech | I | The smallest brand system that still holds | todo |
 | 15 | memecoin launch visual identity | web3 | I | Speed as a craft discipline, not an excuse for slop | todo |
 | 16 | video content calendar for startups | tech | I | Planning a month of cuts from one build | todo |
@@ -175,6 +175,15 @@ Collision watch, check with `grep` before writing:
   out of the one build, several cuts argument, so row 16 and row 24 are still
   clear; anything further on where generated work is acceptable extends this post
   rather than opening a second URL.
+- Row 13 was published on 2026-09-05 as `pitch-video-for-a-web3-protocol`, after
+  checking it against `video-for-a-seed-fundraising-deck` (investor process and
+  the deck cuts), `web3-launch-video` (the launch film and its sequencing) and
+  `saas-explainer-video` (a product with an interface to film). The new post
+  stays on making a mechanism legible when there is no product to show: the
+  audience split, the abstraction ladder, what goes on screen instead of a system
+  diagram, the four beats. Anything further on launch sequencing extends
+  `web3-launch-video`, and anything on the fundraising process extends the seed
+  deck post, rather than opening a second URL.
 - Row 6 was dropped on 2026-08-30, see the Dropped table. The collision was not
   with `product-launch-video` or `teaser-video-for-app-launch`, which carry one
   brief section each, but with `motion-design-agency`, whose whole subject is

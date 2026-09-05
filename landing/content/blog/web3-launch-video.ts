@@ -42,7 +42,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'If the spine reads well as five sentences of plain text, the film will hold. If it only works with music and motion under it, you do not have a spine, you have a mood.',
+      text: 'If the spine reads well as five sentences of plain text, the film will hold. If it only works with music and motion under it, you do not have a spine, you have a mood. When the reveal is a mechanism rather than an interface, the spine needs more room on that beat, which is the subject of our piece on a [pitch video for a Web3 protocol](/blog/pitch-video-for-a-web3-protocol).',
     },
     {
       type: 'callout',
