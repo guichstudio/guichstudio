@@ -118,6 +118,7 @@ gives counts, so the URLs have to be read from the GSC interface directly.
 | 2026-09-03 | `rebranding-a-crypto-project` | rebranding a crypto project | web3 |
 | 2026-09-04 | `ai-video-vs-studio-production` | ai video vs studio production | tech |
 | 2026-09-05 | `pitch-video-for-a-web3-protocol` | pitch video for a web3 protocol | web3 |
+| 2026-09-06 | `brand-assets-a-startup-needs-at-seed-stage` | brand assets a startup needs at seed stage | tech |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -139,7 +140,6 @@ valid.
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 14 | brand assets a startup needs at seed stage | tech | I | The smallest brand system that still holds | todo |
 | 15 | memecoin launch visual identity | web3 | I | Speed as a craft discipline, not an excuse for slop | todo |
 | 16 | video content calendar for startups | tech | I | Planning a month of cuts from one build | todo |
 | 17 | gaming and metaverse trailers | web3 | C | Trailer beats borrowed from games, applied to launches | todo |
@@ -184,6 +184,14 @@ Collision watch, check with `grep` before writing:
   diagram, the four beats. Anything further on launch sequencing extends
   `web3-launch-video`, and anything on the fundraising process extends the seed
   deck post, rather than opening a second URL.
+- Row 14 was published on 2026-09-06 as `brand-assets-a-startup-needs-at-seed-stage`, after
+  checking it against `brand-video-for-tech-startups` (the four films and their order),
+  `web3-branding` (the identity system, web3 side) and `in-house-designer-vs-creative-agency`
+  (the hiring decision). The new post is the static kit itself: the seven items, what waits,
+  the handover to non designers, the build order and the four checks. It carries no video
+  argument beyond one bullet, so `brand-video-for-tech-startups` keeps that intent and now
+  links here. Anything further on what a film should be extends that post, and anything on
+  identity for a protocol extends `web3-branding`, rather than opening a second URL.
 - Row 6 was dropped on 2026-08-30, see the Dropped table. The collision was not
   with `product-launch-video` or `teaser-video-for-app-launch`, which carry one
   brief section each, but with `motion-design-agency`, whose whole subject is

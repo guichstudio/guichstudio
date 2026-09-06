@@ -20,7 +20,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'The order matters more than the budget. Here are the four films, in the order they earn their cost. If the trigger for the first one is a round rather than a launch, the placement changes and so does the brief, which we cover separately in our post on [video for a seed fundraising deck](/blog/video-for-a-seed-fundraising-deck).',
+      text: 'The order matters more than the budget. Here are the four films, in the order they earn their cost. If the trigger for the first one is a round rather than a launch, the placement changes and so does the brief, which we cover separately in our post on [video for a seed fundraising deck](/blog/video-for-a-seed-fundraising-deck). If none of the static pieces exist yet either, start with the [brand assets a startup needs at seed stage](/blog/brand-assets-a-startup-needs-at-seed-stage), because every film below borrows from them.',
     },
     {
       type: 'h2',
