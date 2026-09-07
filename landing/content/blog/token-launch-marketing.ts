@@ -186,6 +186,10 @@ export const post: BlogPost = {
       text: 'The pattern behind all four: each one spends launch week money on a problem that was cheaper to solve in week minus four. That is the recurring shape of a launch that felt expensive and landed flat, and it is why we sequence engagements the way our [service cards](/#service-cards) describe, narrative and system first, assets after.',
     },
     {
+      type: 'p',
+      text: 'One case genuinely does not get six weeks of runway: a memecoin, where the window is hours. The sequencing still holds, compressed into a single sitting, and we set out how in our post on [memecoin launch visual identity](/blog/memecoin-launch-visual-identity).',
+    },
+    {
       type: 'cta',
       text: 'We build the narrative and the visual system first, then the launch kit around a date that can still move, for crypto and tech teams.',
       label: 'See the work',
