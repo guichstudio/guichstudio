@@ -120,6 +120,7 @@ gives counts, so the URLs have to be read from the GSC interface directly.
 | 2026-09-05 | `pitch-video-for-a-web3-protocol` | pitch video for a web3 protocol | web3 |
 | 2026-09-06 | `brand-assets-a-startup-needs-at-seed-stage` | brand assets a startup needs at seed stage | tech |
 | 2026-09-07 | `memecoin-launch-visual-identity` | memecoin launch visual identity | web3 |
+| 2026-09-08 | `video-content-calendar-for-startups` | video content calendar for startups | tech |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -141,7 +142,6 @@ valid.
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 16 | video content calendar for startups | tech | I | Planning a month of cuts from one build | todo |
 | 17 | gaming and metaverse trailers | web3 | C | Trailer beats borrowed from games, applied to launches | todo |
 | 18 | video for a saas landing page hero | tech | I | The film above the fold, and what it must not do | todo |
 | 19 | projection mapping for a product launch event | web3 | C | When a launch deserves a room instead of a feed | todo |
@@ -202,6 +202,16 @@ Collision watch, check with `grep` before writing:
   links here. Anything further on what an identity contains extends `web3-branding`, and
   anything on the weekly template rhythm extends `crypto-community-content`, rather than
   opening a second URL.
+- Row 16 was published on 2026-09-08 as `video-content-calendar-for-startups`, after checking
+  it against `startup-video-marketing-strategy`, which is the closest published post. That post
+  answers where a quarter of video comes from (one build, four slots), and the calendar is one
+  h2 of six inside it, not its subject. It was kept as its own URL on the same test that kept
+  row 11 and dropped row 6: one section of six holds, a whole subject does not. The new post
+  stays strictly on the operating layer, the inventory pass, the cut/assemble/build sort, lead
+  times, the four week grid, the reserved week, the four fields per cell and the Friday pass.
+  It re-argues neither the four slots nor the build economics, and
+  `startup-video-marketing-strategy` now links to it. Anything further on where the assets come
+  from extends that post rather than this one.
 - Row 6 was dropped on 2026-08-30, see the Dropped table. The collision was not
   with `product-launch-video` or `teaser-video-for-app-launch`, which carry one
   brief section each, but with `motion-design-agency`, whose whole subject is

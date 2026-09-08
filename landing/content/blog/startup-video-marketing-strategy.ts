@@ -117,7 +117,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'The slots also tell you what to decline. A request that fits none of them is either a new build, which means it gets planned, or a distraction, which means it gets dropped. That single filter removes most of the arguments a marketing team has about video.',
+      text: 'The slots also tell you what to decline. A request that fits none of them is either a new build, which means it gets planned, or a distraction, which means it gets dropped. That single filter removes most of the arguments a marketing team has about video. Turning the slots into dates, owners and lead times is a separate exercise, covered in our post on the [video content calendar](/blog/video-content-calendar-for-startups).',
     },
     {
       type: 'callout',
