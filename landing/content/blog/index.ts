@@ -28,6 +28,7 @@ import { post as pitchVideoForAWeb3Protocol } from './pitch-video-for-a-web3-pro
 import { post as brandAssetsAStartupNeedsAtSeedStage } from './brand-assets-a-startup-needs-at-seed-stage';
 import { post as memecoinLaunchVisualIdentity } from './memecoin-launch-visual-identity';
 import { post as videoContentCalendarForStartups } from './video-content-calendar-for-startups';
+import { post as gamingAndMetaverseTrailers } from './gaming-and-metaverse-trailers';
 
 // Registry. Add one import + one entry per new post. Order does not matter,
 // getAllPosts() sorts by date descending.
@@ -60,4 +61,5 @@ export const posts: BlogPost[] = [
   brandAssetsAStartupNeedsAtSeedStage,
   memecoinLaunchVisualIdentity,
   videoContentCalendarForStartups,
+  gamingAndMetaverseTrailers,
 ];

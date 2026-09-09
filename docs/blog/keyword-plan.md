@@ -121,6 +121,7 @@ gives counts, so the URLs have to be read from the GSC interface directly.
 | 2026-09-06 | `brand-assets-a-startup-needs-at-seed-stage` | brand assets a startup needs at seed stage | tech |
 | 2026-09-07 | `memecoin-launch-visual-identity` | memecoin launch visual identity | web3 |
 | 2026-09-08 | `video-content-calendar-for-startups` | video content calendar for startups | tech |
+| 2026-09-09 | `gaming-and-metaverse-trailers` | gaming and metaverse trailers | web3 |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -142,7 +143,6 @@ valid.
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 17 | gaming and metaverse trailers | web3 | C | Trailer beats borrowed from games, applied to launches | todo |
 | 18 | video for a saas landing page hero | tech | I | The film above the fold, and what it must not do | todo |
 | 19 | projection mapping for a product launch event | web3 | C | When a launch deserves a room instead of a feed | todo |
 | 20 | art direction for tech brands | tech | C | Why the same components look expensive or cheap | todo |
@@ -160,6 +160,19 @@ Collision watch, check with `grep` before writing:
   (what to shoot, how to assemble three days of footage), otherwise merge it.
 - Row 23 is close to the published `nft-marketing-video`. Read that post first;
   if the reveal is already covered there, extend it and mark row 23 `dropped`.
+  Since 2026-09-09 it is also close to `gaming-and-metaverse-trailers`, which
+  carries the six trailer beats and the escalation argument. Row 23 only holds
+  if it stays on the reveal beat itself (the moment the pieces appear, and why
+  it lands flat); the trailer structure now belongs to row 17's post.
+- Row 17 was published on 2026-09-09 as `gaming-and-metaverse-trailers`, after checking
+  it against every published post: `grep` for gaming, metaverse and trailer returned
+  nothing, so there was no collision to resolve. The post is the trailer format itself:
+  why the cinematic and the feature reel both get skipped, the six beats, the verb as the
+  thing being sold, the three cuts from one capture effort, what is shootable before the
+  build is playable, and the separate feed edit. It re-argues neither launch sequencing
+  (which stays in `web3-launch-video`, now linked) nor the world-before-pieces case
+  (which stays in `nft-marketing-video`, which now links here). Anything further on when
+  a launch film ships extends `web3-launch-video` rather than this post.
 - Row 11 was published on 2026-09-03 as `rebranding-a-crypto-project`, after
   checking it against `web3-branding`, which already carried a "Rebranding
   without losing the community" h2 and a matching FAQ entry. It was kept as its

@@ -62,6 +62,10 @@ export const post: BlogPost = {
       text: 'Concretely, that means the first shots are not the assets. They are the environment, the typography, the interface, the rules of the place. The pieces arrive as inhabitants of a world the viewer has already accepted.',
     },
     {
+      type: 'p',
+      text: 'If the project is playable rather than collectible, the same argument runs at higher intensity and the format has its own conventions: see [gaming and metaverse trailers](/blog/gaming-and-metaverse-trailers) for the beats, and for why the verb matters more than the world.',
+    },
+    {
       type: 'callout',
       text: 'A useful test: mute the film and remove every piece of art from it. If what is left says nothing about the project, the film has no spine, only a subject.',
     },
