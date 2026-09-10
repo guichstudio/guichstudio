@@ -122,6 +122,7 @@ gives counts, so the URLs have to be read from the GSC interface directly.
 | 2026-09-07 | `memecoin-launch-visual-identity` | memecoin launch visual identity | web3 |
 | 2026-09-08 | `video-content-calendar-for-startups` | video content calendar for startups | tech |
 | 2026-09-09 | `gaming-and-metaverse-trailers` | gaming and metaverse trailers | web3 |
+| 2026-09-10 | `video-for-a-saas-landing-page-hero` | video for a saas landing page hero | tech |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -143,7 +144,6 @@ valid.
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 18 | video for a saas landing page hero | tech | I | The film above the fold, and what it must not do | todo |
 | 19 | projection mapping for a product launch event | web3 | C | When a launch deserves a room instead of a feed | todo |
 | 20 | art direction for tech brands | tech | C | Why the same components look expensive or cheap | todo |
 | 21 | conference recap video for crypto teams | web3 | I | Three days of booth footage into something usable | todo |
@@ -152,6 +152,19 @@ valid.
 | 24 | how many videos does a startup actually need | tech | I | One build, several cuts, versus several productions | todo |
 
 Collision watch, check with `grep` before writing:
+
+- Row 18 was published on 2026-09-10 as `video-for-a-saas-landing-page-hero`, after
+  checking it against `saas-explainer-video`, which is the closest published post. That
+  post carries an "Above the fold" row in its placement table and one paragraph on the
+  film dying in the hero, one section of six rather than its subject: the same test that
+  kept rows 11 and 16 and dropped row 6. The new post is the slot itself: the permission
+  difference between corroboration and comprehension, the six things the hero must not do,
+  the loop versus film versus still choice, the six to twelve second length and the page
+  weight brief, and the three video slots on one page sorted by consent. It re-argues
+  neither the explainer format nor the first ten seconds of a film, and
+  `saas-explainer-video` now links here. Anything further on what an explainer contains
+  extends that post rather than this one. `teaser-video-for-app-launch` mentions a website
+  hero only as one surface in a list, so it is untouched.
 
 - Row 21 sits next to row 3, now published as `crypto-conference-booth-content`.
   That post is the assets you bring to the booth; row 21 is what you cut

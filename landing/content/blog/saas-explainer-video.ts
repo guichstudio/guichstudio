@@ -129,7 +129,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'The above the fold row is where most SaaS explainers die. A film built for a dedicated page gets dropped into the hero, where it opens on a logo animation and a slow abstract shape, and the visitor leaves before the product appears. Same file, wrong slot, wasted spend.',
+      text: 'The above the fold row is where most SaaS explainers die. A film built for a dedicated page gets dropped into the hero, where it opens on a logo animation and a slow abstract shape, and the visitor leaves before the product appears. Same file, wrong slot, wasted spend. That row has its own rules, which we set out in [video for a SaaS landing page hero](/blog/video-for-a-saas-landing-page-hero).',
     },
     {
       type: 'h2',
