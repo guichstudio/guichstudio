@@ -123,6 +123,7 @@ gives counts, so the URLs have to be read from the GSC interface directly.
 | 2026-09-08 | `video-content-calendar-for-startups` | video content calendar for startups | tech |
 | 2026-09-09 | `gaming-and-metaverse-trailers` | gaming and metaverse trailers | web3 |
 | 2026-09-10 | `video-for-a-saas-landing-page-hero` | video for a saas landing page hero | tech |
+| 2026-09-12 | `projection-mapping-for-a-product-launch-event` | projection mapping for a product launch event | web3 |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -144,7 +145,6 @@ valid.
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 19 | projection mapping for a product launch event | web3 | C | When a launch deserves a room instead of a feed | todo |
 | 20 | art direction for tech brands | tech | C | Why the same components look expensive or cheap | todo |
 | 21 | conference recap video for crypto teams | web3 | I | Three days of booth footage into something usable | todo |
 | 22 | 3d product animation for a software launch | tech | C | When 3D pays for itself and when it is decoration | todo |
@@ -152,6 +152,19 @@ valid.
 | 24 | how many videos does a startup actually need | tech | I | One build, several cuts, versus several productions | todo |
 
 Collision watch, check with `grep` before writing:
+
+- Row 19 was published on 2026-09-12 as `projection-mapping-for-a-product-launch-event`, after
+  checking it against every published post: `grep` for projection mapping returned nothing, so
+  there was no collision to resolve. The closest neighbour is `crypto-conference-booth-content`,
+  and the two are opposite situations: that post is a stand in a loud bright hall you do not
+  control, this one is an evening in a venue you do, with a dark room, a fixed audience and a
+  surface designed against. The post is the installation itself: the wall as content rather than
+  screen, the flat-screen test that sends a job to an LED wall instead, the five decisions
+  (surface, ambient light, projector count, show format, access window), the three formats
+  (ambient, reveal, responsive) and the capture plan. It re-argues neither launch sequencing
+  (which stays in `web3-launch-video`, now linked) nor booth assets (which stay in
+  `crypto-conference-booth-content`, which now links here). Anything further on what a launch
+  film contains extends `product-launch-video` rather than this post.
 
 - Row 18 was published on 2026-09-10 as `video-for-a-saas-landing-page-hero`, after
   checking it against `saas-explainer-video`, which is the closest published post. That

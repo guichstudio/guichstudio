@@ -43,6 +43,10 @@ export const post: BlogPost = {
       text: 'The six metre test. Put the loop on a monitor, walk to the far side of the office, turn around and look at it for three seconds. If you cannot say what the company does and what it wants from you, the person in the hall will not either, and they are less motivated than you are.',
     },
     {
+      type: 'p',
+      text: 'All of that assumes a hall you do not control. An evening in your own venue is the opposite situation, with a dark room, a fixed audience and a surface you can design against, which is why [projection mapping for a launch event](/blog/projection-mapping-for-a-product-launch-event) follows completely different rules from a stand.',
+    },
+    {
       type: 'h2',
       text: 'The five assets a booth actually needs',
     },
