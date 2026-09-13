@@ -187,7 +187,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'Run these quarterly rather than continuously. Brand systems fail slowly, and the failure shows up as drift across a batch of assets, not inside any single one.',
+      text: 'Run these quarterly rather than continuously. Brand systems fail slowly, and the failure shows up as drift across a batch of assets, not inside any single one. When the kit is complete and the output still looks inconsistent, the missing layer is usually [art direction](/blog/art-direction-for-tech-brands): the rules that decide how the pieces are allowed to be used.',
     },
     {
       type: 'h2',

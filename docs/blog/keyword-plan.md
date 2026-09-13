@@ -124,6 +124,7 @@ gives counts, so the URLs have to be read from the GSC interface directly.
 | 2026-09-09 | `gaming-and-metaverse-trailers` | gaming and metaverse trailers | web3 |
 | 2026-09-10 | `video-for-a-saas-landing-page-hero` | video for a saas landing page hero | tech |
 | 2026-09-12 | `projection-mapping-for-a-product-launch-event` | projection mapping for a product launch event | web3 |
+| 2026-09-13 | `art-direction-for-tech-brands` | art direction for tech brands | tech |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -145,13 +146,27 @@ valid.
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 20 | art direction for tech brands | tech | C | Why the same components look expensive or cheap | todo |
 | 21 | conference recap video for crypto teams | web3 | I | Three days of booth footage into something usable | todo |
 | 22 | 3d product animation for a software launch | tech | C | When 3D pays for itself and when it is decoration | todo |
 | 23 | nft collection reveal video | web3 | I | The reveal beat, and why most of them land flat | todo |
 | 24 | how many videos does a startup actually need | tech | I | One build, several cuts, versus several productions | todo |
 
 Collision watch, check with `grep` before writing:
+
+- Row 20 was published on 2026-09-13 as `art-direction-for-tech-brands`, after checking it
+  against every published post: `grep` for "art direction for tech" returned nothing, and the
+  posts that mention art direction in passing were read in full. The three closest are
+  `brand-assets-a-startup-needs-at-seed-stage` (the static kit, item by item),
+  `motion-design-agency` (how to brief a studio) and `in-house-designer-vs-creative-agency`
+  (who to hire). Each carries art direction as one line or one bullet, never as its subject:
+  the same test that kept rows 11, 16 and 18 and dropped row 6. The new post is the layer
+  above the assets: where the cheap tells come from (the seven tells table), the seven
+  decisions that make up a direction, repetition as the free part, which slots deserve
+  direction under time pressure, and who holds it. It re-argues neither what the kit
+  contains (which stays in `brand-assets-a-startup-needs-at-seed-stage`, now linking here)
+  nor the hiring decision (which stays in `in-house-designer-vs-creative-agency`) nor how to
+  brief a studio (which stays in `motion-design-agency`). Anything further on what a seed
+  brand needs extends the seed stage post rather than this one.
 
 - Row 19 was published on 2026-09-12 as `projection-mapping-for-a-product-launch-event`, after
   checking it against every published post: `grep` for projection mapping returned nothing, so
