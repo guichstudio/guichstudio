@@ -159,7 +159,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'Prepare the follow up as part of the booth build: the longer film that was too slow for the hall, one page that answers the questions your staff got asked most, and a short recap cut from the footage. It is the same visual system, so it is assembly rather than a new production, and it lands in the week where a reply is still likely.',
+      text: 'Prepare the follow up as part of the booth build: the longer film that was too slow for the hall, one page that answers the questions your staff got asked most, and a short recap cut from the footage. It is the same visual system, so it is assembly rather than a new production, and it lands in the week where a reply is still likely. What to shoot and how to assemble it is its own exercise, set out in our post on the [conference recap video](/blog/conference-recap-video-for-crypto-teams).',
     },
     {
       type: 'p',

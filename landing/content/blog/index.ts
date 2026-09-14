@@ -32,6 +32,7 @@ import { post as gamingAndMetaverseTrailers } from './gaming-and-metaverse-trail
 import { post as videoForASaasLandingPageHero } from './video-for-a-saas-landing-page-hero';
 import { post as projectionMappingForAProductLaunchEvent } from './projection-mapping-for-a-product-launch-event';
 import { post as artDirectionForTechBrands } from './art-direction-for-tech-brands';
+import { post as conferenceRecapVideoForCryptoTeams } from './conference-recap-video-for-crypto-teams';
 
 // Registry. Add one import + one entry per new post. Order does not matter,
 // getAllPosts() sorts by date descending.
@@ -68,4 +69,5 @@ export const posts: BlogPost[] = [
   videoForASaasLandingPageHero,
   projectionMappingForAProductLaunchEvent,
   artDirectionForTechBrands,
+  conferenceRecapVideoForCryptoTeams,
 ];

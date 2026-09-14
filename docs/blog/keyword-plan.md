@@ -125,6 +125,7 @@ gives counts, so the URLs have to be read from the GSC interface directly.
 | 2026-09-10 | `video-for-a-saas-landing-page-hero` | video for a saas landing page hero | tech |
 | 2026-09-12 | `projection-mapping-for-a-product-launch-event` | projection mapping for a product launch event | web3 |
 | 2026-09-13 | `art-direction-for-tech-brands` | art direction for tech brands | tech |
+| 2026-09-14 | `conference-recap-video-for-crypto-teams` | conference recap video for crypto teams | web3 |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -146,7 +147,6 @@ valid.
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 21 | conference recap video for crypto teams | web3 | I | Three days of booth footage into something usable | todo |
 | 22 | 3d product animation for a software launch | tech | C | When 3D pays for itself and when it is decoration | todo |
 | 23 | nft collection reveal video | web3 | I | The reveal beat, and why most of them land flat | todo |
 | 24 | how many videos does a startup actually need | tech | I | One build, several cuts, versus several productions | todo |
@@ -194,11 +194,17 @@ Collision watch, check with `grep` before writing:
   extends that post rather than this one. `teaser-video-for-app-launch` mentions a website
   hero only as one surface in a list, so it is untouched.
 
-- Row 21 sits next to row 3, now published as `crypto-conference-booth-content`.
-  That post is the assets you bring to the booth; row 21 is what you cut
-  afterwards. It already carries a short "after the doors close" section on the
-  follow up, so read it first: row 21 holds only if it stays on the edit itself
-  (what to shoot, how to assemble three days of footage), otherwise merge it.
+- Row 21 was published on 2026-09-14 as `conference-recap-video-for-crypto-teams`, after
+  reading `crypto-conference-booth-content` in full, as the note below required. That post
+  carries the recap as one "after the doors close" section of six, one bullet in the
+  sequencing list and one FAQ entry, never as its subject: the same test that kept rows 11,
+  16, 18 and 20 and dropped row 6. So the row held, on the condition it stayed on the edit
+  itself, and it does: the three claims a recap can make, the six row shot list, the nightly
+  offload and log pass, the three cuts from one capture effort, the five beat structure for a
+  muted feed, and the forty eight hour window. It re-argues none of the booth assets (which
+  stay in `crypto-conference-booth-content`, now linking here) nor the calendar slots (which
+  stay in `video-content-calendar-for-startups`). Anything further on what a stand needs
+  extends the booth post rather than this one.
 - Row 23 is close to the published `nft-marketing-video`. Read that post first;
   if the reveal is already covered there, extend it and mark row 23 `dropped`.
   Since 2026-09-09 it is also close to `gaming-and-metaverse-trailers`, which
