@@ -126,6 +126,7 @@ gives counts, so the URLs have to be read from the GSC interface directly.
 | 2026-09-12 | `projection-mapping-for-a-product-launch-event` | projection mapping for a product launch event | web3 |
 | 2026-09-13 | `art-direction-for-tech-brands` | art direction for tech brands | tech |
 | 2026-09-14 | `conference-recap-video-for-crypto-teams` | conference recap video for crypto teams | web3 |
+| 2026-09-15 | `3d-product-animation-for-a-software-launch` | 3d product animation for a software launch | tech |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -147,11 +148,27 @@ valid.
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 22 | 3d product animation for a software launch | tech | C | When 3D pays for itself and when it is decoration | todo |
 | 23 | nft collection reveal video | web3 | I | The reveal beat, and why most of them land flat | todo |
 | 24 | how many videos does a startup actually need | tech | I | One build, several cuts, versus several productions | todo |
 
 Collision watch, check with `grep` before writing:
+
+- Row 22 was published on 2026-09-15 as `3d-product-animation-for-a-software-launch`, after
+  `grep -ri "3d"` across every published post. 3D appears in nine of them and never as a
+  subject: one table row in `how-much-does-a-brand-video-cost` (technique as a cost driver),
+  one bullet in `art-direction-for-tech-brands` (lighting logic), one line of the master
+  material list in `startup-video-marketing-strategy` and in `video-content-calendar-for-startups`,
+  one atmosphere sentence plus one FAQ line in `web3-launch-video`, one FAQ line each in
+  `crypto-video-production`, `web3-branding` and `projection-mapping-for-a-product-launch-event`,
+  and one discipline in a list in `in-house-designer-vs-creative-agency`. The same test that
+  kept rows 11, 16, 18 and 20 and dropped row 6. The new post is the technique decision itself:
+  the four situations where there is nothing to film, the five decoration renders and what
+  convinces instead, the front loaded schedule (modelling, blocking, animation, render, comp)
+  and why a change after rendering costs the render again, the asset versus sequence purchase,
+  and the four approval gates. It re-argues neither what moves a quote (which stays in
+  `how-much-does-a-brand-video-cost`, now linking here) nor the claim versus slot sort (which
+  stays in `ai-video-vs-studio-production`) nor the four launch decisions (which stay in
+  `product-launch-video`). Anything further on pricing extends the cost post rather than this one.
 
 - Row 20 was published on 2026-09-13 as `art-direction-for-tech-brands`, after checking it
   against every published post: `grep` for "art direction for tech" returned nothing, and the

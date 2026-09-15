@@ -93,7 +93,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'Read that table as a menu rather than a verdict. Most teams who come back with sticker shock are paying for two or three expensive-end rows they did not know they had chosen, usually asset creation, deliverable count and approval structure. Those three are also the easiest to change without making the film worse.',
+      text: 'Read that table as a menu rather than a verdict. Most teams who come back with sticker shock are paying for two or three expensive-end rows they did not know they had chosen, usually asset creation, deliverable count and approval structure. Those three are also the easiest to change without making the film worse. The technique row is the one worth interrogating first, and we set out when it is justified in our post on [3D product animation for a software launch](/blog/3d-product-animation-for-a-software-launch).',
     },
     {
       type: 'h2',
