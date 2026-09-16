@@ -117,6 +117,10 @@ export const post: BlogPost = {
       text: 'Every row here is a reframe or a recut of the same visual system. That is the whole argument for building the system first: the fourth asset costs a fraction of the first one only if the first one was built to be reused.',
     },
     {
+      type: 'p',
+      text: 'One row deserves its own plan, and it is the one most schedules leave empty: the hour the placeholders resolve into the real pieces. What to publish at that minute, and why most of them land flat, is the subject of our piece on the [NFT collection reveal video](/blog/nft-collection-reveal-video).',
+    },
+    {
       type: 'h2',
       text: 'Design for the timeline it lands in',
     },

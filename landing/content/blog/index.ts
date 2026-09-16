@@ -34,6 +34,7 @@ import { post as projectionMappingForAProductLaunchEvent } from './projection-ma
 import { post as artDirectionForTechBrands } from './art-direction-for-tech-brands';
 import { post as conferenceRecapVideoForCryptoTeams } from './conference-recap-video-for-crypto-teams';
 import { post as threeDProductAnimationForASoftwareLaunch } from './3d-product-animation-for-a-software-launch';
+import { post as nftCollectionRevealVideo } from './nft-collection-reveal-video';
 
 // Registry. Add one import + one entry per new post. Order does not matter,
 // getAllPosts() sorts by date descending.
@@ -72,4 +73,5 @@ export const posts: BlogPost[] = [
   artDirectionForTechBrands,
   conferenceRecapVideoForCryptoTeams,
   threeDProductAnimationForASoftwareLaunch,
+  nftCollectionRevealVideo,
 ];

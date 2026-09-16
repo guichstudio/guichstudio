@@ -127,6 +127,7 @@ gives counts, so the URLs have to be read from the GSC interface directly.
 | 2026-09-13 | `art-direction-for-tech-brands` | art direction for tech brands | tech |
 | 2026-09-14 | `conference-recap-video-for-crypto-teams` | conference recap video for crypto teams | web3 |
 | 2026-09-15 | `3d-product-animation-for-a-software-launch` | 3d product animation for a software launch | tech |
+| 2026-09-16 | `nft-collection-reveal-video` | nft collection reveal video | web3 |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -148,7 +149,6 @@ valid.
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 23 | nft collection reveal video | web3 | I | The reveal beat, and why most of them land flat | todo |
 | 24 | how many videos does a startup actually need | tech | I | One build, several cuts, versus several productions | todo |
 
 Collision watch, check with `grep` before writing:
@@ -222,12 +222,21 @@ Collision watch, check with `grep` before writing:
   stay in `crypto-conference-booth-content`, now linking here) nor the calendar slots (which
   stay in `video-content-calendar-for-startups`). Anything further on what a stand needs
   extends the booth post rather than this one.
-- Row 23 is close to the published `nft-marketing-video`. Read that post first;
-  if the reveal is already covered there, extend it and mark row 23 `dropped`.
-  Since 2026-09-09 it is also close to `gaming-and-metaverse-trailers`, which
-  carries the six trailer beats and the escalation argument. Row 23 only holds
-  if it stays on the reveal beat itself (the moment the pieces appear, and why
-  it lands flat); the trailer structure now belongs to row 17's post.
+- Row 23 was published on 2026-09-16 as `nft-collection-reveal-video`, after reading
+  `nft-marketing-video` in full, as the note below required, and re-reading
+  `gaming-and-metaverse-trailers`. `nft-marketing-video` is pre mint persuasion: what the
+  film has to establish instead of the art loop, and the four moment mint kit. It uses
+  "reveal" as a synonym for that film and its "After" row is holder cuts, so the reveal
+  hour itself is never its subject: the same test that kept rows 11, 16, 18, 20 and 21 and
+  dropped row 6. So the row held, on the condition it stayed on the reveal beat itself, and
+  it does: reveal hour as a scheduled event rather than a metadata flip, the three audiences
+  watching at the minute, the five reasons a reveal lands flat, the four assets (holding
+  pattern, reveal cut, holder frame kit, day after cut), the forty minute window and why
+  mint day has no production capacity, and the five line pre reveal checklist. It re-argues
+  neither what the marketing film establishes nor the mint asset schedule (both stay in
+  `nft-marketing-video`, now linking here) nor the trailer beats (which stay in
+  `gaming-and-metaverse-trailers`). Anything further on what the pre mint film contains
+  extends `nft-marketing-video` rather than this one.
 - Row 17 was published on 2026-09-09 as `gaming-and-metaverse-trailers`, after checking
   it against every published post: `grep` for gaming, metaverse and trailer returned
   nothing, so there was no collision to resolve. The post is the trailer format itself:
