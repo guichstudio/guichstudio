@@ -87,7 +87,7 @@ export const post: BlogPost = {
     },
     {
       type: 'p',
-      text: 'A quarter does not need a content calendar with forty cells in it. It needs four slots, each with a job and a cadence. Fill those and the calendar writes itself, because every entry is a known type produced from material you already own.',
+      text: 'A quarter does not need a content calendar with forty cells in it. It needs four slots, each with a job and a cadence. Fill those and the calendar writes itself, because every entry is a known type produced from material you already own. If the question you are really asking is a count rather than a plan, we answer that one separately in [how many videos a startup actually needs](/blog/how-many-videos-does-a-startup-need).',
     },
     {
       type: 'table',

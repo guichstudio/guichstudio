@@ -128,6 +128,7 @@ gives counts, so the URLs have to be read from the GSC interface directly.
 | 2026-09-14 | `conference-recap-video-for-crypto-teams` | conference recap video for crypto teams | web3 |
 | 2026-09-15 | `3d-product-animation-for-a-software-launch` | 3d product animation for a software launch | tech |
 | 2026-09-16 | `nft-collection-reveal-video` | nft collection reveal video | web3 |
+| 2026-09-17 | `how-many-videos-does-a-startup-need` | how many videos does a startup actually need | tech |
 
 > Note: the three seed posts share a launch date because they shipped with the
 > blog itself, and `crypto-video-production` was published the same day on Louis'
@@ -149,9 +150,32 @@ valid.
 
 | # | Keyword | Cluster | Type | Angle | Status |
 |---|---|---|---|---|---|
-| 24 | how many videos does a startup actually need | tech | I | One build, several cuts, versus several productions | todo |
+
+**The queue is empty as of 2026-09-17.** Row 24 was the last `todo` row. The
+daily routine has nothing to take tomorrow and will stop at Step 1 until rows
+are added. New rows must pass the four tests in "Choosing a keyword" above, and
+the note from 2026-08-24 still stands: indexation, not targeting, is the binding
+constraint, so adding volume here is not the highest value next move. This is
+Louis' call.
 
 Collision watch, check with `grep` before writing:
+
+- Row 24 was published on 2026-09-17 as `how-many-videos-does-a-startup-need`, after reading
+  `startup-video-marketing-strategy` and `video-content-calendar-for-startups` in full.
+  `grep -rin "how many videos"` returned exactly two hits, one FAQ entry in each: "How many
+  videos does a startup need per quarter?" and "How many videos should a startup publish per
+  month?". The count is one FAQ answer of five in both posts and never their subject: the same
+  test that kept rows 11, 16, 18, 20, 21 and 23 and dropped row 6. So the row held, on the
+  condition it stayed on the counting method itself, and it does: the production versus cut
+  distinction as two purchases hiding in one number, the ninety day moment list and the noun
+  assigned to each entry, the five triggers that force a production and the six that only look
+  like triggers, the year shaped by stage where the production column barely grows, and the
+  over-count and under-count failures. It re-argues neither where the material comes from (the
+  four slots and the build economics stay in `startup-video-marketing-strategy`, now linking
+  here) nor the operating grid of dates, owners and lead times (which stays in
+  `video-content-calendar-for-startups`) nor what moves a quote (which stays in
+  `how-much-does-a-brand-video-cost`). Anything further on planning a quarter extends
+  `startup-video-marketing-strategy` rather than this one.
 
 - Row 22 was published on 2026-09-15 as `3d-product-animation-for-a-software-launch`, after
   `grep -ri "3d"` across every published post. 3D appears in nine of them and never as a
